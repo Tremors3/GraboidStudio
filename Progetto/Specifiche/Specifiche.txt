@@ -1,0 +1,71 @@
+
+------ SCADENZE ------------------------
+
+22 aprile - raccolta dei requisiti + schema scheletro
+03 maggio - schema E/R
+
+------ LINKS ------------------------
+
+https://ardisc.it/musitalia/vistaHomePage.php
+https://www.associazioneaicc.it/case-histories/
+
+------ IDEE ------------------------
+
+Una piattforma online che permette le prenotazioni di band da parte di locali, eventi o clienti vari.
+
+- Azienda che gestice le prenotazioni di band musicali da parte di clienti (Locali ecc...).
+ - Sistema di recensioni.
+ - Scheduling delle prenotazioni delle band.
+ - Accettazione o no della richiesta del cliente da parte della band.
+ - Generi musicali suonati da ciascuna band. Il cliente può scegliere quali generi vuole che siano suonati (anche canzoni specifiche).
+ - Ogni band ha un livello di esperienza ("bravura" assegnata automaticamente tramite le recensioni).
+ - Popolarità locale, popolarità band.
+ - La band da un suo prezzo (che deciderà in base alla distanza del posto, al tipo del posto, ecc...) il locale deciderà se accettare il prezzo. Il sito ci guadagna in questo modo: la band suona per 250$ il sito alza a 270$ e poi il locale vedrà se accettare o meno.
+ (Three-way-handshake)
+ - Utenti "normali" clienti del locale possono vedere quando e quali band suoneranno in un determinato locale.
+ - Il musicista appartiene ad una o più band.
+ - Strumenti utilizzati dal musicista.
+ - Oltre al genere musicale ciascuna band avrà una lista dei brani.
+ - Il locale ospiterà una tipologia di evento: 
+ --> Jam Session (più bands che suonano), 
+ --> Solo una band.
+ --> Misto musicisti tra più bands???
+ --> ... chiedere a mio padre.
+
+ - Come il locale può cercare una band che suoni nel suo locale. Anche la band può richiedere al locale una prenotazione?.
+ - Il locale può fare richiesta di una prenotazione. Invece la band fa una richiesta per farsi notare?.
+
+
+------ ENTITA' ------------------------
+
+BAND      : Insieme di musicisti. Suona uno o più generi musicali. Suona una o più canzoni appartenenti ai generi musicali che la band suona.
+MUSICISTA : Suona uno o più strumenti. Partecipa ad una o più band.
+Cliente   : Cliente può vedere le pagine profilo di locali e bands.
+
+GENERE_MUSICALE
+STRUMENTO
+
+------ TIPOLOGIE DI UTENTI E VISTE ------------------------
+
+Musicista : Gli è permesso visualizzare le informazioni delle bands a cui appartiene ma non modificarle.
+Musicista : ("Gestore/Creatore" della band) Gli è permesso gestire le prenotazioni e la pagina della bend, tutte le informazioni della band.
+Locale    : Può controllare le prenotazioni di band effettuate e gestire un calendario.
+Cliente   : il cliente del locale può vedere sul sito quale band suonerà e quando in un determinato locale.
+
+------ IDEE DI QUERYS ------------------------
+
+1. RICERCARE BAND PER MUSICISTI CHE SUONANO SPECIFICI STRUMENTI
+Metti caso che un locale ha un pianoforte. Il cliente (locale) può voler cercare tutte le bands che abbiano un musicista che suona il pianofopuò voler cercare tutte le bands che abbiano un musicista che suona il pianofortee
+
+------ PROBLEMI FUTURI ------------------------
+
+- Un musicista può fare parte una sola o più band? Se fa parte di più band può capitare che entrambe le band siano occupate la stessa data e ora. Il musicista non si può sdoppiare.
+- E' la band che gestisce le prenotazioni fatte da un 
+
+
+
+
+
+------ APPUNTI ------------------------
+
+Nel caso in cui avremo delle ridondanze nello schema logico; ha senso lasciarle, conviene computazionalmente oppure sconviene?

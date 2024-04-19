@@ -1,0 +1,550 @@
+https://dba.stackexchange.com/questions/92065/modeling-a-scenario-in-which-each-music-artist-is-either-a-group-or-a-solo-perfo
+
+
+
+
+https://docs.google.com/document/d/1kc3iUcrCt-gjc98fysg7egJPt-05cY2i0XVaE2M_ZIE/edit?usp=sharing
+
+
+Raccolta e analisi requisiti
+PROGETTO STUDIO DI REGISTRAZIONE
+
+------ 「Elenco VISTE」 ------------
+
+1: Musicista
+2: Fonico
+3: Cash Manager (addetto alla gestione della liquidità aziendale)
+
+------ Elenco ALTRE ENTITA' -------------
+
+Canzoni
+Strumenti
+
+Band
+Album           (insieme di registrazioni di dischi)
+Disco           (canzone suonata dalla band che farà parte di un album)
+Registrazione   (registrazione di un disco ma ce ne possono essere di più) Una band fa diverse registrazioni e poi sceglie la più bella.
+Sala di Registrazione
+
+File
+Traccia Audio
+Testo Canzone
+Foto copertina    (la foto copertina è dell'album giusto? sì)
+
+------ Dizionario concetti/termini ---
+
+TERMINE    ------- DESCRIZIONE ------- SINONIMI ------- COLLEGAMENTI
+-----------------------------------------------------------------
+Musicista  -------             -------          ------- band, strumenti
+Fonico                                                  sala di registrazione
+Cash Manager                                                
+Canzoni                               disco?
+Strumenti                                               musicista
+Band                                  gruppo            musicista
+Album                                 collezione
+Disco                                 canzone
+Registrazione      storico delle prove    
+Sala di registrazione              
+
+------ Elenco requisiti delle varie viste -----
+
+------ Frasi di carattere generale ---
+L'obiettivo di questa basi di dati è la gestione degli studi di registrazione di una certa azienda.
+Noi sappiamo che ogni studio di registrazione mette a disposizione un fonico, e se necessario il fonico si può spostare in un altro studio di registrazione (possibile relazione aggiuntiva)
+in base alle disponibilità (sia degli studi che del fonico)
+
+
+--------------------------------------
+
+------ Frasi su Musicista ------------
+
+
+--------------------------------------
+
+------ Frasi su Fonico ------------
+Ogni fonico lavora in uno e un solo studio di registrazione (? oppure è che ogni studio di registrazione ha uno e uno solo fonico (si può fare la tecnica di trasferimento attraverso un auto-associazione)).
+
+
+--------------------------------------
+
+------ Frasi su Cash Manager ------------
+Il cash manager è una figura molto competente nominata dall'azienda
+
+--------------------------------------
+
+///////////////////////////////////////////////////////////////////
+
+
+------ Descrizione entità -----
+
+--------------------------------------
+
+------ Musicista ------------
+Nome
+Cognome
+
+
+--------------------------------------
+
+------ Fonico ------------
+
+
+--------------------------------------
+
+------ Cash Manager ------------
+
+
+--------------------------------------
+
+
+    E
+E1     E2
+
+t,e --> E1, E2
+p,e --> E1, E2, E
+t,s --> E1, E2, E1 + E2
+p,s --> E1, E2, E, E1 + E2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------
+
+https://www.bandmix.com/search/
+http://www.bandfriendapp.com/
+
+Una chat che consenta a leader della band e manager del locale di parlare.
+
+------ IDEE ------------
+
+PROFILO DELLA BAND (L'applicazione è più band-oriented).
+--> Recensioni inviate da locale e clienti del locale. (DIVISE IN DUE TABELLE - GENERALIZZAZIONE)
+--> Profili social (facebook, instagram, ...).
+
+Un locale può inviare una richiesta di prenotazione ad una band.
+Una band può mandare una richiesta di prenotazione ad un locale.
+(La maggior parte dei casi è la band che invia la prenotazione).
+
+Una prenotazione può essere richiesta per un certo [GIORNO] e una certa [FASCIA ORARIA].
+Prenotazione contiene:
+--> Prezzo
+--> AltreInfo
+
+------ COSE DA CHIEDERE A MIO PADRE ------------
+
+Problema: Dove ci guadagna l'applicazione? Nulla vieta a locali e band di trovarsi tramite
+il sito per poi contattarsi tramite cellulare per prendere accordi privatamente così da evitare
+la maggiorazione fatta dal sito.
+Possibile soluzione: L'applicazione web richiede un abbonamento [MENSILE / ANNUALE] per essere utilizzata.
+
+------ PROBLEMI ------------
+
+[INDIRIZZO]
+
+Street Number [Int]
+Street Number Suffix [VarChar] - A~Z 1/3 1/2 2/3 3/4 etc
+Street Name [VarChar]
+Street Type [VarChar] - Street, Road, Place etc. (I've found 262 unique street types in the English speaking world so far... and still finding them)
+Address Type [VarChar] - For example Apartment, Suite, Office, Floor, Building etc.
+Address Type Identifier [VarChar] - For instance the apartment number, suite, office or floor number or building identifier.
+Major Municipality (Town/City) [VarChar]
+Governing District (Province, State, County) [VarChar]
+Postal Area (Postal Code/Zip/Postcode)[VarChar]
+Country [VarChar]
+
+
+
+[MEMORIZZAZIONE FILE]
+
+1. Qual'è il modo migliore per memorizzare files? Questo post suggerisce di memorizzare soltanto i metadati
+dei file su database compreso il percorso di sistema nel quale il file si trova.
+---> https://stackoverflow.com/questions/154707/what-is-the-best-way-to-store-media-files-on-a-database
+Mi sembra una buona soluzione.
+
+2. Come facciamo a distinguere le diverse tipologie di dati? Utilizziamo una generalizzazione?
+
+|MUSICISTA|                                           |LOCALE|                                            |BAND|
+     ↑ [0, N]                                            ↑ [0, N]                                           ↑ [0, N]
+     |                                                   |                                                  |
+|FILE DEL MUSICISTA| --> codice, codice-musicista    |FILE DEL LOCALE| --> codice, codice-locale    |FILE DELLA BAND| --> codice, codice-band
+     |                                                   |                                                  |
+     +------+--------------------------------------------+--------------------------------------------------+
+            |
+            ↓
+          |FILE| --> codice, nome-del-file, estensione-file
+            ↑
+            |
+     +------+-------+
+     |      |       |
+  |FOTO| |VIDEO| |AUDIO| --> codice
+
+3. Come salviamo la foto profilo (avatar) del musicista? Dato che è unica salviamo direttamente il percorso?
+Il problema di usare una variabile booleana per indicare se la foto è avatar oppure no è che viene sprecata
+troppa memoria.
+
+4. Le tipologia di files (foto, video, audio) supportano più estensioni? Oppure ne supportano una sola?
+Io per semplicità assegnarei soltanto una estensione per ogni tipologia (png, mp4, mp3).
+
+5. Come facciamo ad evitare ripetizioni nella memorizzazione dei dati dei files? Soprattutto per quanto riguarda il percorso.
+http://myserver/
+http://myserver/files/
+http://myserver/files/videos/
+http://myserver/files/audios/
+http://myserver/files/photos/
+http://myserver/files/videos/video0.mp4
+http://myserver/files/audios/audio0.mp3
+http://myserver/files/photos/photo0.png
+--> La prima parte del percorso (http://myserver/files) è dove tutti i files si trovano.
+Quindi non è necessario riportarla nel database. La si da per scontata.
+--> La seconda parte del percorso (videos/, audios/ or photos/) dipende dalla tipologia del file
+ma è comune a tutti i files, quindi non è necessario riportarla nel database.
+--> La terza parte del percorso (nome) è la parte che può variare del percorso ma è attributo
+comune di tutte le tipologie di file quindi va sotto l'entità FILE.
+--> La quarta parte del percorso è l'estensione che essendo attributo comune dei files anchessa
+va sotto l'entità di FILE.
+
+[MUSICISTA]
+
+1. Il musicista ha un livello di esperienza diverso per ogni strumento che suona.
+Per adesso il musicista ha due attributi: strumenti (N-N) e livello di esperienza (FK).
+Bisognerebbe inventare un sistema che consenta al musicista di non avere un solo livello
+di esperienza ma uno per ogni strumento che suona.
+
+2. Il musicista ha una regione, città di provenienza. Queste sono una nuova entità da 
+creare oppure semplicemente del testo scritto a mano?
+
+3. L'attributo sesso è una chiave straniera ad una nuova entità (lookup table)? Oppure 
+utilizziamo una variabile booleana?
+
+4. La foto profilo è una delle foto caricate (Other Photos) ma taggata come principale?
+Oppure è una foto salvata come attributo interno al profilo, a differenza delle altre
+foto (Other Photos) che sono contenute in una tabella a parte.
+
+5. Come facciamo in modo che il profilo possa registrare dei link associati ai socials?
+Come facciamo a distinguere il link di una piattaforma da quelli di un'altra?
+
+[BAND]
+
+1. Data una band il sito vorrebbe sapere quali musicisti suonano attualmente in quella 
+band e quali musicisti hanno suonato nella stessa ma che adesso non ne fanno più parte.
+
+------ ELENCO ENTITA' ------------
+
+STRUMENTI
+GENERI MUSICALI
+MUSICISTA
+BAND
+BAND-LEADER
+PRENOTAZIONE
+MANAGER (del locale)
+CLIENTE (del locale)
+LOCALE
+RECENSIONE
+RECENSIONE-LOCALE
+RECENSIONE-CLIENTE
+
+------ ENTITA' NELLO SPECIFICO ------------
+
+STRUMENTO (lookup table)
+--- Records
+Accordition
+Acoustic Guitar
+Background Singer
+Bagpipes
+Banjo
+Bass Guitar
+Cello
+Clarinet
+DJ
+Dobro
+Drums
+Electronic Music
+Fiddle
+Flute
+Harmonica
+Harp
+Keyboard
+Lead Guitar
+Mandolin
+Other Percussion
+Piano
+Rhythm Guitar
+Saxophone
+Steel Guitar
+Trombone
+Trumpet
+Ukulele
+Upright Bass
+Violin
+Vocalist
+Vocalist - Alto
+Vocalist - Baritone
+Vocalist - Bass
+Vocalist - Soprano
+Vocalist - Tenor
+
+
+GENERE MUSICALE (lookup table)
+--- Records
+Acoustic
+Alternative
+Americana
+Bluegrass
+Blues
+Calypso
+Celtic
+Christian / Gospel
+Christian Contemporary
+Classic Rock
+Classical
+Country
+Cover / Tribute
+Dubstep
+Electronic
+Flok
+Funk
+Hip Hop/Rap
+Jazz
+Latin
+Lounge
+Metal
+Other
+Pop
+Progressive
+Punk
+R&B
+Reggae
+Rock
+Ska
+Southern Rock
+World
+
+ESPERIENZA (lookup table)
+--- Records
+Beginner
+Intermediate
+Moderate
+Advanced
+Expert
+
+IMPEGNO (lookup table)
+--- Records
+Just for Fun
+Moderately Commited
+Committed
+Very Committed
+Touring
+
+MUSICISTA
+--- Un musicista è un utente che suona uno o più strumenti.
+ATTRIBUTO                           TIPOLOGIA CHIAVE        PROBLEMATICA            NOTE VARIE
+--- Credenziali
+1. Codice Identificativo
+2. Nickname
+3. Nome
+4. Cognome
+5. Sesso                            (CHIAVE ESTERNA)        SI
+6. Età
+7. Cellulare
+8. Email
+9. Regione di provenienza           (CHIAVE ESTERNA?)       SI
+--- Altre Informazioni
+10. Strumenti suonati               (CHIAVE ESTERNA)
+11. Generi di musica suonato        (CHIAVE ESTERNA)
+12. Livello di esperienza           (CHIAVE ESTERNA)        SI                      NOTE: Il livello di esperienza deve essere specifico per ogni strumento suonato.
+13. Livello di impegno              (CHIAVE ESTERNA)
+14. Member Since                    (DATE TIME)
+15. Data di ultima attività         (DATE-TIME)                                     NOTE: L'ultima volta che si è loggato sul sito.
+16. Available to gig                (DAYS)                                          NOTE: Numero di giorni la settimana che è disponibile per suonare.
+17. Years playing music             (INTEGER)
+18. Di sessione (Studio Musician)   (BOOLEAN)
+19. In ricerca di musicisti / Band  (BOOLEAN)
+--- Il musicista ha un livello di esperienza diverso per ogni strumento.
+--- Il musicista ha una regione, città di provenienza. Queste sono una nuova entità da creare oppure semplicemente del testo scritto a mano?
+--- L'attributo sesso è una chiave straniera ad una nuova entità? Oppure utilizziamo una variabile booleana?
+
+PROFILO
+--- Un profilo deve presentare il relativo musicista fornendo campioni
+--- di IMMAGINI, AUDIO, VIDEO e informazioni TESTUALI dello stesso.
+ATTRIBUTO                           TIPOLOGIA CHIAVE        PROBLEMATICA            NOTE VARIE
+1. Codice (del musicista)           
+2. Foto Profilo                     (CHIAVE ESTERNA)        SI
+5. Other Photos                     (CHIAVE ESTERNA)        SI
+6. Tracce Audio                     (CHIAVE ESTERNA)        SI
+7. Tracce Video                     (CHIAVE ESTERNA)        SI
+4. Socials                          (CHIAVE ESTERNA)        SI                      
+3. Informazioni                     (VARCHAR)
+--- La foto profilo è una delle foto caricate (Other Photos) ma taggata come principale? Come facciamo a taggarla come principale? Associazione o Variabile booleana?
+--- Come facciamo in modo che il profilo possa registrare i link associati ai socials? Come facciamo a distinguere il link di una piattaforma da quelli di un'altra? (Facebook, instagram, ...)
+--- Come facciamo a distinguere i vari tipi di files (audio, video, ecc...)? Utilizziamo una generalizzazione? Guarda problema sopra.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+LOCALE
+--- Descrizione.
+ATTRIBUTO                           TIPOLOGIA CHIAVE        PROBLEMATICA            NOTE VARIE
+1. Codice
+2. Nome
+3. Indirizzo
+4. Spazio
+5. Telefono
+6. E-Mail
+7. Foto                             (CHIAVE ESTERNA)
+8. Descrizione
+9. Tipologia                        (CHIAVE ESTERNA)                                
+
+TIPOLOGIA (lookup table)
+--- Records
+bar tradizionale
+pasticceria caffetteria caffe’
+tea room
+gelateria
+milk bar
+bar bianco
+enoteca
+pub
+birreria
+snack bar
+american bar
+bar d’albergo
+bar piscina
+disco bar
+bar discoteca
+piano bar
+night club
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+BAND
+--- Una band è un insieme di musicisti che suonano canzoni di certi generi musicali.
+--> Nome
+--> Musicisti
+--> Generi Musicali
+--> Profili Social
+
+POST (band's post)
+1. Codice Identificativo del musicista
+2. Data di pubblicazione
+3. Descrizione testuale
+4. Immagine
+5. Sample Audio
+6. Sample Video
