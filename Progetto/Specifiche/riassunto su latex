@@ -1,0 +1,39 @@
+\section{Analisi dei requisiti e progetto delle viste}
+Questo progetto si occupa di descrivere il funzionamento di uno studio di registrazione professionale e delle sue principali attività. Lo studio si occupa di:
+\begin{enumerate}
+    \item Acquisizione e rielaborazione di registrazioni audio per conto di artisti (Musicisti solisti, Band), vengono selezionate le registrazioni migliori ed inserite all'interno di collezioni (Singoli, Extended Play, Long Play e Album) e ridistribuite in formato digitale sull'apposita piattaforma web; \\[-20pt]
+    \item Ridistribuzione delle canzoni in formati non digitali (Vinili e audiocassette), visualizzabili nel marketplace del sito, dove possono essere visionati e aquistati. Il servizio è a pagamento a spesa del cliente.
+\end{enumerate}
+Lo studio è disposto di un edificio dove sono locate diverse sale di registrazione disposte di attrezzature per consentire lo svolgimento delle registrazioni. In ogni sala sono presenti tecnici specializzati per la registrazione ed editing dei brani. Inoltre è presente un sistema di prenotazioni con apposito call center per evitare la sovrapposizione delle ore di registrazione in una sala. Viene messa a disposizione dei clienti di un elenco contenente musicisti di studio privati, nel caso un cliente necessiti di un producer o musicista di supporto può consultare la lista e chiamare chi ritiene più adatto. Questo servizio è a pagamento a spesa del cliente.
+
+Quello di cui si occuperà questo progetto è di descrivere il funzionamento di uno studio di registrazione professionale e delle sue principali attività.
+
+\begin{enumerate}
+\item Lo studio si occuperà dell'acquisizione e rielaborazione di registrazioni audio per conto di artisti (Musicisti Solisti, Gruppo). Le migliori registrazioni sono selezionate ed inserite all'interno di collezioni (Singoli, EP, LP o Album) e ridistribuite in formato digitale sull'apposita piattaforma web. Lo studio si occuperà anche di memorizzare i dati relativi a Musicisti e rispettivi Gruppi pero fornire agli utenti dell'applicazione web un'esperienza più completa.
+
+Lo studio si occuperà anche dell'eventuale ridistribuzione delle canzoni in formati non digitali; quali vinili ed audiocassette. Questi formati saranno visualizzabili nel marketplace del sito, dove potranno essere visionati e acquistati. Il servizio è a pagamento a spesa del cliente.
+
+Lo studio disporrà di un edificio dove sono locate diverse sale di registrazione, le quali disporranno delle appropriate attrezzature elettroniche per consentire lo svolgimento delle normali attività. Ogni sala di registrazione disporrà di tecnici specializzati per la registrazione dei brani e successiva manipolazione.
+
+Per gestire lo scheduling delle registrazioni e per evitare sovrapposizioni delle ore di registrazione, lo studio metterà a disposizione un sistema di prenotazioni e un'apposito operatore di Call Center in grado di gestire tali prenotazioni.
+
+Lo studio metterà a disposizione un ulteriore servizio ai propri clienti. Disporrà di un elenco contenente musicisti di studio privati. Qual'ora un cliente necessiti di un producer o di un musicista di supporto lo studio potrà consultare una lista di musicisti di studio e producer privati che potrà chiamare e consigliare al cliente. Il servizio è a pagamento a spesa del cliente.
+
+Nel seguito considereremo perciò le seguenti diverse classi di utenza:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Vista Artista}
+\subsubsection{Formulazione e analisi dei requisiti per gli Artisti}
+
+\renewcommand*{\arraystretch}{1.4}
+\begin{longtable}{|r|p{.8\linewidth}|}
+  \hline
+  & \multicolumn{1}{c|}{\textbf{Requisiti richiesti dagli Artisti}}
+  \endhead
+  \hline
+  \multirow{1}{1em}{\raggedleft \\[-8.5pt] 1\\2\\3\\4\\5\\6\\7\\8\\9\\10\\11\\12\\13\\14\\15\\16\\17} 
+  & L'Artista è colui che contatta lo studio per registrare professionalmente le proprie canzoni, può essere un Musicista Solista oppure un Gruppo. Ogni Artista è composto da: numero identificativo univoco, nome, cognome, nickname, data di nascita, nazionalità, foto, note sull'artista, molteplici numeri di cellulare, molteplici indirizzi email, sata di registrazione, strumenti suonati. Il gruppo necessita soltanto della data di formazione, deve essere possibile tenere traccia della data nell'a quale il Musicista entra a far parte del gruppo. Ogni Artista può produrre diverse Canzoni. Ogni Canzone è composta da: nome dell'Artista, data di registrazione, titolo e la durata effettiva. Una collezione è una raccolta di canzoni. Ogni collezione è composta da: nome dell'Artista, data di inizio registrazioni, data di termine registrazioni, titolo, tipologia ed uno stato. La collezione può essere in stato di produzione (le canzoni stanno ancora venendo registrate) o in stato di pubblicazione (tutte le canzoni sono state registrate). Una collezione una volta pubblicata non si può più modificare e può far parte di una delle tre seguenti tipologie: il Singolo che comprende da 1 a tre canzoni, l'EP (Extended Play) che comprende dalle 4 alle 5 canzoni con una durata complessiva minore di mezz'ora e infine l'Album (LP, Long Play) che contiene un numero di canzoni maggiore dell'EP e di durata complessiva tra la mezz'ora e l'ora. \\
+  \hline
+\end{longtable}
+\textbf{Tabella 1.1} Specifiche in linguaggio naturale per gli Artisti
+\\ \\ <mettere schema scheletro qui>

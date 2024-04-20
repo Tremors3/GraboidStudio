@@ -21,36 +21,38 @@ INDICE
 
 1 Analisi dei requisiti e progetto delle viste
 
-Quello di cui si occuperà questo progetto è di descrivere il funzionamento di uno studio di registrazione professionale e delle sue principali attività.
+Questo progetto si occupa di descrivere il funzionamento di uno studio di registrazione professionale e delle sue principali attività. Nel dettaglio, si occuperà di:
 
-Lo studio si occuperà dell'acquisizione e rielaborazione di registrazioni audio per conto di artisti (Musicisti Solisti, Gruppo). Le migliori registrazioni sono selezionate ed inserite all'interno di collezioni (Singoli, EP, LP o Album) e ridistribuite in formato digitale sull'apposita piattaforma web. Lo studio si occuperà anche di memorizzare i dati relativi a Musicisti e rispettivi Gruppi pero fornire agli utenti dell'applicazione web un'esperienza più completa.
+1. Acquisizione e rielaborazione di registrazioni audio per conto di artisti (Musicisti Solisti, Gruppo). Le migliori registrazioni sono selezionate ed inserite all’interno di collezioni (Singoli, EP, LP o Album) e ridistribuite in formato digitale sull’apposita piattaforma web.
 
-Lo studio si occuperà anche dell'eventuale ridistribuzione delle canzoni in formati non digitali; quali vinili ed audiocassette. Questi formati saranno visualizzabili nel marketplace del sito, dove potranno essere visionati e acquistati. Il servizio è a pagamento a spesa del cliente.
+2. Memorizzare i dati relativi a Musicisti e rispettivi Gruppi pero fornire agli utenti dell’applicazione web un’esperienza più completa.
 
-Lo studio disporrà di un edificio dove sono locate diverse sale di registrazione, le quali disporranno delle appropriate attrezzature elettroniche per consentire lo svolgimento delle normali attività. Ogni sala di registrazione disporrà di tecnici specializzati per la registrazione dei brani e successiva manipolazione.
+Disporrà di un edificio dove sono locate diverse sale di registrazione, le quali disporranno delle appropriate attrezzature elettroniche per consentire lo svolgimento delle normali attività. Ogni sala di registrazione disporrà di tecnici specializzati per la registrazione dei brani e successiva manipolazione.
 
-Per gestire lo scheduling delle registrazioni e per evitare sovrapposizioni delle ore di registrazione, lo studio metterà a disposizione un sistema di prenotazioni e un'apposito operatore di Call Center in grado di gestire tali prenotazioni.
+Per gestire lo scheduling delle registrazioni e per evitare sovrapposizioni delle ore di registrazione, viene messo a disposizione un sistema di prenotazioni e un’apposito operatore di Call Center in grado di gestire tali prenotazioni.
 
-Lo studio metterà a disposizione un ulteriore servizio ai propri clienti. Disporrà di un elenco contenente musicisti di studio privati. Qual'ora un cliente necessiti di un producer o di un musicista di supporto lo studio potrà consultare una lista di musicisti di studio e producer privati che potrà chiamare e consigliare al cliente. Il servizio è a pagamento a spesa del cliente.
+Non verrà messo a disposizione dallo studio nessun tipo di strumento musicale richiesto dall'artista.
+
+Disporrà inoltre di un elenco contenente musicisti di studio privati. Qual’ora un cliente necessiti di un producer o di un musicista di supporto lo studio potrà consultare una lista di musicisti di studio e producer privati che potrà chiamare e consigliare al cliente. Il servizio è a pagamento a spesa del cliente.
 
 Nel seguito considereremo perciò le seguenti diverse classi di utenza:
-
-• Artista
-• Tecnico
-• Operatore
+• Artista.
+• Tecnico.
+• Operatore.
 
 -------------------------------------------------------------------------------------------------
 
 1.1.1 Formulazione e analisi dei requisiti per gli Artisti
 
-Gli artisti sono coloro che contattano lo studio perchè necessitano di registrare in modo professionale le proprie canzoni. Gli Artisti possono essere Musicisti Solisti oppure Gruppi di Musicisti. Ogni artista, di entrambi i tipi, è caratterizzato da un nickname univoco, una data di registrazione, note testuali sull'autista, molteplici numeri di cellulare, molteplici email. Più nel particolare i Musicisti Solisti saranno ulteriormente caratterizzati da un nome, un cognome, una data di nascita, e dagli strumenti suonati; il gruppo necessita soltanto della data di formazione. Deve essere possibile tenere traccia della data nell'a quale il Musicista entra a far parte del gruppo.
+L'Artista è colui che contatta lo studio per registrare professionalmente le proprie canzoni. Ogni Artista deve essere Musicista-Solista oppure un Gruppo di Musicisti. Ogni artista, di entrambi i tipi, è caratterizzato da un nickname univoco, una data di registrazione, note testuali sull'autista, molteplici numeri di cellulare, molteplici email. Nel dettaglio i Musicisti-Solisti saranno ulteriormente caratterizzati da un nome, un cognome, una data di nascita, e dagli strumenti suonati; il gruppo necessita soltanto della data di formazione. Deve essere possibile tenere traccia della data nell'a quale il Musicista entra a far parte del gruppo.
 
-E' possibile che un Musicista Solista che non faccia parte del gruppo che ha pubblicato una canzone partecipi comunque nella sua composizione. Deve quindi essere riportata la sua partecipazione. Non è possibile che un Gruppo di Musicisti partecipi alla composizione di una produzione di un altro artista.
+E' possibile che un Musicista Solista, che non faccia parte del gruppo che ha pubblicato una canzone, partecipi comunque nella sua composizione. Deve quindi essere riportata la sua partecipazione. Non è possibile che un Gruppo-di-Musicisti partecipi alla composizione di una canzone appartenente ad un altro artista.
 
-Una canzone è un pezzo musicale più o meno esteso prodotto da un Artista. Ogni canzone è caratterizzata da un codice-univoco, da un titolo, dalla lunghezza della traccia in minuti, dalla data della traccia, e dal codice della collezione a cui appartiene. Ogni canzone può appartenere ad una sola collezione di canzoni.
+La canzone è un pezzo musicale più o meno esteso prodotto da un Artista. Ogni canzone è caratterizzata da un codice-univoco, da un titolo, dalla lunghezza della traccia in minuti, dalla data della traccia, e dal codice della collezione a cui appartiene. Ogni canzone può appartenere ad una sola collezione di canzoni.
 
-Una collezione è una raccolta di canzoni registrate dallo studio. Ogni collezione è contraddistinta dal codice-univoco dell'artista che la produce, dalla data di inizio e termine delle registrazioni, da un titolo, dalla tipologia e dallo stato. La collezzione può essere in stato di produzione (le canzoni stanno ancora venendo registrate) ed in stato di Pubblicazione (tutte le canzoni sono state registrate).
-Una collezione una volta pubblicata diventa immutabile, cioè non è più possibile aggiungere ad essa nuove canzoni. La collezione può far parte di una delle tre seguenti tipoligie: il Singolo che comprende da 1 a tre canzoni, l'EP (o Extended Play) che comprende dalle 4 alle 5 canzoni con una durata complessiva minore di mezz'ora e infine l'Album (o LP cioè Long Play) che contiene un numero di canzoni maggiore dell'EP e di durata complessiva tra la mezz'ora e l'ora.
+La collezione è una raccolta di canzoni registrate dallo studio. Ogni collezione è contraddistinta dal codice-univoco dell'artista che la possiede, dalla data di inizio e termine delle registrazioni, da un titolo, dalla tipologia e dallo stato. La collezione può essere in stato di produzione (le canzoni stanno ancora venendo registrate) ed in stato di Pubblicazione (tutte le canzoni sono state registrate).
+
+Una collezione una volta pubblicata diventa immutabile, cioè non è più possibile aggiungere ad essa nuove canzoni. La collezione può far parte di una delle tre seguenti tipoligie: il Singolo che comprende da una a tre canzoni, l'EP (o Extended Play) che comprende dalle 4 alle 5 canzoni con una durata complessiva minore di mezz'ora e infine l'Album (o LP cioè Long Play) che contiene un numero di canzoni maggiore dell'EP e di durata complessiva tra la mezz'ora e l'ora.
 
 1.1.2 Tabella dei Termini e Concetti
 
@@ -62,24 +64,24 @@ Una collezione una volta pubblicata diventa immutabile, cioè non è più possib
 6. Precisazione: ...Mezzora... --> ...30 minuti...
 7. Precisazione: ...Mezzora..ora... --> ...Tra i 30 minuti e i 60 minuti complessivi...
 
-1.1.TEMP Elenco attributi Comuni / Appunti di cose da ricordare
+1.1.3 Elenco attributi Comuni
 
 1. Artista : nickname, data di registrazione, note sull'artista, molteplici numeri di cellulare, molteplici email.
 2. Musicista Solista : nome, cognome, data di nascita, strumenti suonati.
 3. Gruppo : data di formazione.
 
-4. Ogni produzione può avere copie fisiche in formato audiocassetta e vinile?
-5. Il producer dovrebbe essere un musicista? Un sito dice di si.
+1.1.4 [TODO] Appunti di cose da ricordare
+
+1. Ogni produzione può avere copie fisiche in formato audiocassetta e vinile?
+2. Il producer dovrebbe essere un musicista? Un sito dice di si.
 
 -------------------------------------------------------------------------------------------------
 
-1.2.1 Formulazione e analisi dei requisiti per gli Artisti
+1.2.1 Formulazione e analisi dei requisiti per i Tecnici
 
-I Tecnici sono coloro che lavorano nelle sale di registrazione e si occupano di acquisire e modificare le tracce registrate. Essi sono caratterizati da un codice-univoco, un nome, un cognome, la data di nascita e la data di registrazione. I Tecnici possono specializzarsi in Tecnico del Suono ed in Fonico e le due figure possono anche sovrapporsi. Il fonico è il tecnico che si occupa di mixaggi, livellazione del suono e aggiunta di effetti post registrazione; mentre il Tecnico del Suono cerca di registrare l'audio della migliore qualità possibile. Entrambe le due entità non caratterizzano ulteriormente il tecnico.
+I Tecnici sono coloro che lavorano nelle sale di registrazione e si occupano di acquisire e modificare le tracce registrate. Essi sono caratterizati da un codice-univoco, un nome, un cognome, la data di nascita e la data di registrazione. I Tecnici devono specializzarsi in Tecnico-del-Suono oppure in Fonico; le due figure possono anche sovrapporsi. Il fonico è il tecnico che si occupa di mixaggi, livellazione del suono e aggiunta di effetti post registrazione; mentre il Tecnico del Suono cerca di ottenere un audio della migliore qualità possibile. Entrambe le due entità non caratterizzano ulteriormente il tecnico. Ciascun tecnico viene assegnato ad una ed una sola sala di registrazione.
 
-Uno studio di registrazione consiste in due spazi, una sala di controllo o regia; ed una sala di registrazione o live room.
-
-
+Uno studio di registrazione consiste in due spazi, una sala di controllo o regia; ed una sala di registrazione o live room insonorizzata. La sala di registrazione disporrà delle attrezzature elettroniche adeguate per registrare il suono; analogamente la sala di controllo disporrà delle appropriate attrezzature per editare e immagazzinare le canzoni registrate. Ciascuna sala di registrazione può avere dagli 1 ai 2 tecnici.
 
 1.2.2 Tabella dei Termini e Concetti
 
@@ -87,66 +89,31 @@ Sinonimo: Sala di Controllo o Regia
 Sinonimo: Sala di Registrazione o Live Room
 ...le due figure possono anche sovrapporsi... --> ...le due figure possono anche essere interpretate dallo stesso tecnico...
 
-1.1.TEMP Elenco attributi Comuni / Appunti di cose da ricordare
+1.2.3 Elenco attributi Comuni
 
 1. Tecnico: codice-univoco, nome, cognome, data di nascita, data di registrazione
 2. Tecnico del Suono: nessuna caratterizzazione.
 3. Tecnico Fonico: nessuna caratterizzazione.
 
+1.2.4 [TODO] Appunti di cose da ricordare
+
+1. Studio != Sala di registrazione != Sala di controllo
+
 -------------------------------------------------------------------------------------------------
 
+1.3.1 Formulazione e analisi dei requisiti per gli Operatori
 
+L'operatore lavora presso la sede principale dell'azienda ed ha il compito di supervisionare lo stato di pagamento delle varie prenotazioni. Ha il diritto di potere cancellare una prenotazione se un cliente è recidivo inseguito a mancato pagamento dopo tre richiami da parte dell'operatore. Il sito non offre un servizio di pagamento a rate. 
 
+Il sito offre il seguente sistema di prenotazione: oraria con cui si occupa la sala per un certo ammontare di ore, a giorni con cui si occupa la sala per un'intera giornata lavorativa per un ammontare pari a (prezzo di un'ora * 8) oppure si può scegliere uno dei seguenti pacchetti settimanale con uno sconto del 25% o mensile con uno sconto del 33% dove si hanno rispettivamente 7 prenotazioni singole e 30 prenotazioni singole .
 
+Una volta scelto il pacchetto si accede a un interfaccia che permette di scegliere una sala e i giorni in cui cui si vuol prenotare, nel caso in cui nel giorno scelto la sala risulti già occupata verrà proposta una lista di sale libere o altrimenti si prova a cambiare giorno se si vuole quella sala specifica. Lato database andremo a salvare quando viene effettuato un pagamento il tipo (orario, singolo, settimanale, mensile) e uno stato che va a indicare per i pacchetti settimanale e mensile che indica il numero residuo di prenotazioni giornaliere rimaste da effettuare.
 
+1.3.3 Elenco attributi Comuni
 
+1.3.4 [TODO] Appunti di cose da ricordare
 
+1. Revisionare e rilocale la formulazione e analisi dei requisiti.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-------------------------------------------------------------------------------------------------
 
