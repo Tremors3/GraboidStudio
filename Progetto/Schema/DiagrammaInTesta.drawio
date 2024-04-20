@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram name="Pagina-1" id="cASJgcRA1GZAY-W6Zr8W">
-        <mxGraphModel dx="2196" dy="599" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="none" math="0" shadow="0">
+        <mxGraphModel dx="2555" dy="809" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="none" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -647,7 +647,7 @@
                     <mxGeometry x="1410" y="1770" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="519" value="L'operatore ha il compito di supervisionare lo stato di pagamento delle varie prenotazioni, ha il diritto di potere cancellare una prenotazione se un cliente è recidivo inseguito a mancato pagamento dopo tre richiami da parte dell'operatore.&amp;nbsp;&lt;br&gt;Una prenotazione ha associato uno&amp;nbsp; e uno solo pagamente (non offriamo un servizio di pagamento a rate). Un pagamento fa riferimento ha una e una sola prenotazione." style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;overflow=fill;fontSize=12;" parent="1" vertex="1">
-                    <mxGeometry x="1210" y="2090" width="970" height="140" as="geometry"/>
+                    <mxGeometry x="1230.5" y="1998" width="970" height="72" as="geometry"/>
                 </mxCell>
                 <mxCell id="520" value="Una prenotazione ha associato uno&amp;nbsp; e uno solo pagamente (non offriamo un servizio di pagamento a rate). Un pagamento fa riferimento ha una e una sola prenotazione." style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;overflow=fill;fontSize=12;" vertex="1" parent="1">
                     <mxGeometry x="-1050.5" y="1717.5" width="970" height="12.5" as="geometry"/>
@@ -659,16 +659,16 @@
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="553" value="Tecnico" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6a00ff;strokeColor=#3700CC;" vertex="1" parent="1">
-                    <mxGeometry x="1650" y="1150" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="1650.5" y="1180" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="556" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="557" target="558">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="557" value="Prenotazione" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6a00ff;strokeColor=#3700CC;" vertex="1" parent="1">
-                    <mxGeometry x="1230" y="1150" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="1230.5" y="1180" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="558" value="visualizza" style="shape=rhombus;double=1;perimeter=rhombusPerimeter;whiteSpace=wrap;html=1;align=center;rounded=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="1">
-                    <mxGeometry x="1414" y="1150" width="140" height="60" as="geometry"/>
+                    <mxGeometry x="1414.5" y="1180" width="140" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="561" value="" style="edgeStyle=none;html=1;startArrow=none;startFill=0;endArrow=classic;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="562">
                     <mxGeometry relative="1" as="geometry">
@@ -680,10 +680,10 @@
                     <mxGeometry x="2210" y="970" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="567" value="&lt;span style=&quot;text-align: center;&quot;&gt;Scelta concettuale&lt;br&gt;Fonico Progetto&amp;nbsp; &amp;nbsp;|&amp;nbsp; &amp;nbsp;Sala Prenotazione&lt;br&gt;&lt;/span&gt;&lt;br&gt;Il fonico attraverso un apposita sezione del sito può visualizzare la tabella prenotazioni in modo da capire in quale sala si deve dirigere&lt;br&gt;e a quale progetto deve lavorare durante quelle ore&lt;br&gt;Un fonico può essere assegnato a uno o più progetti.&amp;nbsp;" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;overflow=fill;fontSize=12;" vertex="1" parent="1">
-                    <mxGeometry x="1230" y="1241" width="970" height="89" as="geometry"/>
+                    <mxGeometry x="1230.5" y="1271" width="970" height="89" as="geometry"/>
                 </mxCell>
                 <mxCell id="568" value="Artista" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6a00ff;strokeColor=#3700CC;fontColor=#ffffff;" vertex="1" parent="1">
-                    <mxGeometry x="1250" y="262.5" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="1230" y="262.5" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="569" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="571" target="568">
                     <mxGeometry relative="1" as="geometry"/>
@@ -692,13 +692,13 @@
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="571" value="effettua" style="shape=rhombus;double=1;perimeter=rhombusPerimeter;whiteSpace=wrap;html=1;align=center;rounded=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="1">
-                    <mxGeometry x="1430" y="262.5" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="1410" y="262.5" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="572" value="Prenotazione" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6a00ff;strokeColor=#3700CC;" vertex="1" parent="1">
-                    <mxGeometry x="1621.5" y="262.5" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="1601.5" y="262.5" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="573" value="Sala" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6a00ff;strokeColor=#3700CC;fontColor=#ffffff;" vertex="1" parent="1">
-                    <mxGeometry x="1970" y="262.5" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="1950" y="262.5" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="574" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="576" target="572">
                     <mxGeometry relative="1" as="geometry"/>
@@ -707,44 +707,50 @@
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="576" value="di" style="shape=rhombus;double=1;perimeter=rhombusPerimeter;whiteSpace=wrap;html=1;align=center;rounded=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="1">
-                    <mxGeometry x="1800" y="262.5" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="1780" y="262.5" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="577" style="edgeStyle=orthogonalEdgeStyle;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="578" target="595">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="578" value="Pagamento" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6a00ff;strokeColor=#3700CC;" vertex="1" parent="1">
-                    <mxGeometry x="1250.5" y="150" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="1230.5" y="150" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="594" style="edgeStyle=orthogonalEdgeStyle;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;endArrow=classic;endFill=1;" edge="1" parent="1" source="595" target="572">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="595" value="di" style="shape=rhombus;double=1;perimeter=rhombusPerimeter;whiteSpace=wrap;html=1;align=center;rounded=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="1">
-                    <mxGeometry x="1430" y="150" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="1410" y="150" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="600" value="Artista" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6a00ff;strokeColor=#3700CC;" vertex="1" parent="1">
-                    <mxGeometry x="1230" y="460" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="1235" y="440" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="641" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="622" target="625">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="622" value="suona" style="shape=rhombus;double=1;perimeter=rhombusPerimeter;whiteSpace=wrap;html=1;align=center;rounded=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="1">
-                    <mxGeometry x="1444" y="460" width="140" height="60" as="geometry"/>
+                    <mxGeometry x="1449" y="440" width="140" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="625" value="Strumento" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6a00ff;strokeColor=#3700CC;" vertex="1" parent="1">
-                    <mxGeometry x="1688" y="460" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="1693" y="440" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="642" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=none;endFill=0;exitX=0.026;exitY=0.502;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="622" target="600">
                     <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="1420" y="348.5" as="sourcePoint"/>
-                        <mxPoint x="1360" y="348.5" as="targetPoint"/>
+                        <mxPoint x="1425" y="328.5" as="sourcePoint"/>
+                        <mxPoint x="1365" y="328.5" as="targetPoint"/>
                         <Array as="points"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="643" value="Un artista può effettuare una o più prenotazioni di una o più sale. Attraverso un apposita sezione della sito web si potrà scegliere il metodo di pagamento e pagare. In un altra sezione è possibile visionare lo stato dei pagamenti di ogni prenotazione ed effettuarne delle stampe." style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;overflow=fill;fontSize=12;" vertex="1" parent="1">
                     <mxGeometry x="1235" y="370" width="970" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="644" value="Ogni artista possiede degli strumenti musicali che vengono salvati nel database di modo che" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;overflow=fill;fontSize=12;" vertex="1" parent="1">
-                    <mxGeometry x="1235" y="560" width="970" height="60" as="geometry"/>
+                <mxCell id="644" value="Ogni artista possiede degli strumenti musicali che vengono registrati attraverso un apposito form" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;overflow=fill;fontSize=12;" vertex="1" parent="1">
+                    <mxGeometry x="1235" y="530" width="970" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="648" value="Contatti" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6a00ff;strokeColor=#3700CC;" vertex="1" parent="1">
+                    <mxGeometry x="1230.5" y="620" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="650" value="Ogni artista (? a capo del progetto? ) (cliente ma è vista di artista quindi non so come descriverlo) (non ha senso memorizzare la relazione artista-contatti visto che è una tabella fruibile sul sito e si contatterano tramite mail/telefono e nel momento in cui un contatto accetta di lavorare a un progetto viene inserito all'interno della lista di persone che lavorano al progetto.&lt;br&gt;&lt;br&gt;L'azienda mette a disposizione nel sito la proprià lista di contatti di producer e artisti che sono disposti a lavorare in dei progetti in modo che possano essere contattati tramite telefono o email dagli artisti che ne necessitano." style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;overflow=fill;fontSize=12;" vertex="1" parent="1">
+                    <mxGeometry x="1230" y="710" width="970" height="90" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

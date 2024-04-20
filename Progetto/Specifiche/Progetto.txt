@@ -48,29 +48,32 @@ Nel seguito considereremo perciò le seguenti diverse classi di utenza:
 
 1.1.1 Formulazione e analisi dei requisiti per gli Artisti
 
-Gli artisti sono coloro che contattano lo studio perchè necessitano di registrare in modo professionale le proprie canzoni. Gli Artisti possono essere Musicisti Solisti oppure Gruppi di Musicisti. Ogni artista, di entrambi i tipi, è caratterizzato da un nickname univoco, una data di registrazione, note testuali sull'autista, molteplici numeri di cellulare, molteplici email. Più nel particolare i Musicisti Solisti saranno ulteriormente caratterizzati da un nome, un cognome, una data di nascita, e dagli strumenti suonati; il gruppo necessita soltanto della data di formazione. E' richiesto di tenere traccia 
+Gli artisti sono coloro che contattano lo studio perchè necessitano di registrare in modo professionale le proprie canzoni. Gli Artisti possono essere Musicisti Solisti oppure Gruppi di Musicisti. Ogni artista, di entrambi i tipi, è caratterizzato da un nickname univoco, una data di registrazione, note testuali sull'autista, molteplici numeri di cellulare, molteplici email. Più nel particolare i Musicisti Solisti saranno ulteriormente caratterizzati da un nome, un cognome, una data di nascita, e dagli strumenti suonati; il gruppo necessita soltanto della data di formazione. Deve essere possibile tenere traccia della data nell'a quale il Musicista entra a far parte del gruppo.
+
+E' possibile che un musicista che non faccia parte del gruppo che ha pubblicato una canzone partecipi comunque nella sua composizione. Deve quindi essere riportata la sua partecipazione.
 
 Una canzone è un pezzo musicale più o meno esteso prodotto da un Artista. Ogni canzone è caratterizzata da un codice-univoco, da un titolo, dalla lunghezza della traccia in minuti, dalla data della traccia, e dal codice della collezione a cui appartiene. Ogni canzone può appartenere ad una sola collezione di canzoni.
 
-Una collezione è una raccolta di canzoni registrate dallo studio. Ogni collezione è contraddistinta dal codice-univoco dell'artista che la produce, dalla data di inizio e termine delle registrazioni, da un titolo, dalla tipologia e dallo stato. La collezzione può essere in stato di produzione (le canzoni stanno ancora venendo registrate) ed in stato di Pubblicazione (tuttte le canzoni sono state registrate).
-Una collezione una volta pubblicata diventa immutabile, cioè non è più possibile aggiungere ad essa nuove canzoni. La collezione può far parte di una delle tre seguenti tipoligie: il Singolo che comprende da 1 a tre canzoni, l'EP (o Extended Play) che comprende dalle 4 alle 5 canzoni con una durata complessiva minore di 30 minuti e infine l'Album (o LP cioè Long Play) che contiene un numero di canzoni maggiore dell'EP e di durata complessiva tra la mezz'ora e l'ora.
+Una collezione è una raccolta di canzoni registrate dallo studio. Ogni collezione è contraddistinta dal codice-univoco dell'artista che la produce, dalla data di inizio e termine delle registrazioni, da un titolo, dalla tipologia e dallo stato. La collezzione può essere in stato di produzione (le canzoni stanno ancora venendo registrate) ed in stato di Pubblicazione (tutte le canzoni sono state registrate).
+Una collezione una volta pubblicata diventa immutabile, cioè non è più possibile aggiungere ad essa nuove canzoni. La collezione può far parte di una delle tre seguenti tipoligie: il Singolo che comprende da 1 a tre canzoni, l'EP (o Extended Play) che comprende dalle 4 alle 5 canzoni con una durata complessiva minore di mezz'ora e infine l'Album (o LP cioè Long Play) che contiene un numero di canzoni maggiore dell'EP e di durata complessiva tra la mezz'ora e l'ora.
 
+1.1.2 Tabella dei Termini e Concetti
 
-Tabella dei Concetti collezione
+1. Sinonimo:
+2. Sinonimo: Canzone Brano.
+3. Sinonimo: Collezione Produzione.
+4. Precisazione: ...Canzone è un pezzo musicale più o meno esteso... --> ...di una certa durata in minuti...
+5. Precisazione: ...Mezzora... --> ...30 minuti...
+6. Precisazione: ...Mezzora..ora... --> ...Tra i 30 minuti e i 60 minuti complessivi...
 
-1. Canzone diventa Brano.
-2. Collezione diventa Produzione.
-3. Ogni artista può possedere diverse canzoni. Una canzone può appartenere ad un singolo artista.
-4. Gruppo --> Insieme di musicisti che producono un brano.
-5. Una canzone è un pezzo musicale più o meno esteso --> di una certa durata in minuti. 
-6. Mezzora, ora --> Tra i 30 minuti e i 60 minuti complessivi.
+1.1.TEMP Elenco attributi Comuni
+
+Artista : nickname, data di registrazione, note sull'artista, molteplici numeri di cellulare, molteplici email.
+Musicista Solista : nome, cognome, data di nascita, strumenti suonati.
+Gruppo : data di formazione.
+
 -------------------------------------------------------------------------------------------------
 
-1.1.1 Elenco attributi Comuni
-
-Artista : nickname, data di registrazione, note sull'artista, molteplici numeri di cellulare, molteplici email
-Musicista Solista : nome, cognome, data di nascita, strumenti suonati.
-Gruppo : nessuna caratterizazione
 
 
 
