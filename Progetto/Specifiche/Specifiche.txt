@@ -1,4 +1,6 @@
 
+
+
 ------ SCADENZE ------------------------
 
 22 aprile - raccolta dei requisiti + schema scheletro
@@ -69,3 +71,13 @@ Metti caso che un locale ha un pianoforte. Il cliente (locale) può voler cercar
 ------ APPUNTI ------------------------
 
 Nel caso in cui avremo delle ridondanze nello schema logico; ha senso lasciarle, conviene computazionalmente oppure sconviene?
+
+
+
+1.3.1 Formulazione e analisi dei requisiti per gli Operatori
+
+L'operatore lavora presso la sede principale dell'azienda ed ha il compito di supervisionare lo stato di pagamento delle varie prenotazioni. Ha il diritto di potere cancellare una prenotazione se un cliente è recidivo inseguito a mancato pagamento dopo tre richiami da parte dell'operatore. Il sito non offre un servizio di pagamento a rate. 
+
+Il sito offre il seguente sistema di prenotazione: oraria con cui si occupa la sala per un certo ammontare di ore, a giorni con cui si occupa la sala per un'intera giornata lavorativa (per un ammontare pari a (prezzo di un'ora * 8)).
+
+nel database vengono salvate le prenotazioni singole anche quando viene scelte di fare un pacchetto, viene gestito dal sito la scelta dei giorni.
