@@ -1,3 +1,9 @@
+1. Allungare la descrizione generale del progetto
+2. Rileggere e correggere il testo delle viste
+3. Trovare Operazioni query per le tre viste.
+4. Fare le tabelle dei concetti...
+5. Diagrammi scheletro.
+
 PROGETTO DI UNA BASE DI DATI
 PER LA GESTIONE DI UNO
 STUDIO DI REGISTRAZIONE
@@ -30,10 +36,6 @@ Questo progetto si occupa di descrivere il funzionamento di uno studio di regist
 Disporrà di un edificio dove sono locate diverse sale di registrazione, le quali disporranno delle appropriate attrezzature elettroniche per consentire lo svolgimento delle normali attività. Ogni sala di registrazione disporrà di tecnici specializzati per la registrazione dei brani e successiva manipolazione.
 
 Per gestire lo scheduling delle registrazioni e per evitare sovrapposizioni delle ore di registrazione, viene messo a disposizione un sistema di prenotazioni e un’apposito operatore di Call Center in grado di gestire tali prenotazioni.
-
-Non verrà messo a disposizione dallo studio nessun tipo di strumento musicale richiesto dall'artista.
-
-Disporrà inoltre di un elenco contenente musicisti di studio privati. Qual’ora un cliente necessiti di un producer o di un musicista di supporto lo studio potrà consultare una lista di musicisti di studio e producer privati che potrà chiamare e consigliare al cliente. Il servizio è a pagamento a spesa del cliente.
 
 Nel seguito considereremo perciò le seguenti diverse classi di utenza:
 • Artista.
@@ -107,7 +109,9 @@ L'operatore è la figura che si occupa di rispondere al telefono. Lavora presso 
 
 Oggetto della prenotazione è una sala di registrazione dello studio. Lo studio si impegna a riservare la sala al cliente che ha effettuato la prenotazione. Più nel dettaglio lo studio non registra nuove prenotazioni che impegnano una sala se essa è già riservata ad altri clienti nella stessa fascia temporale. Lo studio di registrazione non può essere prenotato per meno di un'ora. E' possibile prenotare al massimo una settimana prima del giorno di cui si vuole fare la prenotazione. Il cliente è obbligato a pagare entro tre giorni dopo aver effettuato la prenotazione, in caso contrario essa viene annullata. Il cliente è costretto a pagare l'intera cifra della prenotazione in un'unica rata.
 
-Una prenotazione è caratterizzata dal cliente, dalla data di effettuazione della prenotazione, dalla stanza prenotata, dallo stato di pagamento e di cancellazione e dalla tipologia scelta tra le seguenti: oraria, pagata ad ore, caratterizzata dal giorno e dall'ora di inizio e fine del periodo di impegno; giornaliera, prezzo fisso, che al contrario della prima impegna la stanza per l'intera giornata; settimanale, avente prezzo fisso, che mette a disposizione del cliente 7 giorni lavorativi a sua scelta (piano settimanale); mensile, avente prezzo fisso, che mette a disposizione del cliente 30 giorni lavorativi a sua scelta (piano mensile); Non è necessario utilizzare i giorni tutti in fila ma possono essere sfruttati nell’arco di 90 giorni.
+Una prenotazione è caratterizzata dal cliente, dalla data di effettuazione della prenotazione, dalla stanza prenotata, dallo stato di pagamento e di cancellazione e dalla tipologia scelta tra le seguenti: oraria, pagata ad ore, caratterizzata dal giorno e dall'ora di inizio e fine del periodo di impegno; giornaliera, avente prezzo fisso, che al contrario della prima impegna la stanza per l'intera giornata; settimanale, avente prezzo fisso, che mette a disposizione del cliente 7 giorni lavorativi a sua scelta (piano settimanale); mensile, avente prezzo fisso, che mette a disposizione del cliente 30 giorni lavorativi a sua scelta (piano mensile). Non è necessario utilizzare i giorni tutti in fila ma possono essere sfruttati nell’arco di 90 giorni.
+
+Lo studio supporta solamente i seguenti metodi di pagamento: Bonifico, Carta di Pagamento, Servizi di pagamento Internet.
 
 --- operazioni
 - inserimento informazioni artista [artista]
