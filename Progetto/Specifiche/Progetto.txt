@@ -117,6 +117,10 @@ Viene visualizzato un elenco di tutte le sale libere per una certa data/ora.
 
 TECNICO
 
+
+?- elenco di tutti gli artisti che hanno lavorato con un tecnico 
+
+
 - inserimento informazioni tecnico
 Registrazione del tecnico
 
@@ -140,6 +144,10 @@ Una volta terminata la "stesura" di una canzone essa deve essere inserita nella 
 
 
 OPERATORE
+
+
+?- quante volte un cliente ha effettuato una prenotazione per una certa sala e il costo totale
+
 
 - inserimento informazioni operatore
 Registrazione dell'operatore.
