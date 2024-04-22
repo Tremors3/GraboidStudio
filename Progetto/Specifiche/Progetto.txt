@@ -80,33 +80,88 @@ Sinonimo: Sala di Registrazione
 
 1.3.1 Formulazione e analisi dei requisiti per gli Operatori
 
-L'operatore è il dipendente che si occupa di rispondere alle chiamate dei clienti. Lavora presso l'edificio dello studio in un locale apposito. Egli è caratterizzato da un nome, un cognome, una data di nascita, una data di assunzione, molteplici numeri di telefono, molteplici email, un iban. Inoltre tra le sue competenze troviamo la registrazione di nuove prenotazioni inoltrabili tramite chiamata telefonica, la loro supervisione ed eventuale cancellazione. L'operatore deve supervisionare anche lo stato di pagamento delle prenotazioni. Oggetto della prenotazione è una sala di registrazione dello studio. Lo studio si impegna a riservare la sala al cliente che ha effettuato la prenotazione. Più nel dettaglio lo studio non registra nuove prenotazioni che impegnano una sala se è già riservata ad altri clienti nella stessa fascia temporale. Lo studio di registrazione non può essere prenotato per meno di un'ora. E' possibile prenotare al massimo una settimana prima del giorno di cui si vuole fare la prenotazione. Il cliente è obbligato a pagare entro tre giorni dopo aver effettuato la prenotazione, in caso contrario essa viene annullata. Il cliente è costretto a pagare l'intera cifra della prenotazione in un'unica rata. Una prenotazione è caratterizzata dal cliente, dalla data di effettuazione della prenotazione, dal codice della stanza prenotata, dallo stato di pagamento e di cancellazione e dalla tipologia scelta tra le seguenti: oraria (pagata ad ore), caratterizzata dal giorno e dall'ora di inizio e fine del periodo di impegno; giornaliera, avente prezzo fisso, che al contrario della prima impegna la stanza per l'intera giornata; settimanale, avente prezzo fisso, che mette a disposizione del cliente 7 giorni lavorativi a sua scelta (piano settimanale); mensile, avente prezzo fisso, che mette a disposizione del cliente 30 giorni lavorativi a sua scelta (piano mensile). Non è necessario utilizzare i giorni tutti in fila ma possono essere sfruttati nell'arco di 90 giorni.
-Lo studio supporta solamente i seguenti metodi di pagamento: Bonifico, Carta di Pagamento, Servizi di pagamento Internet.
+L'operatore è il dipendente che si occupa di rispondere alle chiamate dei clienti. Lavora presso l'edificio dello studio in un locale apposito. Egli è caratterizzato da un nome, un cognome, una data di nascita, una data di assunzione, molteplici numeri di telefono, molteplici email, un iban. Inoltre tra le sue competenze troviamo la registrazione di nuove prenotazioni inoltrabili tramite chiamata telefonica, la loro supervisione ed eventuale cancellazione. L'operatore deve supervisionare anche lo stato di pagamento delle prenotazioni. Oggetto della prenotazione è una sala di registrazione dello studio. Lo studio si impegna a riservare la sala al cliente che ha effettuato la prenotazione. Più nel dettaglio lo studio non registra nuove prenotazioni che impegnano una sala se è già riservata ad altri clienti nella stessa fascia temporale. Lo studio di registrazione non può essere prenotato per meno di un'ora. E' possibile prenotare al massimo una settimana prima del giorno di cui si vuole fare la prenotazione. Il cliente è obbligato a pagare entro tre giorni dopo aver effettuato la prenotazione, in caso contrario essa viene annullata. Il cliente è costretto a pagare l'intera cifra della prenotazione in un'unica rata. Una prenotazione è caratterizzata dal cliente, dalla data di effettuazione della prenotazione, dal codice della stanza prenotata, dallo stato di pagamento e di cancellazione e dalla tipologia scelta tra le seguenti: oraria (pagata ad ore), caratterizzata dal giorno e dall'ora di inizio e fine del periodo di impegno; giornaliera, avente prezzo fisso, che al contrario della prima impegna la stanza per l'intera giornata; settimanale, avente prezzo fisso, che mette a disposizione del cliente 7 giorni lavorativi a sua scelta (piano settimanale); mensile, avente prezzo fisso, che mette a disposizione del cliente 30 giorni lavorativi a sua scelta (piano mensile). Non è necessario utilizzare i giorni tutti in fila ma possono essere sfruttati nell'arco di 90 giorni. Lo studio supporta solamente i seguenti metodi di pagamento: Bonifico, Carta di Pagamento, Servizi di pagamento Internet.
 
 1.3.2 Tabella dei termini e concetti
-
-
-
-
 --- operazioni
-- inserimento informazioni artista [artista]
-- inserimento informazioni band [artista]
-- elenco composizioni a cui a partecipato un artista [artista]
-- visualizzazione lista contatti [artista]
-- creazione di una prenotazione [artista]
-- annullamento di una prenotazione [artista]
-- elenco artisti partecipanti a una data canzone [artista] 
+
+
+
+ARTISTA
+
+- Elenco di tutte le produzioni nelle quali un Solista ha collaborato (non composto).
+- Elenco di tutte le produzioni rilasciate da gruppi che contengono un determinato Solista.
+- Elenco di tutti gli artisti che hanno collaborato con un certo producer.
+- Elenco di tutti i Solisti che hanno collaborato con un certo Gruppo o Solista.
+
+- inserimento informazioni artista
+Registrazione dell'artista
+
+- inserimento informazioni band
+Registrazione della band
+
+- creazione di una prenotazione
+Un artista crea una prenotazione, ha tre giorni di tempo per pagarla, viene inserito l'artista che effettua la prenotazione, i giorni e le fascie orarie scelte e le relative sale.
+
+- modifica di una prenotazione
+Un artista può modificare la fascia oraria o il giorno, la sala per una data prenotazione.
+
+- annullamento di una prenotazione
+Un artista può annullare una prenotazione specifica fino a sette giorni prima della data della prenotazione.
+
+- elenco artisti partecipanti a una data canzone
+Data una certa canzone vengono mostrate le informazioni degli artisti che hanno partecipato ad essa
+
+- elenco sale disponibili
+Viene visualizzato un elenco di tutte le sale libere per una certa data/ora.
+
+TECNICO
 
 - inserimento informazioni tecnico
-- elenco delle produzioni [tecnico]
-- inserimento dati della canzone [tecnico]
-- inserimento della canzone in una produzione [tecnico]
+Registrazione del tecnico
 
-- inserimento informazioni operatore 
-- annullamento di una prenotazione [operatore]
+- elenco delle produzioni
+Viene visualizzato un elenco di produzioni a cui ha partecipato un tecnico contenente: le produzioni, artisti, produttori, tecnici, titolo, data di creazione, lo stato della collezione ("produzione" o "pubblicazione"), la tipologia ("Singolo", "EP", "Album").
+
+- elenco attrezzature di una data sala
+Vengono elencate le attrezzature presenti in una data sala
+
+- crezione di una produzione
+Inserimento del titolo, viene indicato l'artista che la possiede e viene impostato lo stato di "produzione".
+
+- Pubblicazione di una produzione
+Questa operazione va a impostare per una data produzione lo stato di "pubblicazione" che va ad indicare l'immutabilità di essa e viene impostata la data di termine delle registrazioni. 
+
+- inserimento dati della canzone
+Inserimento informazioni generali della canzone quali artisti, produttori che hanno partecipato alla creazione della canzone, titolo, durata in secondi e data di registrazione.
+
+- inserimento della canzone in una produzione
+Una volta terminata la "stesura" di una canzone essa deve essere inserita nella "collezione" di cui fa parte.
+
+
+OPERATORE
+
+- inserimento informazioni operatore
+Registrazione dell'operatore.
+
+- creazione prenotazione
+L'operatore ha anche il compito di registrare le prenotazioni previo accordo con il cliente tramite chiamata telefonica.
+
+- modifica di una data prenotazione
+L'operatore previo accordo con cliente può modificare la fascia oraria o il giorno, la sala per una data prenotazione.
+
+- elenco delle prenotazioni che non sono ancora state pagate
+Viene visualizzato un elenco di prenotazioni non pagate e informazioni di chi ha fatto la prenotazione: nome, cognome, telefono, data di registrazione della prenotazione.
+
+- annullamento di una prenotazione
+L'operatore ha il diritto di annullare una prenotazione se il cliente non paga entro tre giorni dopo aver effettuato la prenotazione.
 
 - visualizzazione delle informazioni relative al pagamento di una data prenotazione [artista-operatore]
-- elenco sale disponibili [artista - operatore]
+Vengono visualizzate le informazioni nome, cognome del cliente, data in cui è stata effettuata la prenotazione, lo stato "pagato", "da pagare", costo totale della prenotazione. 
+
+- elenco sale disponibili
+Viene visualizzato un elenco di tutte le sale libere per una certa data/ora.
+
 
 1.3.3 Elenco attributi Comuni
 
@@ -115,4 +170,8 @@ Prenotazione orario     : giorno, orario di inizio, orario di fine.
 Prenotazione a giorni   : giorno
 
 -------------------------------------------------------------------------------------------------
+
+Query che mantiene l'integrità del database
+- aggiornamento contatore del numero di giorni prenotabili di un piano.
+Ogni prenotazione ha associato un contatore che va a indicare i giorni prenotabili di un piano, questo contatore viene incrementato nel caso in cui una prenotazione venga cancellata dal cliente (facendo un controllo che la prenotazione venga cancellata prima di una settimana della data a cui fa riferimento la prenotazione), viene decrementato ogni qual volta venga registrata una riservazione di un giorno di una sala.
 
