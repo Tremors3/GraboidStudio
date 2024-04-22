@@ -27,15 +27,9 @@ INDICE
 
 1 Analisi dei requisiti e progetto delle viste
 
-Questo progetto si occupa di descrivere il funzionamento di uno studio di registrazione professionale e delle sue principali attività. Nel dettaglio, si occuperà di:
+Questo progetto si occupa di descrivere il funzionamento di uno studio di registrazione e delle sue principali attività. Si occuperà dell'acquisizione e rielaborazione di registrazioni audio per conto di artisti (Musicisti Solisti, Cantanti Solisti, Gruppo). Le migliori registrazioni sono selezionate ed inserite all’interno di collezioni (Singoli, EP, LP o Album) e ridistribuite in formato digitale.
 
-1. Acquisizione e rielaborazione di registrazioni audio per conto di artisti (Musicisti Solisti, Gruppo). Le migliori registrazioni sono selezionate ed inserite all’interno di collezioni (Singoli, EP, LP o Album) e ridistribuite in formato digitale sull’apposita piattaforma web.
-
-2. Memorizzare i dati relativi a Musicisti e rispettivi Gruppi per fornire agli utenti dell’applicazione web un’esperienza più completa.
-
-Disporrà di un edificio dove sono locate diverse sale di registrazione, le quali disporranno delle appropriate attrezzature elettroniche per consentire lo svolgimento delle normali attività. Ogni sala di registrazione disporrà di tecnici specializzati per la registrazione dei brani e successiva manipolazione.
-
-Per gestire lo scheduling delle registrazioni e per evitare sovrapposizioni delle ore di registrazione, viene messo a disposizione un sistema di prenotazioni e un apposito operatore di Call Center in grado di gestire tali prenotazioni. Lo studio supporta solamente i seguenti metodi di pagamento: Bonifico, Carta di Pagamento, Servizi di pagamento Internet.
+Lo studio di registrazione si trova in un edificio dove sono locate diverse sale di registrazione, le quali dispongono delle appropriate attrezzature per consentire lo svolgimento delle normali attività. Tecnici specializzati si occupano di registrare e manipolare i brani. Per gestire lo scheduling delle registrazioni e per evitare sovrapposizioni delle ore di registrazione, vi è un sistema di prenotazioni e un apposito operatore in grado di gestire tali prenotazioni.
 
 Nel seguito considereremo perciò le seguenti diverse classi di utenza:
 • Artista.
