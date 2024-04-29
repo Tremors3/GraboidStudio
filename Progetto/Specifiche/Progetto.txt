@@ -177,3 +177,21 @@ Query che mantiene l'integrità del database
 - aggiornamento contatore del numero di giorni prenotabili di un piano.
 Ogni prenotazione ha associato un contatore che va a indicare i giorni prenotabili di un piano, questo contatore viene incrementato nel caso in cui una prenotazione venga cancellata dal cliente (facendo un controllo che la prenotazione venga cancellata prima di una settimana della data a cui fa riferimento la prenotazione), viene decrementato ogni qual volta venga registrata una riservazione di un giorno di una sala.
 
+
+--- Fase 3 consegna 3 maggio
+Evoluzione dello schema scheletro di ogni vista con descrizione
+dei passaggi in riferimento alla descrizione dei requisiti
+
+Schema E-R finale per ogni vista
+
+Integrazione delle viste in un unico schema E-R
+
+Dizionario dei dati
+
+Vincoli non esprimibili
+---
+
+
+
+
+

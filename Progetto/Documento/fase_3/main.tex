@@ -1,0 +1,291 @@
+\documentclass{article}
+\usepackage[italian]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=tudelftblue]{hyperref} %sets hyperlink colour
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage{roboto} % for Roboto Slab font
+\usepackage{float}
+\usepackage{titling} 
+\usepackage{blindtext}\usepackage{titlesec}
+\usepackage[square,sort,comma,numbers]{natbib}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{tikz}
+\usepackage{geometry}
+\usepackage{sectsty}
+\usepackage{amsmath}
+\usepackage{tikzpagenodes}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{makecell} 
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{svg}
+\usepackage{enumitem}
+\definecolor{tudelftdarkblue}{RGB}{0,0,0}
+\definecolor{tudelftcyan}{RGB}{209,65,36}
+\definecolor{tudelftblue}{RGB}{99, 102, 106}
+\geometry{a4paper, margin=2cm}
+\allsectionsfont{\color{black}} %sets colour for all headers
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\sectionfont{\fontfamily{RobotoSlab-TLF}\selectfont}
+
+\newcounter{countertabelle}
+\setcounter{countertabelle}{0}
+\newcommand{\ctabelle}{\addtocounter{countertabelle}{1}\thecountertabelle}
+
+\newcounter{counteroperazioni}
+\setcounter{counteroperazioni}{0}
+\newcommand{\coperazioni}{\addtocounter{counteroperazioni}{1}\thecounteroperazioni}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\input{titlepage}
+\tableofcontents
+
+\newpage
+\section{Analisi dei requisiti e progetto delle viste}
+Questo progetto si occupa di descrivere il funzionamento di uno studio di registrazione e delle sue principali attività. Si occuperà dell'acquisizione e rielaborazione di registrazioni audio per conto di artisti (Musicisti Solisti, Cantanti Solisti, Gruppo).  Le migliori registrazioni sono selezionate ed inserite all’interno di collezioni (Singoli, EP, LP o Album) e ridistribuite in formato digitale. \\ \\ Lo studio di registrazione si trova in un edificio dove sono locate diverse sale di registrazione, le quali dispongono delle appropriate attrezzature per consentire lo svolgimento delle normali attività. Tecnici specializzati si occupano di registrare e manipolare i brani. Per gestire lo scheduling delle registrazioni e per evitare sovrapposizioni delle ore di registrazione, vi è un sistema di prenotazioni e un apposito operatore in grado di gestire tali prenotazioni. \\ \\
+Nel seguito considereremo perciò le seguenti diverse classi di utenza:
+\begin{itemize}
+    \item \textbf{Artista}.
+    \item \textbf{Tecnico}.
+    \item \textbf{Operatore}.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\subsection{Vista Artista}
+\subsubsection{Formulazione e analisi dei requisiti per gli Artisti}
+
+\renewcommand*{\arraystretch}{1.4}
+\begin{longtable}{|r|p{.8\linewidth}|}
+  \hline
+  & \multicolumn{1}{c|}{\textbf{Requisiti richiesti dagli Artisti}}
+  \endhead
+  \hline
+  \multirow{1}{1em}{\raggedleft \\[-8.5pt] 1\\2\\3\\4\\5\\6\\7\\8\\9\\10\\11\\12\\13\\14\\15\\16\\17\\18\\19\\20\\21\\22\\23\\24\\25\\26\\27}
+  & L'Artista è l'ente che contatta lo studio per registrare professionalmente le proprie canzoni. Ogni Artista deve essere un Solista (cantante o musicista) oppure un Gruppo di Solisti. Ogni artista, di entrambi i tipi, è caratterizzato da un nickname, una data di registrazione, note testuali sull'artista, molteplici numeri di cellulare, molteplici email, iban. Nel dettaglio i Solisti saranno ulteriormente caratterizzati da un nome, un cognome, una data di nascita; il gruppo necessita soltanto della data di formazione. Deve essere possibile tenere traccia della data nella quale il Solista entra a far parte del gruppo. Un'altra figura di notevole importanza è il Produttore. Il Produttore è un Solista che nel corso della produzione di un disco ricopre diversi ruoli, tra i quali figurano la supervisione delle sessioni in studio di registrazione, la preparazione e la guida dei musicisti e la supervisione dei processi di mixaggio e mastering. E' possibile che un Solista, che non faccia parte del gruppo che ha pubblicato una canzone, partecipi comunque nella sua composizione. Deve quindi esserne riportata la sua partecipazione. Non è possibile che un Gruppo partecipi alla composizione di una canzone appartenente ad un altro artista. La canzone è un pezzo musicale più o meno esteso caratterizzata da un codice-univoco, da un titolo, dalla lunghezza in secondi, dalla data di registrazione, e dal codice della collezione a cui appartiene. Ogni canzone può appartenere ad una sola collezione di canzoni. La collezione è una raccolta di canzoni. Ogni collezione è contraddistinta dal codice-univoco dell'artista che la possiede, dalla data di inizio e termine delle registrazioni, da un titolo, dalla tipologia e dallo stato. La collezione può essere in stato di produzione (le canzoni stanno ancora venendo registrate) ed in stato di Pubblicazione (tutte le canzoni sono state registrate). Una collezione una volta pubblicata diventa immutabile, cioè non è più possibile aggiungere ad essa nuove canzoni. La collezione può far parte di una delle tre seguenti tipologie: il Singolo che comprende da una a tre canzoni, l'EP (o Extended Play) che comprende dalle 4 alle 5 canzoni con una durata complessiva minore di mezz'ora e infine l'Album (o LP cioè Long Play) che contiene un numero di canzoni maggiore dell'EP e di durata complessiva tra la mezz'ora e l'ora.
+ \\
+  \hline
+\end{longtable}
+
+\textbf{Tabella 1.\ctabelle} Specifiche in linguaggio naturale per gli Artisti
+
+\subsubsection{Dizionario dei concetti per gli Artisti} 
+
+\renewcommand*{\arraystretch}{1.4}
+\begin{longtable}{|p{.15\linewidth}|p{.25\linewidth}|p{.2\linewidth}|p{.2\linewidth}|}
+    \hline
+    \textbf{Termine} & \textbf{Descrizione} & \textbf{Sinonimi} & \textbf{Collegamenti}
+    \endhead
+    \hline
+    Artista & Ente che contatta lo studio per registrare professionalmente le proprie canzoni & Cliente & Collezione, Prenotazione \\ \hline
+    Solista & Artista singolo cantante o musicista & Musicista, Cantante & Gruppo\\ \hline
+    Gruppo & Artista composto da un insieme di musicisti & Band & Solista \\ \hline
+    Produttore & Solista che supervisiona le sessioni di registrazione dei musicisti e dei processi di mixaggio e mastering & & Collezione \\ \hline
+    Collezione & Una raccolta di canzoni; il prodotto finale dell'Artista & Produzione, Album & Artista, Produttore, Canzone \\ \hline
+    Canzone & Pezzo musicale più o meno esteso & Brano, Traccia & Collezione  \\ \hline
+    Prenotazione & Impegno di un Cliente ad occupare uno studio. & Impegno & Artista \\ \hline
+\end{longtable}
+\textbf{Tabella 1.\ctabelle} Dizionario dei concetti
+
+\subsubsection{Operazioni per gli Artisti}
+\setcounter{counteroperazioni}{0}
+\begin{itemize}[labelindent=1.5em,labelsep=.5cm,leftmargin=*]
+    \item [\textbf{A\coperazioni)}] INSERIRE LE INFORMAZIONI DI UN ARTISTA \\ Registrazione dell'artista.
+    \item [\textbf{A\coperazioni)}] INSERIRE LE INFORMAZIONI DI UNA BAND \\  Registrazione della band.
+    \item [\textbf{A\coperazioni)}] ELENCARE LE COMPOSIZIONI A CUI HA PARTECIPATO UN ARTISTA \\ Vengono elencate tutte le canzoni a cui ha partecipato un artista.
+    \item [\textbf{A\coperazioni)}] ELENCARE GLI ARTISTI CHE HANNO PARTECIPATO ALLA CREAZIONE DI UNA CANZONE \\ Data una certa canzone vengono mostrate le informazioni degli artisti che hanno partecipato ad essa.
+
+    \item [\textbf{A\coperazioni)}] CREARE UNA PRENOTAZIONE \\ Un artista effettua una prenotazione specificando: l'artista che effettua la prenotazione, i giorni, le fasce orarie scelte e le relative sale. 
+    \item [\textbf{A\coperazioni)}] ANNULLARE UNA PRENOTAZIONE \\ Un artista può annullare una prenotazione specifica fino a sette giorni prima della data della prenotazione.
+    \item [\textbf{A\coperazioni)}] VISUALIZZARE LE INFORMAZIONI RELATIVE AL PAGAMENTO DI UNA PRENOTAZIONE \\ Vengono visualizzate le informazioni nome, cognome del cliente, data in cui è stata effettuata la prenotazione, lo stato "pagato", "da pagare", costo totale della prenotazione. 
+    \item [\textbf{A\coperazioni)}] ELENCARE LE SALE DISPONIBILI \\ Viene visualizzato un elenco di tutte le sale libere per una certa data/ora.
+    % \item [\textbf{A\coperazioni)}] TITOLO \\
+\end{itemize}
+
+
+
+\subsubsection{Schema scheletro per gli Artisti}
+\begin{center}
+    \includesvg[width=.7\textwidth]{images/schema_scheletro_artista.svg}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\subsection{Vista Tecnico}
+\subsubsection{Formulazione e analisi dei requisiti per i Tecnici}
+
+\renewcommand*{\arraystretch}{1.4}
+\begin{longtable}{|r|p{.8\linewidth}|}
+  \hline
+  & \multicolumn{1}{c|}{\textbf{Requisiti richiesti dai Tecnici}}
+  \endhead
+  \hline
+  \multirow{1}{1em}{\raggedleft \\[-8.5pt] 1\\2\\3\\4\\5\\6\\7\\8\\9\\10\\11\\12\\13} 
+  & I Tecnici sono coloro che lavorano negli studi e si occupano di acquisire e modificare le canzoni registrate. Sono caratterizzati da un nome, un cognome, la data di nascita, la data di assunzione, molteplici numeri di telefono, molteplici email, un iban. I Tecnici devono specializzarsi in Tecnico del Suono oppure in Fonico; le due figure possono anche sovrapporsi. Il fonico è il tecnico che si occupa di mixaggi, livellazione del suono e aggiunta di effetti post registrazione; mentre il Tecnico del Suono cerca di ottenere un audio della migliore qualità possibile. Entrambe le due entità non caratterizzano ulteriormente il tecnico. Ciascun tecnico viene assegnato ad uno e uno solo studio. Uno studio di registrazione consiste in due spazi, una Sala di Controllo; e una Sala di Registrazione insonorizzata. La Sala di Registrazione disporrà delle attrezzature elettroniche adeguate per registrare il suono; analogamente la Sala di Controllo disporrà delle appropriate attrezzature per editare e immagazzinare le canzoni registrate. Ciascuno studio può avere dagli 1 ai 2 tecnici.
+ \\
+  \hline
+\end{longtable}
+\textbf{Tabella 1.\ctabelle} Specifiche in linguaggio naturale per i Tecnici
+
+\subsubsection{Dizionario dei concetti per i Tecnici}
+\renewcommand*{\arraystretch}{1.4}
+\begin{longtable}{|p{.15\linewidth}|p{.25\linewidth}|p{.2\linewidth}|p{.2\linewidth}|}
+    \hline
+    \textbf{Termine} & \textbf{Descrizione} & \textbf{Sinonimi} & \textbf{Collegamenti}
+    \endhead
+    \hline
+    Tecnico & Il tecnico lavora negli studi e si occupa di acquisire e modificare le canzoni registrate  & Fonico, Tecnico del Suono & Studio, Produzione \\ \hline
+    Studio & Uno studio consiste in due spazi: una Sala di Controllo e una Sala di Registrazione & & Tecnico \\ \hline
+    Sala di controllo & Sala dove i tecnici possono editare e mixare le registrazioni & Regia &  \\ \hline
+    Sala di registrazione & Sala specializzata nella registrazione del suono & Live room &  \\ \hline
+    Produzione & Una raccolta di canzoni; il prodotto finale dell’Artista & Collezione, Album & Tecnico\\ \hline
+\end{longtable}
+\textbf{Tabella 1.\ctabelle} Dizionario dei concetti
+
+\setcounter{counteroperazioni}{0}
+\subsubsection{Operazioni per i Tecnici}
+\begin{itemize}[labelindent=1.5em,labelsep=.5cm,leftmargin=*]
+    \item [\textbf{T\coperazioni)}] INSERIRE LE INFORMAZIONI DI UN TECNICO \\ Registrazione del tecnico.
+    \item [\textbf{T\coperazioni)}] ELENCARE LE PRODUZIONI A CUI HA PARTECIPATO UN TECNICO \\ Viene visualizzato un elenco di produzioni a cui ha partecipato un tecnico contenente: le produzioni, artisti, produttori, tecnici, titolo, data di creazione, lo stato della collezione ("produzione" o "pubblicazione"), la tipologia ("Singolo", "EP", "Album").
+    \item [\textbf{T\coperazioni)}] ELENCARE LE ATTREZZATURE DI UNA SALA \\ Vengono elencate le attrezzature presenti in una data sala.
+    \item [\textbf{T\coperazioni)}] CREAZIONE DI UNA PRODUZIONE \\ Inserimento del titolo, viene indicato l'artista che la possiede e viene impostato lo stato di "produzione".
+    \item [\textbf{T\coperazioni)}] PUBBLICAZIONE DI UNA PRODUZIONE \\ Viene impostata per una data produzione lo stato di "pubblicazione" che va ad indicare l'immutabilità di essa e viene impostata la data di termine delle registrazioni. 
+    \item [\textbf{T\coperazioni)}] INSERIRE I DATI DI UNA CANZONE\\ Inserimento informazioni generali della canzone quali artisti, produttori che hanno partecipato alla creazione della canzone, titolo, durata in secondi e data di registrazione.
+    \item [\textbf{T\coperazioni)}] INSERIRE UNA CANZONE IN UNA PRODUZIONE \\ Una volta terminata la "stesura" di una canzone essa deve essere inserita nella "collezione" di cui fa parte.
+    % \item [\textbf{T\coperazioni)}] TITOLO \\
+\end{itemize}
+
+\subsubsection{Schema scheletro per i Tecnici}
+\begin{center}
+    \includesvg[width=.8\textwidth]{images/schema_scheletro_tecnico.svg}
+\end{center}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\subsection{Vista Operatore}
+\subsubsection{Formulazione e analisi dei requisiti per gli Operatori}
+
+\renewcommand*{\arraystretch}{1.4}
+\begin{longtable}{|r|p{.8\linewidth}|}
+  \hline
+  & \multicolumn{1}{c|}{\textbf{Requisiti richiesti dagli Operatori}}
+  \endhead
+  \hline
+  \multirow{1}{1em}{\raggedleft \\[-8.5pt] 1\\2\\3\\4\\5\\6\\7\\8\\9\\10\\11\\12\\13\\14\\15\\16\\17\\18\\19\\20\\21\\22\\23} 
+  & L'operatore è il dipendente che si occupa di rispondere alle chiamate dei clienti. Lavora presso l'edificio dello studio in un locale apposito. Egli è caratterizzato da un nome, un cognome, una data di nascita, una data di assunzione, molteplici numeri di telefono, molteplici email, un iban. Inoltre tra le sue competenze troviamo la registrazione di nuove prenotazioni inoltrabili tramite chiamata telefonica, la loro supervisione ed eventuale cancellazione. L'operatore deve supervisionare anche lo stato di pagamento delle prenotazioni. Oggetto della prenotazione è una sala di registrazione dello studio. Lo studio si impegna a riservare la sala al cliente che ha effettuato la prenotazione. Più nel dettaglio lo studio non registra nuove prenotazioni che impegnano una sala se è già riservata ad altri clienti nella stessa fascia temporale. Lo studio di registrazione non può essere prenotato per meno di un'ora. E' possibile prenotare al massimo una settimana prima del giorno di cui si vuole fare la prenotazione. Il cliente è obbligato a pagare entro tre giorni dopo aver effettuato la prenotazione, in caso contrario essa viene annullata. Il cliente è costretto a pagare l'intera cifra della prenotazione in un'unica rata. Una prenotazione è caratterizzata dal cliente, dalla data di effettuazione della prenotazione, dal codice della stanza prenotata, dallo stato di pagamento e di cancellazione e dalla tipologia scelta tra le seguenti: oraria (pagata ad ore), caratterizzata dal giorno e dall'ora di inizio e fine del periodo di impegno; giornaliera, avente prezzo fisso, che al contrario della prima impegna la stanza per l'intera giornata; settimanale, avente prezzo fisso, che mette a disposizione del cliente 7 giorni lavorativi a sua scelta (piano settimanale); mensile, avente prezzo fisso, che mette a disposizione del cliente 30 giorni lavorativi a sua scelta (piano mensile). Non è necessario utilizzare i giorni tutti in fila ma possono essere sfruttati nell'arco di 90 giorni.
+ \\
+  \hline
+\end{longtable}
+\textbf{Tabella 1.\ctabelle} Specifiche in linguaggio naturale per gli Operatori
+
+\subsubsection{Dizionario dei concetti per gli Operatori}
+\renewcommand*{\arraystretch}{1.4}
+\begin{longtable}{|p{.15\linewidth}|p{.25\linewidth}|p{.2\linewidth}|p{.2\linewidth}|}
+    \hline
+    \textbf{Termine} & \textbf{Descrizione} & \textbf{Sinonimi} & \textbf{Collegamenti} \endhead \hline
+    Operatore & Dipendente che si occupa di rispondere alle chiamate dei clienti &  &  Prenotazione\\ \hline
+    Cliente & Artista che richiede una prenotazione & Artista & Prenotazione \\ \hline
+    Prenotazione & Impegno di un Cliente ad occupare uno studio.  & Impegno & Studio, Pagamento, Operatore \\ \hline
+    Pagamento & Mantiene le informazioni relative allo stato del pagamento. & Versamento & Prenotazione   \\ \hline
+    Studio & Uno studio consiste in due spazi: una Sala di Controllo e una Sala di Registrazione & & Prenotazioni \\ \hline
+\end{longtable}
+\textbf{Tabella 1.\ctabelle} Dizionario dei concetti
+
+\setcounter{counteroperazioni}{0}
+\subsubsection{Operazioni per gli Operatori}
+\begin{itemize}[labelindent=1.5em,labelsep=.5cm,leftmargin=*]
+    \item [\textbf{O\coperazioni)}] INSERIRE LE INFORMAZIONI DI UN OPERATORE \\ Registrazione dell'operatore
+    \item [\textbf{O\coperazioni)}] CREARE UNA PRENOTAZIONE \\ L'operatore registra le prenotazioni previo accordo con il cliente tramite chiamata telefonica.
+    \item [\textbf{O\coperazioni)}] MODIFICA DI UNA PRENOTAZIONE\\ L'operatore previo accordo con cliente può modificare la fascia oraria o il giorno, la sala per una data prenotazione.
+    \item [\textbf{O\coperazioni)}] ANNULLARE UNA PRENOTAZIONE \\ L'operatore ha il diritto di annullare una prenotazione se il cliente non paga entro tre giorni dopo aver effettuato la prenotazione.
+    \item [\textbf{O\coperazioni)}] VISUALIZZARE LE INFORMAZIONI RELATIVE AL PAGAMENTO DI UNA PRENOTAZIONE \\ Vengono visualizzate le informazioni nome, cognome del cliente, data in cui è stata effettuata la prenotazione, lo stato "pagato", "da pagare", costo totale della prenotazione. 
+    \item [\textbf{O\coperazioni)}] ELENCARE LE PRENOTAZIONI CHE NON SONO ANCORA STATE PAGATE \\ Viene visualizzato un elenco di prenotazioni non pagate e informazioni di chi ha fatto la prenotazione: nome, cognome, telefono, data di registrazione della prenotazione.
+    \item [\textbf{O\coperazioni)}] ELENCARE LE SALE DISPONIBILI \\ Viene visualizzato un elenco di tutte le sale libere per una certa data/ora.
+    % \item [\textbf{O\coperazioni)}] TITOLO \\
+\end{itemize}
+
+\subsubsection{Schema scheletro per gli Operatori}
+\begin{center}
+    \includesvg[width=1\textwidth]{images/schema_scheletro_operatore.svg}
+\end{center}
+
+
+\renewcommand*{\arraystretch}{1.4}
+\begin{longtable}{|r p{.8\linewidth}|}
+    \hline
+    \multicolumn{2}{|c|}{\textbf{Regole di vincolo}}
+    \endhead
+    \hline
+    
+    \setcounter{counteroperazioni}{0}
+    (RV\coperazioni) & AAAAAAAAAAAAAAAAAAAAAAAAAA \\
+    (RV\coperazioni) & AAAAAAAAAAAAAAAAAAAAAAAAAA \\
+    (RV\coperazioni) & AAAAAAAAAAAAAAAAAAAAAAAAAA \\
+    (RV\coperazioni) & AAAAAAAAAAAAAAAAAAAAAAAAAA \\
+    
+    \hline
+    \multicolumn{2}{|c|}{\textbf{Regole di derivazione}} \\ 
+    \hline
+    
+    \setcounter{counteroperazioni}{0}
+    (RD\coperazioni) & BBBBBBBBBBBBBBBBBBBBBBBBBB \\
+    (RD\coperazioni) & BBBBBBBBBBBBBBBBBBBBBBBBBB \\
+    (RD\coperazioni) & BBBBBBBBBBBBBBBBBBBBBBBBBB \\
+    (RD\coperazioni) & BBBBBBBBBBBBBBBBBBBBBBBBBB \\
+
+  \hline
+\end{longtable}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\addcontentsline{toc}{section}{Riferimenti bibliografici}
+\bibliographystyle{apalike}
+\bibliography{ref}
+\begin{tabular}{c}
+\end{tabular}
+\\
+Attributi delle entità: \href{https://ardisc.it/musitalia/vistaHomePage.php}{ArDisc} \\
+Vari tipi di Album (Singolo, Extended Play e Long Play):  \href{https://blog.groover.co/it/consigli-per-i-musicisti/ep-vs-album-it/}{Groover} \\
+Siti da cui abbiamo preso l'idea dei piani: \href{https://insoundstudio.com/studio/tariffe-e-offerte}{inSoundStudioProject}, \href{https://www.studioesagono.com/studio/rates/}{Studio Esagono} \\
+
+
+
+\newpage
+\section*{Contatti}
+
+\begin{tabular}{l r l}
+& Menozzi Matteo: & 316725@studenti.unimore.it \\
+& Patrini Andrea: & 317106@studenti.unimore.it \\
+& Turci Sologni Enrico: & 317448@studenti.unimore.it
+\end{tabular}
+
+\end{document}
+
+
+
+
+
+
+%All other official TU Delft colours
+\definecolor{donkerblauw}{RGB}{12, 35, 64}
+\definecolor{turkoois}{RGB}{0, 184, 200}
+\definecolor{blauw}{RGB}{0, 118, 194}
+\definecolor{paars}{RGB}{111, 29, 119}
+\definecolor{roze}{RGB}{239, 96, 163}
+\definecolor{framboos}{RGB}{165, 0, 52}
+\definecolor{rood}{RGB}{224, 60, 49}
+\definecolor{oranje}{RGB}{237, 104, 66}
+\definecolor{geel}{RGB}{255, 184, 28}
+\definecolor{lichtgroen}{RGB}{108, 194, 74}
+\definecolor{donkergroen}{RGB}{0, 155, 119}
+%You can use these to change the hyperlink colour or the colour of the header or whatever. Glück Auf!
