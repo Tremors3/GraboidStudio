@@ -179,16 +179,32 @@ Ogni prenotazione ha associato un contatore che va a indicare i giorni prenotabi
 
 
 --- Fase 3 consegna 3 maggio
-Evoluzione dello schema scheletro di ogni vista con descrizione
+--abbiamo un problema riguardante la bellezza visiva e facilità di modifica dell'er visto che drawio non è molto comodo per generalizzazioni e spostare cose, ci guardo io (a meno che non hai già un idea di un app che faccia le cose bene).
+
+1)Evoluzione dello schema scheletro di ogni vista con descrizione
 dei passaggi in riferimento alla descrizione dei requisiti
+In questa fase si parte da ciò che è stato definito sullo schema scheletro e lo si va ad evolvere, in base alle "strategie" con ciò intendo che bisogna fare una minifrase come quelle (nel libro a pag 277-282 ci sono gli esempi di come si fa (quindi conviene capire ciò che c'è scritto li prima di iniziare)) e anche nella cartella materiale di drive nel progetto d'esempio a pagina 5 c'è un esempio fatto bene che fa capire cosa si intende (consiglio di leggere le pagine del libro prima per avere una visione migliore),
 
-Schema E-R finale per ogni vista
+Idea - per quanto riguarda le cardinalità delle relazioni, ne abbiamo alcune che sono ambigue se non motivate, quindi vanno motivate, (il diagrammaintesta attuale ha un backup quindi lo si può modificare tranquillamente)
 
-Integrazione delle viste in un unico schema E-R
 
-Dizionario dei dati
+2)Schema E-R finale per ogni vista
 
-Vincoli non esprimibili
+Questo è uno schema E-R per ogni vista che non deve essere ristrutturato nel senso che le generalizzazioni devono rimanere e se ci sono delle relazioni del tipo "storico" appartenza passata - attuale le si lascia cosi, si vedrà in fase logica (dopo la fase concettuale l'er deve essere ristrutturato in modo da poter utilizzare il modello logico al meglio) come ristrutturlo con le motivazioni relative, ciò che intendo è che anche se non è perfetto a livello di ottimizzazione query, e presa veloce dei dati, ci sono delle tecniche descritte nel libro nella parte logica per ottimizzare quindi non è un problema.
+
+3)Integrazione delle viste in un unico schema E-R 
+
+4) Dizionario dei dati 
+dizionario dati -entitá, descrizione, attributi, identificatore  ----------- dizionario - relazioni - descrizione - entità coinvolte - attributi
+
+5)Vincoli non esprimibili
+tabella con (RV per regola di vincolo) - <concetto> deve/non deve <espressione su concetti> , (RD) per regola di derivazione <concetto>  si ottiene <espressione su concetti>
+
+Visto che la vista dell'artista è l'insieme di entrambe le viste circa del tecnico e dell operatore, viene fatta per ultima
+La parte 4-5 per il momento la facciamo separata e poi viene unita e i termini adattati, quindi anche se ci possono essere termini diversi non importa li sistemiamo domani
+
+In diagrammaInTesta in basso a destra ci sono delle label rosse, li sono già unite le idee di tutti gli altri schemi, l'unica cosa negli schemi vari ci s
+delle frasi che possono portare idee su vincoli o simili.
 ---
 
 
