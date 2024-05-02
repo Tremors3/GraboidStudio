@@ -197,7 +197,7 @@ l'evoluzione di una entità in una gerarchia
 - Nella strategia bottom-up rientrano
 si suddividono le specifiche in zone, poi si inizia a costruire un mini e-r e poi infine li si integra.
 individuazione di un legame gerarchico tra entità già presenti
-aggregazione di attributi in un entità --es. partendo dalla specifiche dove non vi è definito il nome di una certa entita ma abbiamo la lista di attributi e andiamo a definirne una
+aggregazione di attributi in un entità --es. partendo dalla specifiche dove non vi è definito il nome di una certa entita ma abbiamo la lista di attributi e andiamo a definirne una.
 introduzione  di  una  nuova  entità  o  di  una  relazione  dall'analisi  delle  specifiche
 
 - Nella strategia inside-out
@@ -233,6 +233,12 @@ In diagrammaInTesta in basso a destra ci sono delle label rosse, li sono già un
 delle frasi che possono portare idee su vincoli o simili.
 ---
 
+------ Artista -----
+Cambio di prenotazione in ordine
+Cambio di riservazione in prenotazione
+
+------ Fine artista -----
+
 ------ Tecnico -----
 Evoluzione dello schema scheletro di ogni vista con descrizione dei passaggi in riferimento alla descrizione dei requisiti
 
@@ -256,3 +262,29 @@ Dall'operazione di creazione di una produzione notiamo che abbiamo bisogno dell'
 
 
 ------ Fine tecnico ------
+
+--- Tipologia --> valore = €
+--- Prenotazione -- approccio top down giornaliera oraria, spiegare e dire totale e esclusiva
+--- La chiave primaria di oraria si ottiene con Orario di inizio e la chiave primaria di Prenotazione oraria: codice
+
+
+
+Dizionario modifiche termini in er:
+Prenotazione --> Ordine
+Riservazione --> Prenotazione
+Riservazione Giornaliera/Oraria --> Prenotazione Giornaliera/Oraria
+
+---
+
+- Nella strategia top-down rientrano
+definizione degli attributi di un entità
+la reitificazione di un attributo o un entità
+la decomposizione di una relazione in due relazioni (-esempio di storicizzazione, noi abbiamo la storicizzazione degli artisti-band)
+l'evoluzione di una entità in una gerarchia
+
+- Nella strategia bottom-up rientrano.
+aggregazione di attributi in un entità 
+introduzione  di  una  nuova  entità  o  di  una  relazione  dall'analisi  delle  specifiche
+
+- Nella strategia inside-out
+si  individuano  inizialmente  solo  alcuni  concetti  importanti  e  poi  si  procede,  a  partire  da  questi,  a  "macchia  d'olio", concetto con attributi, si crea un altro concetto con attributi, li si connette con una relazione e cosi via.
