@@ -175,7 +175,12 @@ Prenotazione            : cliente, sala, data effett. prenotazione, stato di pag
 Prenotazione orario     : giorno, orario di inizio, orario di fine.
 Prenotazione a giorni   : giorno
 
--------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------
+-idea per avere operazioni interessanti dal punto di vista computazionale visto che vengono effettuate spesso.
+Il tecnico deve poter caricare la canzone che si trova nel server, quindi associamo a ogni canzone l'attributo path per indicare il percorso.
+Una volta modificata la canzone deve essere salvata tramite un sistema di versioning. 
+-fine idea
+----------------------
 
 Query che mantiene l'integrità del database
 - aggiornamento contatore del numero di giorni prenotabili di un piano.
@@ -234,26 +239,15 @@ delle frasi che possono portare idee su vincoli o simili.
 ---
 
 ------ Artista -----
-Cambio di prenotazione in ordine
-Cambio di riservazione in prenotazione
 
 ------ Fine artista -----
 
 ------ Tecnico -----
 Evoluzione dello schema scheletro di ogni vista con descrizione dei passaggi in riferimento alla descrizione dei requisiti
 
-Un tecnico ha un nome, cognome, la data di nascita, la data di assunzione, molteplici numeri di telefono, molteplici email, un iban.
 
 I tecnici devono specializzarsi in tecnico del Suono oppure in Fonico, le due figure possono sovrapporsi, quindi si tratta di una gerarchia totale e sovrapposta,
 
--idea per avere operazioni interessanti dal punto di vista computazionale visto che vengono effettuate spesso.
-Il tecnico deve poter caricare la canzone che si trova nel server, quindi associamo a ogni canzone l'attributo path per indicare il percorso.
-Una volta modificata la canzone deve essere salvata tramite un sistema di versioning. 
--fine idea
-
-Il tecnico deve essere assegnato a una e una sola sala.
-
-Dalle specifiche risulta si vede la generalizzazione della sala che viene suddivisa in sala di controllo e sala di registrazione che è di tipo totale, ed è sempre sovrapposta, la sala di registrazione dispone di attrezzatura elettronica, la sala di controllo dispone di attrezzatura per editare e salvare le canzoni. --- Da fare in fase 4, questa gerarchia sparisce perchè inutile (metodo dell'accorpamento delle entità figlie nell'entità padre) visto che risulta più conveniente.
 
 Entità aggiuntive fase di espansione
 --Idee per differenziare i vari schemi.
