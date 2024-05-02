@@ -188,6 +188,28 @@ Ogni prenotazione ha associato un contatore che va a indicare i giorni prenotabi
 1)Evoluzione dello schema scheletro di ogni vista con descrizione dei passaggi in riferimento alla descrizione dei requisiti
 In questa fase si parte da ciò che è stato definito sullo schema scheletro e lo si va ad evolvere, in base alle "strategie" con ciò intendo che bisogna fare una minifrase come quelle (nel libro a pag 277-282 ci sono gli esempi di come si fa (quindi conviene capire ciò che c'è scritto li prima di iniziare)) e anche nella cartella materiale di drive nel progetto d'esempio a pagina 5 c'è un esempio fatto bene che fa capire cosa si intende (consiglio di leggere le pagine del libro prima per avere una visione migliore),
 
+- Nella strategia top-down rientrano
+definizione degli attributi di un entità
+la reitificazione di un attributo o un entità
+la decomposizione di una relazione in due relazioni (-esempio di storicizzazione, noi abbiamo la storicizzazione degli artisti-band)
+l'evoluzione di una entità in una gerarchia
+
+- Nella strategia bottom-up rientrano
+si suddividono le specifiche in zone, poi si inizia a costruire un mini e-r e poi infine li si integra.
+individuazione di un legame gerarchico tra entità già presenti
+aggregazione di attributi in un entità --es. partendo dalla specifiche dove non vi è definito il nome di una certa entita ma abbiamo la lista di attributi e andiamo a definirne una
+introduzione  di  una  nuova  entità  o  di  una  relazione  dall'analisi  delle  specifiche
+
+- Nella strategia inside-out
+si  individuano  inizialmente  solo  alcuni  concetti  importanti  e  poi  si  procede,  a  partire  da  questi,  a  "macchia  d'olio", concetto con attributi, si crea un altro concetto con attributi, li si connette con una relazione e cosi via.
+
+- Nella strategia mista
+La  strategia  mista  cerca  di  combinare  i vantaggi  della  strategia  top-down  con  quel-
+li  della  strategia  bottom-up.  Il  progettista  suddivide  i  requisiti  in  componenti  se-
+parate,  come  nella  strategia  bottom-up,  ma  allo  stesso  tempo  definisce  uno sche-
+ma  scheletro contenente,  a  livello  astratto,  i  concetti  principali dell'applicazione. 
+
+
 Idea - per quanto riguarda le cardinalità delle relazioni, ne abbiamo alcune che sono ambigue se non motivate, quindi vanno motivate, (il diagrammaintesta attuale ha un backup quindi lo si può modificare tranquillamente)
 
 
@@ -211,7 +233,26 @@ In diagrammaInTesta in basso a destra ci sono delle label rosse, li sono già un
 delle frasi che possono portare idee su vincoli o simili.
 ---
 
+------ Tecnico -----
+Evoluzione dello schema scheletro di ogni vista con descrizione dei passaggi in riferimento alla descrizione dei requisiti
+
+Un tecnico ha un nome, cognome, la data di nascita, la data di assunzione, molteplici numeri di telefono, molteplici email, un iban.
+
+I tecnici devono specializzarsi in tecnico del Suono oppure in Fonico, le due figure possono sovrapporsi, quindi si tratta di una gerarchia totale e sovrapposta,
+
+-idea per avere operazioni interessanti dal punto di vista computazionale visto che vengono effettuate spesso.
+Il tecnico deve poter caricare la canzone che si trova nel server, quindi associamo a ogni canzone l'attributo path per indicare il percorso.
+Una volta modificata la canzone deve essere salvata tramite un sistema di versioning. 
+-fine idea
+
+Il tecnico deve essere assegnato a una e una sola sala.
+
+Dalle specifiche risulta si vede la generalizzazione della sala che viene suddivisa in sala di controllo e sala di registrazione che è di tipo totale, ed è sempre sovrapposta, la sala di registrazione dispone di attrezzatura elettronica, la sala di controllo dispone di attrezzatura per editare e salvare le canzoni. --- Da fare in fase 4, questa gerarchia sparisce perchè inutile (metodo dell'accorpamento delle entità figlie nell'entità padre) visto che risulta più conveniente.
+
+Entità aggiuntive fase di espansione
+--Idee per differenziare i vari schemi.
+Dall'operazione di creazione di una produzione notiamo che abbiamo bisogno dell'elenco degli artisti
 
 
 
-
+------ Fine tecnico ------
