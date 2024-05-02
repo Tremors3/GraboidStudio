@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram name="Pagina-1" id="cASJgcRA1GZAY-W6Zr8W">
-        <mxGraphModel dx="4299" dy="4007" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="none" math="0" shadow="0">
+        <mxGraphModel dx="2212" dy="1887" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="none" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -2974,8 +2974,8 @@
                         <mxPoint x="7698.02" y="4452.039999999999" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="2240" value="1) N giorni da prenotare rimanenti&lt;br&gt;2) Data di effettuazione&lt;br&gt;3) Annullata" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="7290.25" y="4444.52" width="200" height="60" as="geometry"/>
+                <mxCell id="2240" value="1) N giorni da prenotare rimanenti&lt;br&gt;2) Data di effettuazione&lt;br&gt;3) Annullata&lt;br&gt;4) N ore da prenotare rimanenti" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="7270.75" y="4432" width="200" height="70" as="geometry"/>
                 </mxCell>
                 <mxCell id="2241" value="" style="edgeStyle=none;html=1;endArrow=oval;endFill=0;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="2228" edge="1">
                     <mxGeometry relative="1" as="geometry">
@@ -3952,7 +3952,7 @@
                         <mxPoint x="8234.5" y="4346.079136690648" as="sourcePoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="2635" value="Codice" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+                <mxCell id="2635" value="Nome" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
                     <mxGeometry x="8120.5" y="4333.13" width="60" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="2636" value="" style="edgeStyle=none;html=1;endArrow=oval;endFill=0;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1">
