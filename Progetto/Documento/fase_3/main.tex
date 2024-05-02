@@ -102,7 +102,8 @@ Nel seguito considereremo perciò le seguenti diverse classi di utenza:
     \item [\textbf{A\coperazioni)}] ELENCARE GLI ARTISTI CHE HANNO PARTECIPATO ALLA CREAZIONE DI UNA CANZONE \\ Data una certa canzone vengono mostrate le informazioni degli artisti che hanno partecipato ad essa.
 
     \item [\textbf{A\coperazioni)}] CREARE UNA PRENOTAZIONE \\ Un artista effettua una prenotazione specificando: i giorni, le fasce orarie scelte e le relative sale. 
-    \item [\textbf{A\coperazioni)}] ANNULLARE UN ORDINE \\ Un artista può annullare un ordine specifica fino a sette giorni prima della data dell'ordine.
+    \item [\textbf{A\coperazioni)}] ANNULLARE UN PRENOTAZIONE \\ Un artista può annullare una prenotazione specifica fino a sette giorni prima della data della prenotazione.
+    \item [\textbf{A\coperazioni)}] CREARE UN ORDINE \\ Un artista effettua una prenotazione specificando: i giorni, le fasce orarie scelte e le relative sale. 
     \item [\textbf{A\coperazioni)}] VISUALIZZARE LE INFORMAZIONI RELATIVE AL PAGAMENTO DI UN ORDINE \\ Vengono visualizzate le informazioni nome, cognome del cliente, data in cui è stata effettuata l'ordine, lo stato "pagato", "da pagare", costo totale dell'ordine. 
     \item [\textbf{A\coperazioni)}] ELENCARE LE SALE DISPONIBILI \\ Viene visualizzato un elenco di tutte le sale libere per una certa data/ora.
     % \item [\textbf{A\coperazioni)}] TITOLO \\
@@ -290,7 +291,7 @@ Nel seguito considereremo perciò le seguenti diverse classi di utenza:
     \textbf{Entità} & \textbf{Descrizione} & \textbf{Attributi} & \textbf{Identificatore} 
     \endhead 
     \hline
-    Operatore & Operatore che gestisce gli ordini & Codice Fiscale, Nome, Cognome, Data nascita, Data assunzione, numero telefono, iban & Codice Fiscale \\ \hline
+    Operatore & Operatore che gestisce gli ordini & Codice Fiscale, Nome, Cognome, Data nascita, Data assunzione, numero telefono (1,N), email (1,N), iban & Codice Fiscale \\ \hline
     Ordine & Ordine per una sala effettuata da un cliente (artista) & Codice, Numero giorni di prenotazione rimanenti, Data  prenotazione & Codice  \\ \hline
     Pagamento & Pagamento per un ordine effettuata/in attesa di un artista & Codice, Stato, Metodo, Costo totale & Codice\\ \hline
     Tipologia & Specifica la tipologia di prenotazione: oraria, giornaliera, settimanale o mensile & Codice, Valore, N giorni da prenotare & Codice \\ \hline
