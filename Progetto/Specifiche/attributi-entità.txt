@@ -1,0 +1,43 @@
+[VISTA ARTISTA]
+
+X ARTISTA - numeri di telefono, email, data registrazione, nome d'arte
+  GRUPPO (BAND)    - numeri di telefono, email, data registrazione, nome d'arte, (data formazione)
+X SOLISTA - numeri di telefono, email, data registrazione, nome d'arte, codice fiscale, nome, cognome, data di nascita
+X PRODUTT - numeri di telefono, email, data registrazione,              codice fiscale, nome, cognome, data di nascita
+
+X PRODUZIONE   - titolo, stato, data inizio, data fine, genere musicale (1,N)
+X CANZONE      - percorso di sistema, estensione, (titolo, testo, data di registrazione, lunghezza in secondi)
+X FILE         - percorso di sistema, estensione, (nome del file)
+X PRENOTAZIONE - timestamp, giorni da prenotare, fasce orarie da prenotare, annullata
+
+[VISTA OPERATORE]
+
+X OPERATORE    - numeri di telefono, email, data registrazione, codice fiscale, nome, cognome, data di nascita, (data di assunzione, iban)
+X CLIENTE      - numeri di telefono, email, data registrazione, codice fiscale, nome, cognome, data di nascita
+X ORDINE       - timestamp, n giorni da prenotare rimanenti, n ore da prenotare rimanenti, annullato
+X TIPOLOGIA    - nome, valore, n giorni da prenotare
+X PAGAMENTO    - codice, stato (1,2), metodo (1,N), costo totale
+X PRENOTAZIONE - giorno, orario inizio, orario fine, annullata
+  SALA       - numero, piano
+
+[VISTA TECNICO]
+
+X TECNICO      - numeri di telefono, email, data registrazione, codice fiscale, nome, cognome, data di nascita, (data di assunzione, iban)
+X CANZONE      - percorso di sistema, estensione, (titolo, testo, data di registrazione, lunghezza in secondi), codice
+X FILE         - percorso di sistema, estensione, (nome del file)
+X ATTREZZATURA - codice, nome
+  SALA       - numero, piano 
+
+------------------------------------------------------------------------------------------------------------------
+
+[PER GENERALIZZAZIONE]
+
+X ARTISTA   - numeri di telefono, email, data registrazione, nome d'arte
+X BAND      - numeri di telefono, email, data registrazione, nome d'arte, (data formazione)
+X SOLISTA   - numeri di telefono, email, data registrazione, nome d'arte, codice fiscale, nome, cognome, data di nascita
+X PRODUTT   - numeri di telefono, email, data registrazione,              codice fiscale, nome, cognome, data di nascita
+X CLIENTE   - numeri di telefono, email, data registrazione,      /       codice fiscale, nome, cognome, data di nascita
+X OPERATORE - numeri di telefono, email, data registrazione,              codice fiscale, nome, cognome, data di nascita, (data di assunzione, iban)
+X TECNICO   - numeri di telefono, email, data registrazione,              codice fiscale, nome, cognome, data di nascita, (data di assunzione, iban)
+
+[SOLISTA = CLIENTE]
