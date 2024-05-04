@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="3g2r9AfaQK4DRxRpGaNm" name="Page-1">
-        <mxGraphModel dx="293" dy="218" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+        <mxGraphModel dx="1582" dy="748" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -11,7 +11,7 @@
                         <Array as="points"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="225" value="" style="edgeStyle=none;orthogonalLoop=1;jettySize=auto;html=1;rounded=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=none;endFill=0;exitX=0.059;exitY=1.026;exitDx=0;exitDy=0;exitPerimeter=0;startArrow=oval;startFill=0;" edge="1" parent="1">
+                <mxCell id="225" value="" style="edgeStyle=none;orthogonalLoop=1;jettySize=auto;html=1;rounded=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=none;endFill=0;exitX=0.059;exitY=1.026;exitDx=0;exitDy=0;exitPerimeter=0;startArrow=oval;startFill=0;" parent="1" edge="1">
                     <mxGeometry width="100" relative="1" as="geometry">
                         <mxPoint x="2070.7800000000007" y="336.6500000000001" as="sourcePoint"/>
                         <mxPoint x="2070" y="412" as="targetPoint"/>
@@ -244,7 +244,7 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="70" value="n giorni da prenotare" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-                    <mxGeometry x="1249" y="231.95000000000002" width="140" height="30" as="geometry"/>
+                    <mxGeometry x="1210.43" y="267.65000000000003" width="140" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="71" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.029;entryY=0.503;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=oval;endFill=0;" parent="1" source="21" target="63" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
@@ -315,8 +315,8 @@
                 <mxCell id="89" value="piano" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
                     <mxGeometry x="886.4999999999998" y="845.85" width="50" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="90" value="numero sala" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-                    <mxGeometry x="848.4299999999998" y="863.35" width="90" height="30" as="geometry"/>
+                <mxCell id="90" value="numero" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="876.4299999999998" y="864.75" width="60" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="91" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=none;startFill=0;endArrow=none;endFill=0;" parent="1" source="128" target="129" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
@@ -744,7 +744,7 @@
                 <mxCell id="197" value="titolo" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
                     <mxGeometry x="1969.1999999999998" y="406.15" width="50" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="198" value="data creazione" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontFamily=Helvetica;fontColor=default;" parent="1" vertex="1">
+                <mxCell id="198" value="data formazione" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontFamily=Helvetica;fontColor=default;" parent="1" vertex="1">
                     <mxGeometry x="1338.1399999999999" y="609.25" width="100" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="199" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=oval;endFill=0;" parent="1" source="202" edge="1">
@@ -765,7 +765,7 @@
                 <mxCell id="202" value="Solista" style="whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" parent="1" vertex="1">
                     <mxGeometry x="1704.6400000000003" y="597" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="203" value="Band" style="whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" parent="1" vertex="1">
+                <mxCell id="203" value="Gruppo" style="whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" parent="1" vertex="1">
                     <mxGeometry x="1460.6400000000003" y="596" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="204" value="&lt;div style=&quot;text-align: left;&quot;&gt;nome d'arte&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;text-align: center; font-size: 12px;&quot;&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;numero di telefono (1,N)&lt;/span&gt;&lt;/div&gt;&lt;/span&gt;&lt;span style=&quot;text-align: center; font-size: 12px;&quot;&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;email (1,N)&lt;/span&gt;&lt;/div&gt;&lt;/span&gt;&lt;/div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;data di registrazione&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;/span&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontFamily=Helvetica;fontColor=default;" parent="1" vertex="1">

@@ -1,7 +1,7 @@
 [VISTA ARTISTA]
 
 X ARTISTA - numeri di telefono, email, data registrazione, nome d'arte
-  GRUPPO (BAND)    - numeri di telefono, email, data registrazione, nome d'arte, (data formazione)
+X GRUPPO  - numeri di telefono, email, data registrazione, nome d'arte, (data formazione)
 X SOLISTA - numeri di telefono, email, data registrazione, nome d'arte, codice fiscale, nome, cognome, data di nascita
 X PRODUTT - numeri di telefono, email, data registrazione,              codice fiscale, nome, cognome, data di nascita
 
@@ -18,7 +18,7 @@ X ORDINE       - timestamp, n giorni da prenotare rimanenti, n ore da prenotare 
 X TIPOLOGIA    - nome, valore, n giorni da prenotare
 X PAGAMENTO    - codice, stato (1,2), metodo (1,N), costo totale
 X PRENOTAZIONE - giorno, orario inizio, orario fine, annullata
-  SALA       - numero, piano
+X SALA         - numero, piano
 
 [VISTA TECNICO]
 
@@ -26,7 +26,7 @@ X TECNICO      - numeri di telefono, email, data registrazione, codice fiscale, 
 X CANZONE      - percorso di sistema, estensione, (titolo, testo, data di registrazione, lunghezza in secondi), codice
 X FILE         - percorso di sistema, estensione, (nome del file)
 X ATTREZZATURA - codice, nome
-  SALA       - numero, piano 
+X SALA         - numero, piano 
 
 ------------------------------------------------------------------------------------------------------------------
 
