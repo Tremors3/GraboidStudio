@@ -5,7 +5,7 @@ X GRUPPO  - numeri di telefono, email, data registrazione, nome d'arte, (data fo
 X SOLISTA - numeri di telefono, email, data registrazione, nome d'arte, codice fiscale, nome, cognome, data di nascita
 X PRODUTT - numeri di telefono, email, data registrazione,              codice fiscale, nome, cognome, data di nascita
 
-X PRODUZIONE   - titolo, stato, data inizio, data fine, genere musicale (1,N)
+X PRODUZIONE   - titolo, stato, data inizio acquisizioni, data fine acquisizioni, genere musicale (1,N)
 X CANZONE      - percorso di sistema, estensione, (titolo, testo, data di registrazione, lunghezza in secondi)
 X FILE         - percorso di sistema, estensione, (nome del file)
 X PRENOTAZIONE - timestamp, giorni da prenotare, fasce orarie da prenotare, annullata
