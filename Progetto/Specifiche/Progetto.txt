@@ -282,3 +282,103 @@ introduzione  di  una  nuova  entità  o  di  una  relazione  dall'analisi  dell
 
 - Nella strategia inside-out
 si  individuano  inizialmente  solo  alcuni  concetti  importanti  e  poi  si  procede,  a  partire  da  questi,  a  "macchia  d'olio", concetto con attributi, si crea un altro concetto con attributi, li si connette con una relazione e cosi via.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+STUDIO DEI VOLUMI DEI CONCETTI
+
+--------------------------------------
+
+Per 4 sale abbiamo 6 tecnici di cui 2 sono sia Fonici sia Tecnici del Suono, mentre gli altri quattro si dividono in modo equo tra le due figure.
+
+--------------------------------------
+
+Numero di Produzioni:  7/mese produzioni, cioè 84 produzioni annuali.
+Numero di Album per Gruppo: 2.
+
+Numero dei Gruppi: 30
+Numero dei Solisti per Gruppo: 4
+Numero dei Solisti appartenenti ai gruppi: 120
+Numero dei Solisti NON appartenenti ai gruppi: 24
+
+Numero dei Solisti Comparse: 50.
+
+Numero dei Produttori: 56
+
+TOTALE SOLISTI: $ 120 + 24 + 50 + 56 = 250 $ (all'anno)
+
+--------------------------------------
+
+Numero di Canzoni: 60 * 2 + 14 * 4 + 10 * 8 = 256/anno
+Numero di Canzoni al mese per sala: 256(anno) / 12 / 4 = 5(mese, per sala)
+Numero medio di Canzoni per Singolo:    2
+Numero medio di Canzoni per EP:         4
+Numero medio di Canzoni per ALBUM:      8
+
+Numero di Singoli:  60
+Numero di EP:        14
+Numero di Album:    10
+
+--------------------------------------
+Numero di attrezzature in avere: 37 x 4 = 148 - 8 = 140
+
+Numero di attrezzature per Sala: 37.
+
+PER SALA ABBIAMO:
+--> mixer x2
+--> microfoni x20;
+--> studio monitor (diffusori) x8
+--> altro x7
+Totale strumenti x Sala: 2 + 20 + 8 + 7 = 37
+
+--------------------------------------
+
+Numero di Operatori: 2
+
+--------------------------------------
+
+Numero di Ordini: $ 324/anno $
+
+Numero di Clienti: 30 + 24 = 54
+Numero rappresentanti Gruppi: 30
+Numero di Solisti che NON appartengono a gruppi ma che producono: 24
+
+--------------------------------------
+
+Numero di Prenotazioni Orarie medie al giorno: 2
+
+4 mensili = 120 prenotazioni
+
+11 settimanali = 77 prenotazioni
+
+109 giornaliere = 109 prenotazioni
+
+200 orarie = 200 prenotazioni
+
+Prenotazioni Totali: $ 506/anno $
+Prenotazioni Per Sala: 506 / 4 = 125.5/anno
+
+--------------------------------------
