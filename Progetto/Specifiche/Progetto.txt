@@ -382,3 +382,15 @@ Prenotazioni Totali: $ 506/anno $
 Prenotazioni Per Sala: 506 / 4 = 125.5/anno
 
 --------------------------------------
+
+
+Analisi dato n totale di ore prenotate
+--> Lettura del dato.
+
+Analisi n totale di giorni prenotati
+--> Lettura del dato.
+
+
+
+
+
