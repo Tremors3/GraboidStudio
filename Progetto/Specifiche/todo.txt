@@ -1,1 +1,39 @@
 --> Contestualizzare i Vincoli.
+
+
+
+
+-------------------------- CONSEGNA QUINTA PARTE
+IMPLEMENTAZIONE DEL DB
+    --> schema fisico
+    --> creazione postgresql
+    --> popolamento
+--------------------------
+INDICI
+--> https://stackoverflow.com/questions/1108/how-does-database-indexing-work
+    --> individuare le query che richiedono più letture
+    --> individuare gli attributi su cui effettuare un indice
+    --> controllare che effettuare un indice convenga veramente e non sia sprecato
+    --> calcolare il numero di letture risparmiate utilizzando l'indice
+    --> Calcolare il costo in memoria causato dall'utilizzo dell'indice
+--------------------------
+TRIGGER
+--------------------------
+QUERY
+    --> implementare query
+    --> implementare viste per ogni query
+    --> implementare procedure
+--------------------------
+
+
+
+
+
+
+
+-------------------------- CONSEGNA QUINTA PARTE
+1. SCHEMA FISICO
+2. QUERY
+3. INDICIZZAZIONE
+4. TRIGGER
+5. PROCEDURE
