@@ -11,7 +11,7 @@ IMPLEMENTAZIONE DEL DB
 --------------------------
 QUERY
     --> implementare query
-    --> implementare viste le viste per le query
+    --> implementare viste per le query
 --------------------------
 INDICI
 --> https://stackoverflow.com/questions/1108/how-does-database-indexing-work
@@ -20,6 +20,10 @@ INDICI
     --> controllare che effettuare un indice convenga veramente e non sia sprecato
     --> calcolare il numero di letture risparmiate utilizzando l'indice
     --> Calcolare il costo in memoria causato dall'utilizzo dell'indice
+--------------------------
+VIEW
+--------------------------
+FUNCTIONS
 --------------------------
 TRIGGER
 --------------------------
