@@ -19,12 +19,12 @@ INSERT INTO PARTECIPAZIONE_PASSATA (gruppo, solista, data_adesione, data_fine_ad
 VALUES
 ('Artista1', 'Artista3', '2020-01-01', '2021-01-01');
 
-INSERT INTO EMAIL_A (email, artista)
+INSERT INTO EMAIL_ARTISTA (email, artista)
 VALUES
 ('artista1@example.com', 'Artista1'),
 ('artista2@example.com', 'Artista2');
 
-INSERT INTO TELEFONO_A (numero, artista)
+INSERT INTO TELEFONO_ARTISTA (numero, artista)
 VALUES
 ('1234567890', 'Artista1'),
 ('0987654321', 'Artista2');
@@ -71,12 +71,12 @@ VALUES
 ('CF5432109876', 'Operatore1', 'Cognome1', '1985-05-05', '2022-01-01', 'IT60X0542811101000000123456'),
 ('CF6543210987', 'Operatore2', 'Cognome2', '1987-07-07', '2022-02-01', 'IT60X0542811101000000654321');
 
-INSERT INTO EMAIL_O (email, operatore)
+INSERT INTO EMAIL_OPERATORE (email, operatore)
 VALUES
 ('operatore1@example.com', 'CF5432109876'),
 ('operatore2@example.com', 'CF6543210987');
 
-INSERT INTO TELEFONO_O (numero, operatore)
+INSERT INTO TELEFONO_OPERATORE (numero, operatore)
 VALUES
 ('3216549870', 'CF5432109876'),
 ('9876543210', 'CF6543210987');

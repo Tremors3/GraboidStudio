@@ -9,6 +9,10 @@ IMPLEMENTAZIONE DEL DB
     --> creazione postgresql
     --> popolamento
 --------------------------
+QUERY
+    --> implementare query
+    --> implementare viste le viste per le query
+--------------------------
 INDICI
 --> https://stackoverflow.com/questions/1108/how-does-database-indexing-work
     --> individuare le query che richiedono più letture
@@ -19,11 +23,11 @@ INDICI
 --------------------------
 TRIGGER
 --------------------------
-QUERY
-    --> implementare query
-    --> implementare viste per ogni query
-    --> implementare procedure
---------------------------
+PROCEDURE
+
+
+
+
 
 
 

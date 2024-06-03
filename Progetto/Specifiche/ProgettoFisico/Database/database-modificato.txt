@@ -65,7 +65,7 @@ CREATE TABLE GENERE (
     nome VARCHAR(255) PRIMARY KEY 
 ); 
  
-CREATE TABLE GENER_PRODUZIONE ( 
+CREATE TABLE GENERE_PRODUZIONE ( 
     genere VARCHAR(255), 
     produzione INTEGER, 
     PRIMARY KEY (genere, produzione), 
@@ -74,7 +74,7 @@ CREATE TABLE GENER_PRODUZIONE (
 ); 
  
 CREATE TABLE CANZONE ( 
-    titolo VARCHAR(255), 
+    titolo VARCHAR(255) UNIQUE, 
     produzione INTEGER, 
     artista VARCHAR(255), 
     testo TEXT, 
@@ -164,7 +164,7 @@ CREATE TABLE TIPOLOGIA (
 ); 
  
 CREATE TABLE PACCHETTO ( 
-    ordine TIMESTAMP, 
+    ordine TIMESTAMP UNIQUE, 
     tipologia VARCHAR(255), 
     n_giorni_prenotati_totali INTEGER, 
     PRIMARY KEY (ordine, tipologia), 
