@@ -33,14 +33,14 @@ CREATE TABLE PARTECIPAZIONE_PASSATA (
     FOREIGN KEY (solista) REFERENCES SOLISTA(artista) 
 ); 
  
-CREATE TABLE EMAIL_ARTISTA ( 
+CREATE TABLE EMAIL_A ( 
     email VARCHAR(255), 
     artista VARCHAR(255), 
     PRIMARY KEY (email), 
     FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte) 
 ); 
  
-CREATE TABLE TELEFONO_ARTISTA ( 
+CREATE TABLE TELEFONO_A ( 
     numero VARCHAR(15), 
     artista VARCHAR(255), 
     PRIMARY KEY (numero), 
@@ -118,14 +118,14 @@ CREATE TABLE OPERATORE (
     iban VARCHAR(34) 
 ); 
  
-CREATE TABLE EMAIL_OPERATORE ( 
+CREATE TABLE EMAIL_O ( 
     email VARCHAR(255), 
     operatore VARCHAR(16), 
     PRIMARY KEY (email), 
     FOREIGN KEY (operatore) REFERENCES OPERATORE(codice_fiscale) 
 ); 
  
-CREATE TABLE TELEFONO_OPERATORE ( 
+CREATE TABLE TELEFONO_O ( 
     numero VARCHAR(15), 
     operatore VARCHAR(16), 
     PRIMARY KEY (numero), 
@@ -210,3 +210,47 @@ CREATE TABLE FASCIA_ORARIA (
     PRIMARY KEY (oraria, orario_inizio, orario_fine), 
     FOREIGN KEY (oraria) REFERENCES ORARIA(prenotazione) 
 ); 
+ 
+-- Creazione della tabella TIPO_TECNICO
+CREATE TABLE TIPO_TECNICO (
+    nome VARCHAR(255) PRIMARY KEY
+); 
+ 
+-- Creazione della tabella TECNICO
+CREATE TABLE TECNICO (
+    codice_fiscale CHAR(16) PRIMARY KEY,
+    sala_piano INT,
+    sala_numero INT,
+    tipo_tecnico VARCHAR(255),
+    nome VARCHAR(255),
+    cognome VARCHAR(255),
+    data_di_nascita DATE,
+    data_di_assunzione DATE,
+    iban VARCHAR(27),
+    FOREIGN KEY (sala_piano, sala_numero) REFERENCES SALA(piano, numero),
+    FOREIGN KEY (tipo_tecnico) REFERENCES TIPO_TECNICO(nome)
+); 
+ 
+-- Creazione della tabella EMAIL_TECNICO
+CREATE TABLE EMAIL_T (
+    email VARCHAR(255) PRIMARY KEY,
+    tecnico CHAR(16),
+    FOREIGN KEY (tecnico) REFERENCES TECNICO(codice_fiscale)
+); 
+ 
+-- Creazione della tabella TELEFONO_TECNICO
+CREATE TABLE TELEFONO_T (
+    numero VARCHAR(15) PRIMARY KEY,
+    tecnico CHAR(16),
+    FOREIGN KEY (tecnico) REFERENCES TECNICO(codice_fiscale)
+); 
+ 
+-- Creazione della tabella LAVORA_A
+CREATE TABLE LAVORA_A (
+    tecnico CHAR(16),
+    canzone VARCHAR(255),
+    PRIMARY KEY (tecnico, canzone),
+    FOREIGN KEY (tecnico) REFERENCES TECNICO(codice_fiscale),
+    FOREIGN KEY (canzone) REFERENCES CANZONE(nome_del_file)
+); 
+ 
