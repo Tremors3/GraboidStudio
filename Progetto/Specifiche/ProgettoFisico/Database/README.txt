@@ -5,6 +5,7 @@ La chiave primaria di ORDINE non ha molto senso:
 
 -------------------------------------------------------------------------------------------------
 
+https://stackoverflow.com/questions/43263924/sql-foreign-key-references-a-composite-primary-key
 COSTRAINT UNIVOCI AL POSTO DI CHIAVI PRIMARIE:
 
 AGGIUNTA DEI CODICI
