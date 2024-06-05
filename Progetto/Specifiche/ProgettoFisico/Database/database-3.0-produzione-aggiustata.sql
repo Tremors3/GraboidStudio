@@ -251,11 +251,12 @@ CREATE TABLE TELEFONO_T (
 -- Creazione della tabella LAVORA_A
 CREATE TABLE LAVORA_A (
     tecnico CHAR(16),
-    titolo VARCHAR(255), 
-    produzione INTEGER, 
+    titolo VARCHAR(256),
+    titolo_produzione VARCHAR(255), 
+    artista_produzione VARCHAR(255), 
     artista VARCHAR(255), 
-    PRIMARY KEY (tecnico, titolo, produzione, artista),
+    PRIMARY KEY (tecnico, titolo, titolo_produzione, artista_produzione),
     FOREIGN KEY (tecnico) REFERENCES TECNICO(codice_fiscale),
-    FOREIGN KEY (titolo, produzione, artista) REFERENCES CANZONE(titolo, produzione, artista) 
+    FOREIGN KEY (titolo, titolo_produzione, artista_produzione) REFERENCES CANZONE(titolo, titolo_produzione, artista_produzione)
 ); 
  
