@@ -25,5 +25,5 @@ DIPENDENZE DELL'AGGIUNTA DEI CODICI
 
 MOTIVI
 1. Complicazione delle query.
-2. Ripetizione dei dati da tabella a tabella in cascata.
+2. ~(NON CERTO) Ripetizione dei dati da tabella a tabella in cascata.
 3. Avere un codice univoco fa comodo; è più simile ad un caso reale.

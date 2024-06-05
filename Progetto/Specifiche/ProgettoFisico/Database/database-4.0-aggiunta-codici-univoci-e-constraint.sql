@@ -60,7 +60,7 @@ CREATE TABLE PRODUZIONE (
     codice SERIAL PRIMARY KEY,
 
     -- Old Primary Key
-    titolo VARCHAR(255), 
+    titolo VARCHAR(255),
     artista VARCHAR(255),
 
     -- Old Primary Key Uniqueness Maintained
@@ -172,7 +172,7 @@ CREATE TABLE METODO (
  
 CREATE TABLE PAGAMENTO (
 
-    ordine SERIAL PRIMARY KEY,
+    ordine INTEGER PRIMARY KEY,
     FOREIGN KEY (ordine) REFERENCES ORDINE(codice), 
 
     -- Other
