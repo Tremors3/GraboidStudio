@@ -56,55 +56,77 @@ CREATE TABLE GENERE (
 ); 
  
 CREATE TABLE PRODUZIONE ( 
+    -- Unique code
+    codice SERIAL PRIMARY KEY,
+
+    -- Old Primary Key
     titolo VARCHAR(255), 
-    artista VARCHAR(255), 
+    artista VARCHAR(255),
+
+    -- Old Primary Key Uniqueness Maintained
+    CONSTRAINT unique_produzione UNIQUE (titolo, artista),
+    FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte),
+
+    -- Other
     data_inizio DATE, 
     data_fine DATE, 
     stato VARCHAR(50), 
     tipo_produzione VARCHAR(255), 
     genere VARCHAR(255), 
-    PRIMARY KEY (titolo, artista), 
-    FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte), 
-    FOREIGN KEY (tipo_produzione) REFERENCES TIPO_PRODUZIONE(nome), 
+    FOREIGN KEY (tipo_produzione) REFERENCES TIPO_PRODUZIONE(nome),
     FOREIGN KEY (genere) REFERENCES GENERE(nome) 
 ); 
  
-CREATE TABLE CANZONE ( 
+CREATE TABLE CANZONE (
+    -- Unique code
+    codice SERIAL PRIMARY KEY,
+
+    -- Old Primary Key
     titolo VARCHAR(255), 
-    titolo_produzione VARCHAR(255), 
-    artista_produzione VARCHAR(255), 
+    produzione SERIAL,
+
+    -- Old Primary Key Uniqueness Maintained
+    CONSTRAINT unique_canzone UNIQUE (titolo, produzione),
+    FOREIGN KEY (produzione) REFERENCES PRODUZIONE(codice),
+
+    -- Other
     testo TEXT, 
     data_di_registrazione DATE, 
     lunghezza_in_secondi INTEGER, 
     nome_del_file VARCHAR(255), 
     percorso_di_sistema VARCHAR(255), 
-    estensione VARCHAR(10), 
-    PRIMARY KEY (titolo, titolo_produzione, artista_produzione), 
-    FOREIGN KEY (titolo_produzione, artista_produzione) REFERENCES PRODUZIONE(titolo, artista)
+    estensione VARCHAR(10)
 ); 
 
 CREATE TABLE PARTECIPAZIONE ( 
+    -- Unique code
+    codice SERIAL PRIMARY KEY,
+
+    -- Old Primary Key
     solista VARCHAR(255), 
-    titolo VARCHAR(255), 
-    titolo_produzione VARCHAR(255), 
-    artista_produzione VARCHAR(255), 
-    PRIMARY KEY (solista, titolo, titolo_produzione, artista_produzione), 
+    canzone SERIAL,
+
+    -- Old Primary Key Uniqueness Maintained
+    CONSTRAINT unique_partecipazione UNIQUE (solista, canzone),
     FOREIGN KEY (solista) REFERENCES SOLISTA(artista), 
-    FOREIGN KEY (titolo, titolo_produzione, artista_produzione) REFERENCES CANZONE(titolo, titolo_produzione, artista_produzione) 
+    FOREIGN KEY (canzone) REFERENCES CANZONE(codice),
+
+    -- Other
+    titolo_produzione VARCHAR(255), 
+    artista_produzione VARCHAR(255)
 ); 
  
 CREATE TABLE PRODUTTORE ( 
     solista VARCHAR(255) PRIMARY KEY, 
-    FOREIGN KEY (solista) REFERENCES SOLISTA(artista) 
+    FOREIGN KEY (solista) REFERENCES SOLISTA(artista)
 ); 
  
 CREATE TABLE CONDURRE ( 
     produttore VARCHAR(255), 
-    titolo_produzione VARCHAR(255),
-    artista_produzione VARCHAR(255), 
-    PRIMARY KEY (produttore, titolo_produzione, artista_produzione), 
+    produzione SERIAL, 
+    PRIMARY KEY (produttore, produzione), 
     FOREIGN KEY (produttore) REFERENCES PRODUTTORE(solista), 
-    FOREIGN KEY (titolo_produzione, artista_produzione) REFERENCES PRODUZIONE(titolo, artista)
+    FOREIGN KEY (produzione) REFERENCES PRODUZIONE(codice)
 ); 
  
 CREATE TABLE OPERATORE ( 
@@ -131,12 +153,20 @@ CREATE TABLE TELEFONO_O (
 ); 
  
 CREATE TABLE ORDINE ( 
+    -- Unique code
+    codice SERIAL PRIMARY KEY,
+
+    -- Old Primary Key
     timestamp TIMESTAMP, 
-    artista VARCHAR(255), 
-    operatore VARCHAR(16), 
+    artista VARCHAR(255),
+
+    -- Old Primary Key Uniqueness Maintained
+    CONSTRAINT unique_ordine UNIQUE (timestamp, artista), 
+    FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte),
+
+    -- Other
     annullato BOOLEAN, 
-    PRIMARY KEY (timestamp, artista), 
-    FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte), 
+    operatore VARCHAR(16),
     FOREIGN KEY (operatore) REFERENCES OPERATORE(codice_fiscale) 
 ); 
  
@@ -144,14 +174,15 @@ CREATE TABLE METODO (
     nome VARCHAR(255) PRIMARY KEY 
 ); 
  
-CREATE TABLE PAGAMENTO ( 
-    timestamp TIMESTAMP, 
-    artista VARCHAR(255),
-    metodo VARCHAR(255), 
+CREATE TABLE PAGAMENTO (
+
+    ordine SERIAL PRIMARY KEY,
+    FOREIGN KEY (ordine) REFERENCES ORDINE(codice), 
+
+    -- Other
     stato VARCHAR(50), 
     costo_totale DECIMAL(10, 2), 
-    PRIMARY KEY (timestamp, artista), 
-    FOREIGN KEY (timestamp, artista) REFERENCES ORDINE(timestamp, artista), 
+    metodo VARCHAR(255), 
     FOREIGN KEY (metodo) REFERENCES METODO(nome) 
 ); 
  
@@ -163,13 +194,20 @@ CREATE TABLE TIPOLOGIA (
 ); 
  
 CREATE TABLE PACCHETTO ( 
-    tipologia VARCHAR(255), 
-    timestamp TIMESTAMP, 
-    artista VARCHAR(255),
-    n_giorni_prenotati_totali INTEGER, 
-    PRIMARY KEY (timestamp, artista, tipologia), 
-    FOREIGN KEY (timestamp, artista) REFERENCES ORDINE(timestamp, artista), 
-    FOREIGN KEY (tipologia) REFERENCES TIPOLOGIA(nome) 
+    -- Unique code
+    codice SERIAL PRIMARY KEY,
+
+    -- Old Primary Key
+    ordine SERIAL,
+    tipologia VARCHAR(255),
+
+    -- Old Primary Key Uniqueness Maintained
+    CONSTRAINT unique_pacchetto UNIQUE (ordine, tipologia), 
+    FOREIGN KEY (ordine) REFERENCES ORDINE(codice), 
+    FOREIGN KEY (tipologia) REFERENCES TIPOLOGIA(nome),
+
+    -- Other
+    n_giorni_prenotati_totali INTEGER
 ); 
  
 CREATE TABLE ORARIO ( 
@@ -189,15 +227,13 @@ CREATE TABLE SALA (
  
 CREATE TABLE PRENOTAZIONE ( 
     codice SERIAL PRIMARY KEY, 
-    artista VARCHAR(255),
-    timestamp TIMESTAMP, 
-    tipologia VARCHAR(255), 
-    sala_piano INTEGER, 
-    sala_numero INTEGER, 
     annullata BOOLEAN, 
     giorno DATE, 
     tipo VARCHAR(50), 
-    FOREIGN KEY (timestamp, artista, tipologia) REFERENCES PACCHETTO(timestamp, artista, tipologia), 
+    pacchetto SERIAL, 
+    sala_piano INTEGER, 
+    sala_numero INTEGER,
+    FOREIGN KEY (pacchetto) REFERENCES PACCHETTO(codice), 
     FOREIGN KEY (sala_piano, sala_numero) REFERENCES SALA(piano, numero) 
 ); 
  
@@ -251,12 +287,9 @@ CREATE TABLE TELEFONO_T (
 -- Creazione della tabella LAVORA_A
 CREATE TABLE LAVORA_A (
     tecnico CHAR(16),
-    titolo VARCHAR(256),
-    titolo_produzione VARCHAR(255), 
-    artista_produzione VARCHAR(255), 
-    artista VARCHAR(255), 
-    PRIMARY KEY (tecnico, titolo, titolo_produzione, artista_produzione),
+    canzone SERIAL,
+    PRIMARY KEY (tecnico, canzone),
     FOREIGN KEY (tecnico) REFERENCES TECNICO(codice_fiscale),
-    FOREIGN KEY (titolo, titolo_produzione, artista_produzione) REFERENCES CANZONE(titolo, titolo_produzione, artista_produzione)
+    FOREIGN KEY (canzone) REFERENCES CANZONE(codice)
 ); 
  
