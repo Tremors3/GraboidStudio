@@ -1,8 +1,8 @@
 CREATE TABLE ARTISTA (
     nome_arte VARCHAR(255) PRIMARY KEY,
     data_di_registrazione DATE
-);
-
+); 
+ 
 CREATE TABLE GRUPPO ( 
     artista VARCHAR(255), 
     data_formazione DATE, 
@@ -231,14 +231,14 @@ CREATE TABLE TECNICO (
     FOREIGN KEY (tipo_tecnico) REFERENCES TIPO_TECNICO(nome)
 ); 
  
--- Creazione della tabella EMAIL_TECNICO
+-- Creazione della tabella EMAIL_T
 CREATE TABLE EMAIL_T (
     email VARCHAR(255) PRIMARY KEY,
     tecnico CHAR(16),
     FOREIGN KEY (tecnico) REFERENCES TECNICO(codice_fiscale)
 ); 
  
--- Creazione della tabella TELEFONO_TECNICO
+-- Creazione della tabella TELEFONO_T
 CREATE TABLE TELEFONO_T (
     numero VARCHAR(15) PRIMARY KEY,
     tecnico CHAR(16),

@@ -2,7 +2,6 @@
 
 
 
-
 -------------------------- CONSEGNA QUINTA PARTE
 IMPLEMENTAZIONE DEL DB
     --> schema fisico
@@ -13,6 +12,8 @@ QUERY
     --> implementare query
     --> implementare viste per le query
 --------------------------
+VIEW
+--------------------------
 INDICI
 --> https://stackoverflow.com/questions/1108/how-does-database-indexing-work
     --> individuare le query che richiedono più letture
@@ -21,14 +22,11 @@ INDICI
     --> calcolare il numero di letture risparmiate utilizzando l'indice
     --> Calcolare il costo in memoria causato dall'utilizzo dell'indice
 --------------------------
-VIEW
---------------------------
 FUNCTIONS
 --------------------------
 TRIGGER
 --------------------------
 PROCEDURE
-
 
 
 
