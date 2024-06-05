@@ -211,12 +211,11 @@ CREATE TABLE PACCHETTO (
 ); 
  
 CREATE TABLE ORARIO ( 
-    timestamp TIMESTAMP, 
-    artista VARCHAR(255),
+    ordine SERIAL,
     n_ore_prenotate_totali INTEGER, 
     valore DECIMAL(10, 2), 
-    PRIMARY KEY (timestamp, artista), 
-    FOREIGN KEY (timestamp, artista) REFERENCES ORDINE(timestamp, artista)
+    PRIMARY KEY (ordine), 
+    FOREIGN KEY (ordine) REFERENCES ORDINE(codice)
 ); 
  
 CREATE TABLE SALA ( 
