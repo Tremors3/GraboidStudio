@@ -394,3 +394,35 @@ Analisi n totale di giorni prenotati
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+idea query:
+dato un album ricavare la durata complessiva in secondi delle sue canzoni (somma secondi durata canzoni)
+
+domino:
+prenotazione fuori fascia oraria
+
+trigger: 
+superamento dei 90 giorni dalla prenotazione (non sappiamo come associarlo ad un'operazione)
+singolo o extended play con numero eccessivo di canzoni
+quando vogliamo prenotare un nuovo giorno dobbiamo controllare che il numero complessivo di giorni prenotati non superi il limite massimo di giorni dato dal pacchetto. 
+
+procedure: 
+calcolo delle ore totali
+calcolo dei giorni totali
+calcolo del costo totale
