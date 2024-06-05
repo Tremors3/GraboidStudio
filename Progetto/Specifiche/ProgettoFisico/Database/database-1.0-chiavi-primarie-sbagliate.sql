@@ -74,7 +74,7 @@ CREATE TABLE GENERE_PRODUZIONE (
 ); 
  
 CREATE TABLE CANZONE ( 
-    titolo VARCHAR(255) UNIQUE, 
+    titolo VARCHAR(255), 
     produzione INTEGER, 
     artista VARCHAR(255), 
     testo TEXT, 
@@ -87,7 +87,7 @@ CREATE TABLE CANZONE (
     FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte), 
     FOREIGN KEY (produzione) REFERENCES PRODUZIONE(codice) 
 ); 
- 
+
 CREATE TABLE PARTECIPAZIONE ( 
     solista VARCHAR(255), 
     canzone VARCHAR(255), 
@@ -164,7 +164,7 @@ CREATE TABLE TIPOLOGIA (
 ); 
  
 CREATE TABLE PACCHETTO ( 
-    ordine TIMESTAMP UNIQUE, 
+    ordine TIMESTAMP, 
     tipologia VARCHAR(255), 
     n_giorni_prenotati_totali INTEGER, 
     PRIMARY KEY (ordine, tipologia), 
