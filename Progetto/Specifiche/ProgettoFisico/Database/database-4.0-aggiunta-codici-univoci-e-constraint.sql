@@ -109,11 +109,7 @@ CREATE TABLE PARTECIPAZIONE (
     -- Old Primary Key Uniqueness Maintained
     CONSTRAINT unique_partecipazione UNIQUE (solista, canzone),
     FOREIGN KEY (solista) REFERENCES SOLISTA(artista), 
-    FOREIGN KEY (canzone) REFERENCES CANZONE(codice),
-
-    -- Other
-    titolo_produzione VARCHAR(255), 
-    artista_produzione VARCHAR(255)
+    FOREIGN KEY (canzone) REFERENCES CANZONE(codice)
 ); 
  
 CREATE TABLE PRODUTTORE ( 
@@ -165,7 +161,7 @@ CREATE TABLE ORDINE (
     FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte),
 
     -- Other
-    annullato BOOLEAN, 
+    annullato BOOLEAN,
     operatore VARCHAR(16),
     FOREIGN KEY (operatore) REFERENCES OPERATORE(codice_fiscale) 
 ); 
@@ -228,7 +224,7 @@ CREATE TABLE PRENOTAZIONE (
     codice SERIAL PRIMARY KEY, 
     annullata BOOLEAN, 
     giorno DATE, 
-    tipo VARCHAR(50), 
+    tipo BOOLEAN, 
     pacchetto SERIAL, 
     sala_piano INTEGER, 
     sala_numero INTEGER,
