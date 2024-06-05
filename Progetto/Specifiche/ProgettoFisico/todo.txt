@@ -2,11 +2,14 @@
 
 
 
+
+
 -------------------------- CONSEGNA QUINTA PARTE
 IMPLEMENTAZIONE DEL DB
-    --> schema fisico
-    --> creazione postgresql
-    --> popolamento
+    --> [x] schema fisico
+    --> [x] creazione postgresql
+    --> [x] popolamento
+    --> [/]Spiegazione di come abbiamo scelto le chiavi primarie; codici; constraint! <--------
 --------------------------
 QUERY
     --> implementare query
@@ -27,9 +30,6 @@ FUNCTIONS
 TRIGGER
 --------------------------
 PROCEDURE
-
-
-
 
 
 
