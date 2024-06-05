@@ -182,15 +182,15 @@ INSERT INTO PAGAMENTO (ordine, stato, costo_totale, metodo) VALUES
 
 -- Popolamento della tabella TIPOLOGIA
 INSERT INTO TIPOLOGIA (nome, valore, n_giorni) VALUES
-('Standard', 50.00, 1), ('Premium', 100.00, 3), ('Deluxe', 150.00, 5), ('Ultimate', 200.00, 7);
+('Giornaliera', 50.00, 1), ('Settimanale', 100.00, 7), ('Mensile', 150.00, 30);
 
 -- Popolamento della tabella PACCHETTO
 INSERT INTO PACCHETTO (ordine, tipologia, n_giorni_prenotati_totali) VALUES
-(1, 'Standard', 1),
-(2, 'Premium', 3),
-(3, 'Deluxe', 5),
-(4, 'Ultimate', 7),
-(5, 'Standard', 1),
+(1, 'Giornaliera', 1),
+(2, 'Settimanale', 3),
+(3, 'Settimanale', 7),
+(4, 'Giornaliera', 0),
+(5, 'Mensile', 17);
 
 -- Popolamento della tabella ORARIO
 INSERT INTO ORARIO (ordine, n_ore_prenotate_totali, valore) VALUES
@@ -205,36 +205,36 @@ INSERT INTO SALA (piano, numero) VALUES
 (1, 101), (2, 202), (3, 303), (4, 404), (5, 505);
 
 -- Popolamento della tabella PRENOTAZIONE
+-- PRENOTAZIONE ORARIA:     tipo=FALSE
+-- PRENOTAZIONE PACCHETTO:  tipo=TRUE
 INSERT INTO PRENOTAZIONE (annullata, giorno, tipo, pacchetto, sala_piano, sala_numero) VALUES
-(FALSE, '2023-01-10', FALSE, 1, 1, 101),
-(FALSE, '2023-01-15', FALSE, 2, 2, 202),
-(FALSE, '2023-01-20', FALSE, 3, 3, 303),
-(FALSE, '2023-01-25', FALSE, 4, 4, 404),
-(FALSE, '2023-01-30', FALSE, 5, 5, 505),
-(FALSE, '2023-02-04', TRUE, 6, 1, 101),
-(FALSE, '2023-02-09', TRUE, 7, 2, 202),
-(FALSE, '2023-02-14', TRUE, 8, 3, 303),
-(FALSE, '2023-02-19', TRUE, 9, 4, 404),
-(FALSE, '2023-02-24', TRUE, 10, 5, 505);
+(FALSE, '2023-01-10', TRUE, 1, 1, 101),
+(FALSE, '2023-01-15', TRUE, 2, 2, 202),
+(FALSE, '2023-01-20', TRUE, 3, 3, 303),
+(FALSE, '2023-01-25', TRUE, 4, 4, 404),
+(FALSE, '2023-01-30', TRUE, 5, 5, 505),
+(FALSE, '2023-02-04', FALSE, NULL, 1, 101),
+(FALSE, '2023-02-09', FALSE, NULL, 2, 202),
+(FALSE, '2023-02-14', FALSE, NULL, 3, 303),
+(FALSE, '2023-02-19', FALSE, NULL, 4, 404),
+(FALSE, '2023-02-24', FALSE, NULL, 5, 505);
 
--- Le prime 5 prenotazioni sono orarie
--- PRENOTAZIONE ORARIA:         tipo=FALSE
--- PRENOTAZIONE GIORNALIERA:    tipo=TRUE
+-- Le ultime 5 prenotazioni sono orarie
 INSERT INTO ORARIA (prenotazione) VALUES 
-(1), 
-(2), 
-(3), 
-(4), 
-(5);
+(6), 
+(7), 
+(8), 
+(9), 
+(10);
 
 INSERT INTO FASCIA_ORARIA (oraria, orario_inizio, orario_fine) VALUES 
-(1, '09:00:00', '12:00:00'), 
-(1, '13:00:00', '17:00:00'),
-(2, '08:00:00', '11:00:00'),
-(3, '18:00:00', '22:00:00'),
-(4, '17:00:00', '23:00:00'),
-(4, '09:00:00', '11:00:00'),
-(5, '14:00:00', '18:00:00');
+(6, '09:00:00', '12:00:00'), 
+(6, '13:00:00', '17:00:00'),
+(7, '08:00:00', '11:00:00'),
+(8, '18:00:00', '22:00:00'),
+(9, '17:00:00', '23:00:00'),
+(9, '09:00:00', '11:00:00'),
+(10, '14:00:00', '18:00:00');
 
 INSERT INTO TIPO_TECNICO (nome) VALUES 
 ('Fonico'), 

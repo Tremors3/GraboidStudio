@@ -83,7 +83,7 @@ CREATE TABLE CANZONE (
 
     -- Old Primary Key
     titolo VARCHAR(255), 
-    produzione SERIAL,
+    produzione INTEGER,
 
     -- Old Primary Key Uniqueness Maintained
     CONSTRAINT unique_canzone UNIQUE (titolo, produzione),
@@ -104,7 +104,7 @@ CREATE TABLE PARTECIPAZIONE (
 
     -- Old Primary Key
     solista VARCHAR(255), 
-    canzone SERIAL,
+    canzone INTEGER,
 
     -- Old Primary Key Uniqueness Maintained
     CONSTRAINT unique_partecipazione UNIQUE (solista, canzone),
@@ -119,7 +119,7 @@ CREATE TABLE PRODUTTORE (
  
 CREATE TABLE CONDURRE ( 
     produttore VARCHAR(255), 
-    produzione SERIAL, 
+    produzione INTEGER, 
     PRIMARY KEY (produttore, produzione), 
     FOREIGN KEY (produttore) REFERENCES PRODUTTORE(solista), 
     FOREIGN KEY (produzione) REFERENCES PRODUZIONE(codice)
@@ -194,7 +194,7 @@ CREATE TABLE PACCHETTO (
     codice SERIAL PRIMARY KEY,
 
     -- Old Primary Key
-    ordine SERIAL,
+    ordine INTEGER,
     tipologia VARCHAR(255),
 
     -- Old Primary Key Uniqueness Maintained
@@ -207,7 +207,7 @@ CREATE TABLE PACCHETTO (
 ); 
  
 CREATE TABLE ORARIO ( 
-    ordine SERIAL,
+    ordine INTEGER,
     n_ore_prenotate_totali INTEGER, 
     valore DECIMAL(10, 2), 
     PRIMARY KEY (ordine), 
@@ -225,7 +225,7 @@ CREATE TABLE PRENOTAZIONE (
     annullata BOOLEAN, 
     giorno DATE, 
     tipo BOOLEAN, 
-    pacchetto SERIAL, 
+    pacchetto INTEGER, 
     sala_piano INTEGER, 
     sala_numero INTEGER,
     FOREIGN KEY (pacchetto) REFERENCES PACCHETTO(codice), 
@@ -238,7 +238,7 @@ CREATE TABLE ORARIA (
 ); 
  
 CREATE TABLE FASCIA_ORARIA ( 
-    oraria SERIAL, 
+    oraria INTEGER, 
     orario_inizio TIME, 
     orario_fine TIME, 
     PRIMARY KEY (oraria, orario_inizio), 
@@ -282,7 +282,7 @@ CREATE TABLE TELEFONO_T (
 -- Creazione della tabella LAVORA_A
 CREATE TABLE LAVORA_A (
     tecnico CHAR(16),
-    canzone SERIAL,
+    canzone INTEGER,
     PRIMARY KEY (tecnico, canzone),
     FOREIGN KEY (tecnico) REFERENCES TECNICO(codice_fiscale),
     FOREIGN KEY (canzone) REFERENCES CANZONE(codice)
