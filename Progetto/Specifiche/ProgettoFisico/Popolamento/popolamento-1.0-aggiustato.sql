@@ -169,16 +169,16 @@ INSERT INTO METODO (nome) VALUES
 
 -- Popolamento della tabella PAGAMENTO
 INSERT INTO PAGAMENTO (ordine, stato, costo_totale, metodo) VALUES
-(1, 'Completato', 150.00, 'Carta di Credito'),
-(2, 'Completato', 200.00, 'PayPal'),
-(3, 'Completato', 250.00, 'Bonifico Bancario'),
-(4, 'Completato', 300.00, 'Contanti'),
-(5, 'Completato', 350.00, 'Carta di Credito'),
-(6, 'Completato', 400.00, 'PayPal'),
-(7, 'Completato', 450.00, 'Bonifico Bancario'),
-(8, 'Completato', 500.00, 'Contanti'),
-(9, 'Completato', 550.00, 'Carta di Credito'),
-(10, 'Completato', 600.00, 'PayPal');
+(1, 'Pagato', 150.00, 'Carta di Credito'),
+(2, 'Da pagare', 200.00, 'PayPal'),
+(3, 'Pagato', 250.00, 'Bonifico Bancario'),
+(4, 'Da pagare', 300.00, 'Contanti'),
+(5, 'Pagato', 350.00, 'Carta di Credito'),
+(6, 'Pagato', 400.00, 'PayPal'),
+(7, 'Da pagare', 450.00, 'Bonifico Bancario'),
+(8, 'Pagato', 500.00, 'Contanti'),
+(9, 'Pagato', 550.00, 'Carta di Credito'),
+(10, 'Pagato', 600.00, 'PayPal');
 
 -- Popolamento della tabella TIPOLOGIA
 INSERT INTO TIPOLOGIA (nome, valore, n_giorni) VALUES

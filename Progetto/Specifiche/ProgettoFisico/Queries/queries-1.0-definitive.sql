@@ -110,9 +110,8 @@ FROM pagamento as p
 join (
     SELECT o.codice, o.timestamp, o.artista, o.annullato, o.operatore
     FROM ordine as o
-    WHERE o.codice = "<codice>"
-) as s 
-on s.codice = p.codice
+    WHERE o.codice = 1
+) as s on s.codice = p.ordine
 
 
 -- O3) ANNULLARE UN ORDINE
@@ -146,32 +145,29 @@ AND p.ordine = sub.codice
 
 -- O7) ELENCARE GLI ORDINI CHE NON SONO ANCORA STATI PAGATI
 -- Viene visualizzato un elenco di ordini non pagati e informazioni di chi ha fatto l’ordine: nome, cognome, telefono, data di effettuazione dell’ordine e il costo totale.
--- gli stati possibili sono "pagato", "da pagare"                                        (╬▔皿▔)╯
+-- gli stati possibili sono 'Pagato', 'Da Pagare'                                        (╬▔皿▔)╯
 
--- da provare se funziona con il ps
-SELECT p.ordine, p.costo_totale, sub.nome, sub.cognome, sub.telefono, sub.timestamp  FROM PAGAMENTO AS p
-WHERE p.stato = 'da pagare' AS ps
+-- Per i Solisti
+SELECT p.ordine, sub.nome, sub.cognome, sub.numero, sub.timestamp
+FROM PAGAMENTO AS p
 JOIN ( 
-    SELECT o.codice, s.nome, s.cognome, s.telefono, s.timestamp
-    FROM ORDINE AS o ARTISTA AS a SOLISTA AS s
+    SELECT o.codice, s.nome, s.cognome, te.numero, o.timestamp
+    FROM ORDINE AS o, ARTISTA AS a, SOLISTA AS s, TELEFONO_A AS te
     WHERE o.artista = a.nome_arte 
     AND s.artista = a.nome_arte
-) as sub
-AND ps.ordine = sub.codice 
+	AND te.artista = a.nome_arte
+) as sub ON p.ordine = sub.codice WHERE p.stato = 'Da Pagare'
 
-SELECT p.ordine, sub.nome, sub.cognome, sub.telefono, sub.timestamp  FROM PAGAMENTO AS p
-WHERE p.stato = 'da pagare'
+-- Per i Gruppi
+SELECT sub.nome_arte, p.ordine, sub.numero, sub.timestamp
+FROM PAGAMENTO AS p
 JOIN ( 
-    SELECT o.codice, s.nome, s.cognome, s.telefono, o.timestamp
-    FROM ORDINE AS o ARTISTA AS a SOLISTA AS s
+    SELECT a.nome_arte, o.codice, te.numero, o.timestamp
+    FROM ORDINE AS o, ARTISTA AS a, GRUPPO AS g, TELEFONO_A AS te
     WHERE o.artista = a.nome_arte 
-    AND s.artista = a.nome_arte
-) as sub
-AND p.ordine = sub.codice 
-
-
-
-
+    AND g.artista = a.nome_arte
+	AND te.artista = a.nome_arte
+) as sub ON p.ordine = sub.codice WHERE p.stato = 'Da Pagare'
 
 
 
