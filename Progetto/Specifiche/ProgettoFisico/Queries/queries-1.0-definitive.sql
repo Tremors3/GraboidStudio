@@ -49,26 +49,14 @@ union
 
 ------------------------------------- TECNICO -------------------------------------
 
-
 --T1) ELENCARE LE CANZONI A CUI LAVORA UN TECNICO
 --Viene visualizzato un elenco di canzoni a cui lavora un tecnico, viene richiesto di visualizzare il titolo,
 --la produzione di cui fa parte se è in una produzione, la lunghezza, data di registrazione, testo.
 
-SELECT titolo, produzione, lunghezza, data_registrazione, testo FROM CANZONE, LAVORA_A
-WHERE  LAVORA_A.tecnico = '<codice_fiscale>' AND LAVORA_A.canzone = CANZONE.codice;
-
-SELECT titolo, produzione, lunghezza, data_registrazione, testo FROM LAVORA_A
+SELECT titolo, produzione, lunghezza_in_secondi, data_di_registrazione, testo FROM LAVORA_A
 JOIN CANZONE on LAVORA_A.canzone = CANZONE.codice
-WHERE  LAVORA_A.tecnico = '<codice_fiscale>';
+WHERE  LAVORA_A.tecnico = 'TCNAUD85M01H501Z';
 
-SELECT titolo, produzione, lunghezza, data_registrazione, testo FROM CANZONE
-JOIN (
-    SELECT lavora_a.canzone
-    FROM lavora_a
-    WHERE  LAVORA_A.tecnico = '<codice_fiscale>';
-    ) as subquery
-    on subquery.canzone = CANZONE.codice
-;
 --T2) INSERIRE I DATI DI UNA CANZONE
 --Inserimento informazioni generali della canzone titolo, lunghezza, data di registrazione, testo, e il file
 --associato contenente il nome, il percorso di sistema e l’estensione.
@@ -80,7 +68,6 @@ INSERT INTO Canzone (titolo, produzione, testo, data_di_registrazione, lunghezza
 --la data di inizio.
 
 INSERT INTO PRODUZIONE (titolo, artista, data_inizio, data_fine, stato, tipo_produzione, genere) VALUES ...;
-
 
 --T4) PUBBLICAZIONE DI UNA PRODUZIONE
 --Viene impostata per una data produzione lo stato di "pubblicazione" che va ad indicare l’immutabilità di essa e viene impostata la data di termine delle registrazioni.
@@ -95,7 +82,6 @@ WHERE p.codice = '<codice>';
 UPDATE CANZONE as c
 SET c.produzione = '<codice_produzione>' 
 WHERE c.codice = '<codice_canzone>' AND ((SELECT stato FROM PRODUZIONE WHERE PRODUZIONE.codice = '<codice_produzione>') != 'Pubblicazione');
-
 
 ------------------------------------- OPERATORE -------------------------------------
 
@@ -112,7 +98,6 @@ join (
     FROM ordine as o
     WHERE o.codice = 1
 ) as s on s.codice = p.ordine
-
 
 -- O3) ANNULLARE UN ORDINE
 -- L’operatore può annullare un ordine se il cliente lo richiede o non paga dopo aver chiamato l’operatore.
@@ -153,7 +138,6 @@ JOIN (
     AND g.artista = a.nome_arte
 	AND te.artista = a.nome_arte
 ) as sub ON p.ordine = sub.codice
-
 
 -- O7) ELENCARE GLI ORDINI CHE NON SONO ANCORA STATI PAGATI
 -- Viene visualizzato un elenco di ordini non pagati e informazioni di chi ha fatto l’ordine: nome, cognome, telefono, data di effettuazione dell’ordine e il costo totale.
