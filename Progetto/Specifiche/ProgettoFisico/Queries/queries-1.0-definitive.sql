@@ -3,7 +3,7 @@
 -- ELENCARE LE PRODUZIONI COMPOSTE DA UN DETERMINATO ARTISTA
 -- Vengono elencate tutte le informazioni sulle produzioni composte da un determinato artista.
 
-SELECT * FROM produzione AS p WHERE p.artista = "ID_ARTISTA";
+SELECT * FROM produzione AS p WHERE p.artista = 'SoloXYZ';
 
 -- A2) ELENCARE GLI ARTISTI CHE HANNO PARTECIPATO ALLA CREAZIONE DI UNA CANZONE
 -- Data una certa canzone vengono mostrate le informazioni degli artisti che hanno partecipato ad essa.
@@ -24,26 +24,27 @@ ON s.artista = subquery.solista;
 -- Vengono visualizzati i dettagli delle prenotazioni effettuate da un artista.
 
 -- bisogna capire cosa esce in output, se è necessario fare un group by p.oraria
-(select p.codice, p.giorno, p.annullata
-from prenotazione as p
-JOIN (
-    SELECT oraria.prenotazione
-    FROM ordine AS o
-    JOIN orario ON o.ordine = orario.ordine
-    JOIN oraria ON oraria.orario = orario.ordine
-    WHERE o.artista = 'ID_ARTISTA'
-) AS subquery ON p.codice = subquery.prenotazione
+(
+    select p.codice, p.giorno, p.annullata
+    from prenotazione as p
+    JOIN (  
+        SELECT oraria.prenotazione
+        FROM ordine
+        JOIN orario ON ordine.codice = orario.ordine
+        JOIN oraria ON oraria.orario = orario.ordine
+        WHERE ordine.artista = 'SoloXYZ'
+    ) AS subquery ON p.codice = subquery.prenotazione
 )
 union 
-(select p.codice, p.giorno, p.annullata
-from prenotazione as p
-join (
-    SELECT pacchetto.ordine
-    FROM ordine AS o
-    JOIN pacchetto
-    ON pacchetto.ordine = o.codice
-    WHERE o.artista = 'ID_ARTISTA'
-) AS subquery ON p.codice = subquery.ordine
+(
+    select p.codice, p.giorno, p.annullata
+    from prenotazione as p
+    join (
+        SELECT pacchetto.ordine
+        FROM ordine AS o
+        JOIN pacchetto ON pacchetto.ordine = o.codice
+        WHERE o.artista = 'SoloXYZ'
+    ) AS subquery ON p.codice = subquery.ordine
 )
 
 ------------------------------------- TECNICO -------------------------------------
@@ -134,8 +135,7 @@ WHERE codice = '<codice>';
 
 -- O6) VISUALIZZARE LE INFORMAZIONI RELATIVE AL PAGAMENTO DI UN ORDINE
 -- Vengono visualizzate le informazioni nome, cognome del cliente, data in cui è stata effettuato l’ordine, lo stato "pagato", "da pagare", costo totale dell’ordine.
-SELECT p.ordine, sub.nome, sub.cognome, sub.telefono, sub.timestamp  FROM PAGAMENTO AS p
-WHERE p.stato = 'da pagare'
+SELECT p.ordine, p.costo_totale, sub.nome, sub.cognome, sub.telefono, sub.timestamp  FROM PAGAMENTO AS p
 JOIN ( 
     SELECT o.codice, s.nome, s.cognome, s.telefono, o.timestamp
     FROM ORDINE AS o ARTISTA AS a SOLISTA AS s
@@ -145,11 +145,11 @@ JOIN (
 AND p.ordine = sub.codice 
 
 -- O7) ELENCARE GLI ORDINI CHE NON SONO ANCORA STATI PAGATI
--- Viene visualizzato un elenco di ordini non pagati e informazioni di chi ha fatto l’ordine: nome, cognome, telefono, data di effettuazione dell’ordine.
--- gli stati possibili sono "pagato", "da pagare"
+-- Viene visualizzato un elenco di ordini non pagati e informazioni di chi ha fatto l’ordine: nome, cognome, telefono, data di effettuazione dell’ordine e il costo totale.
+-- gli stati possibili sono "pagato", "da pagare"                                        (╬▔皿▔)╯
 
 -- da provare se funziona con il ps
-SELECT p.ordine, sub.nome, sub.cognome, sub.telefono, sub.timestamp  FROM PAGAMENTO AS p
+SELECT p.ordine, p.costo_totale, sub.nome, sub.cognome, sub.telefono, sub.timestamp  FROM PAGAMENTO AS p
 WHERE p.stato = 'da pagare' AS ps
 JOIN ( 
     SELECT o.codice, s.nome, s.cognome, s.telefono, s.timestamp
