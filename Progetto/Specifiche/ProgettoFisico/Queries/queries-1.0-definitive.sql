@@ -134,14 +134,26 @@ WHERE codice = '<codice>';
 
 -- O6) VISUALIZZARE LE INFORMAZIONI RELATIVE AL PAGAMENTO DI UN ORDINE
 -- Vengono visualizzate le informazioni nome, cognome del cliente, data in cui è stata effettuato l’ordine, lo stato "pagato", "da pagare", costo totale dell’ordine.
-SELECT p.ordine, p.costo_totale, sub.nome, sub.cognome, sub.telefono, sub.timestamp  FROM PAGAMENTO AS p
+SELECT p.ordine, sub.nome, sub.cognome, sub.numero, sub.timestamp
+FROM PAGAMENTO AS p
 JOIN ( 
-    SELECT o.codice, s.nome, s.cognome, s.telefono, o.timestamp
-    FROM ORDINE AS o ARTISTA AS a SOLISTA AS s
+    SELECT o.codice, s.nome, s.cognome, te.numero, o.timestamp
+    FROM ORDINE AS o, ARTISTA AS a, SOLISTA AS s, TELEFONO_A AS te
     WHERE o.artista = a.nome_arte 
     AND s.artista = a.nome_arte
-) as sub
-AND p.ordine = sub.codice 
+	AND te.artista = a.nome_arte
+) as sub ON p.ordine = sub.codice
+
+SELECT sub.nome_arte, p.ordine, sub.numero, sub.timestamp
+FROM PAGAMENTO AS p
+JOIN ( 
+    SELECT a.nome_arte, o.codice, te.numero, o.timestamp
+    FROM ORDINE AS o, ARTISTA AS a, GRUPPO AS g, TELEFONO_A AS te
+    WHERE o.artista = a.nome_arte 
+    AND g.artista = a.nome_arte
+	AND te.artista = a.nome_arte
+) as sub ON p.ordine = sub.codice
+
 
 -- O7) ELENCARE GLI ORDINI CHE NON SONO ANCORA STATI PAGATI
 -- Viene visualizzato un elenco di ordini non pagati e informazioni di chi ha fatto l’ordine: nome, cognome, telefono, data di effettuazione dell’ordine e il costo totale.
