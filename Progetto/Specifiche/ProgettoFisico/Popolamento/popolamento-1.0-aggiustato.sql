@@ -220,12 +220,12 @@ INSERT INTO PRENOTAZIONE (annullata, giorno, tipo, pacchetto, sala_piano, sala_n
 (FALSE, '2023-02-24', FALSE, NULL, 5, 505);
 
 -- Le ultime 5 prenotazioni sono orarie
-INSERT INTO ORARIA (prenotazione) VALUES 
-(6), 
-(7), 
-(8), 
-(9), 
-(10);
+INSERT INTO ORARIA (prenotazione, orario) VALUES 
+(6, 6), 
+(7, 7), 
+(8, 8), 
+(9, 9), 
+(10, 10);
 
 INSERT INTO FASCIA_ORARIA (oraria, orario_inizio, orario_fine) VALUES 
 (6, '09:00:00', '12:00:00'), 
