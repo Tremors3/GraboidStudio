@@ -190,16 +190,10 @@ CREATE TABLE TIPOLOGIA (
 ); 
  
 CREATE TABLE PACCHETTO ( 
-    -- Unique code
-    codice SERIAL PRIMARY KEY,
+    ordine INTEGER PRIMARY KEY,
+    FOREIGN KEY (ordine) REFERENCES ORDINE(codice)
 
-    -- Old Primary Key
-    ordine INTEGER,
     tipologia VARCHAR(255),
-
-    -- Old Primary Key Uniqueness Maintained
-    CONSTRAINT unique_pacchetto UNIQUE (ordine, tipologia), 
-    FOREIGN KEY (ordine) REFERENCES ORDINE(codice), 
     FOREIGN KEY (tipologia) REFERENCES TIPOLOGIA(nome),
 
     -- Other
@@ -207,11 +201,14 @@ CREATE TABLE PACCHETTO (
 ); 
  
 CREATE TABLE ORARIO ( 
-    ordine INTEGER,
+    ordine INTEGER PRIMARY KEY,
+    FOREIGN KEY (ordine) REFERENCES ORDINE(codice)
+    
     n_ore_prenotate_totali INTEGER, 
     valore DECIMAL(10, 2), 
-    PRIMARY KEY (ordine), 
-    FOREIGN KEY (ordine) REFERENCES ORDINE(codice)
+    
+    -- one to one
+    oraria INTEGER REFERENCES ORARIA(prenotazione) UNIQUE DEFERRABLE INITIALLY DEFERRED
 ); 
  
 CREATE TABLE SALA ( 
@@ -233,8 +230,11 @@ CREATE TABLE PRENOTAZIONE (
 ); 
  
 CREATE TABLE ORARIA ( 
-    prenotazione SERIAL PRIMARY KEY, 
+    prenotazione INTEGER PRIMARY KEY, 
     FOREIGN KEY (prenotazione) REFERENCES PRENOTAZIONE(codice) 
+
+    -- one to one
+    orario INTEGER REFERENCES ORARIO(ordine) UNIQUE NOT NULL
 ); 
  
 CREATE TABLE FASCIA_ORARIA ( 

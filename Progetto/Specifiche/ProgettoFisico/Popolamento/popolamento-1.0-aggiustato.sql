@@ -77,16 +77,16 @@ INSERT INTO GENERE (nome) VALUES
 
 -- Popolamento della tabella PRODUZIONE
 INSERT INTO PRODUZIONE (titolo, artista, data_inizio, data_fine, stato, tipo_produzione, genere) VALUES
-('Album 1', 'BandABC', '2020-02-01', '2020-06-01', 'Completo', 'Album', 'Rock'),
-('Singolo 1', 'SoloXYZ', '2019-08-01', '2019-08-15', 'Completo', 'Singolo', 'Pop'),
-('EP 1', 'Group123', '2018-12-01', '2019-01-01', 'Completo', 'EP', 'Jazz'),
-('Compilation 1', 'DuoLMN', '2021-03-01', '2021-04-01', 'Completo', 'EP', 'Classical'),
-('Album 2', 'SoloPQR', '2017-06-01', '2017-10-01', 'Completo', 'Album', 'Hip Hop'),
-('Singolo 2', 'TrioUVW', '2019-10-10', '2019-10-20', 'Completo', 'Singolo', 'Electronic'),
-('EP 2', 'BandDEF', '2020-04-01', '2020-05-01', 'Completo', 'EP', 'Rock'),
-('Album 3', 'SoloGHI', '2018-07-01', '2018-11-01', 'Completo', 'Album', 'Pop'),
-('Singolo 3', 'GroupJKL', '2019-05-01', '2019-05-15', 'Completo', 'Singolo', 'Jazz'),
-('EP 3', 'DuoMNO', '2021-08-01', '2021-09-01', 'Completo', 'EP', 'Classical');
+('Album 1', 'BandABC', '2020-02-01', '2020-06-01', 'Pubblicazione', 'Album', 'Rock'),
+('Singolo 1', 'SoloXYZ', '2019-08-01', '2019-08-15', 'Pubblicazione', 'Singolo', 'Pop'),
+('EP 1', 'Group123', '2018-12-01', '2019-01-01', 'Pubblicazione', 'EP', 'Jazz'),
+('Compilation 1', 'DuoLMN', '2021-03-01', '2021-04-01', 'Pubblicazione', 'EP', 'Classical'),
+('Album 2', 'SoloPQR', '2017-06-01', '2017-10-01', 'Pubblicazione', 'Album', 'Hip Hop'),
+('Singolo 2', 'TrioUVW', '2019-10-10', '2019-10-20', 'Pubblicazione', 'Singolo', 'Electronic'),
+('EP 2', 'BandDEF', '2020-04-01', '2020-05-01', 'Pubblicazione', 'EP', 'Rock'),
+('Album 3', 'SoloGHI', '2018-07-01', '2018-11-01', 'Pubblicazione', 'Album', 'Pop'),
+('Singolo 3', 'GroupJKL', '2019-05-01', '2019-05-15', 'Pubblicazione', 'Singolo', 'Jazz'),
+('EP 3', 'DuoMNO', '2021-08-01', '2021-09-01', 'Pubblicazione', 'EP', 'Classical');
 
 -- Popolamento della tabella CANZONE
 INSERT INTO CANZONE (titolo, produzione, testo, data_di_registrazione, lunghezza_in_secondi, nome_del_file, percorso_di_sistema, estensione) VALUES
