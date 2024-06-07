@@ -4,15 +4,14 @@ CREATE TABLE ARTISTA (
 ); 
  
 CREATE TABLE GRUPPO ( 
-    artista VARCHAR(255), 
-    data_formazione DATE, 
-    PRIMARY KEY (artista), 
+    artista VARCHAR(255) PRIMARY KEY, 
+    data_formazione DATE NOT NULL, 
     FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte) 
 ); 
  
 CREATE TABLE SOLISTA ( 
     artista VARCHAR(255), 
-    codice_fiscale VARCHAR(16) UNIQUE, 
+    codice_fiscale CHAR(16) UNIQUE, 
     nome VARCHAR(255), 
     cognome VARCHAR(255), 
     data_di_nascita DATE NOT NULL, 
@@ -24,31 +23,30 @@ CREATE TABLE SOLISTA (
 ); 
  
 CREATE TABLE PARTECIPAZIONE_PASSATA ( 
-    gruppo VARCHAR(255), 
-    solista VARCHAR(255), 
-    data_adesione DATE, 
-    data_fine_adesione DATE, 
+    gruppo VARCHAR(255) NOT NULL, 
+    solista VARCHAR(255) NOT NULL, 
+    data_adesione DATE NOT NULL, 
+    data_fine_adesione DATE NOT NULL, 
     PRIMARY KEY (gruppo, solista), 
     FOREIGN KEY (gruppo) REFERENCES GRUPPO(artista), 
     FOREIGN KEY (solista) REFERENCES SOLISTA(artista) 
-); 
+);
  
 CREATE TABLE EMAIL_A ( 
-    email VARCHAR(255), 
-    artista VARCHAR(255), 
-    PRIMARY KEY (email), 
+    email VARCHAR(255) PRIMARY KEY, 
+    artista VARCHAR(255) NOT NULL, 
     FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte) 
 ); 
  
 CREATE TABLE TELEFONO_A ( 
-    numero VARCHAR(15), 
+    numero CHAR(15), 
     artista VARCHAR(255), 
     PRIMARY KEY (numero), 
     FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte) 
 ); 
  
 CREATE TABLE TIPO_PRODUZIONE ( 
-    nome VARCHAR(255) PRIMARY KEY 
+    nome VARCHAR(25) PRIMARY KEY 
 ); 
 
 CREATE TABLE GENERE ( 
@@ -60,18 +58,18 @@ CREATE TABLE PRODUZIONE (
     codice SERIAL PRIMARY KEY,
 
     -- Old Primary Key
-    titolo VARCHAR(255),
-    artista VARCHAR(255),
+    titolo VARCHAR(255) NOT NULL,
+    artista VARCHAR(255) NOT NULL,
 
     -- Old Primary Key Uniqueness Maintained
     CONSTRAINT unique_produzione UNIQUE (titolo, artista),
     FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte),
 
     -- Other
-    data_inizio DATE, 
+    data_inizio DATE NOT NULL, 
     data_fine DATE, 
-    stato VARCHAR(50), 
-    tipo_produzione VARCHAR(255), 
+    stato VARCHAR(13) NOT NULL, 
+    tipo_produzione VARCHAR(25), 
     genere VARCHAR(255), 
     FOREIGN KEY (tipo_produzione) REFERENCES TIPO_PRODUZIONE(nome),
     FOREIGN KEY (genere) REFERENCES GENERE(nome),
@@ -83,7 +81,7 @@ CREATE TABLE CANZONE (
     codice SERIAL PRIMARY KEY,
 
     -- Old Primary Key
-    titolo VARCHAR(255), 
+    titolo VARCHAR(255) NOT NULL, 
     produzione INTEGER,
 
     -- Old Primary Key Uniqueness Maintained
@@ -104,8 +102,8 @@ CREATE TABLE PARTECIPAZIONE (
     codice SERIAL PRIMARY KEY,
 
     -- Old Primary Key
-    solista VARCHAR(255), 
-    canzone INTEGER,
+    solista VARCHAR(255) NOT NULL, 
+    canzone INTEGER NOT NULL,
 
     -- Old Primary Key Uniqueness Maintained
     CONSTRAINT unique_partecipazione UNIQUE (solista, canzone),
@@ -127,24 +125,24 @@ CREATE TABLE CONDURRE (
 ); 
  
 CREATE TABLE OPERATORE ( 
-    codice_fiscale VARCHAR(16) PRIMARY KEY, 
-    nome VARCHAR(255), 
-    cognome VARCHAR(255), 
-    data_di_nascita DATE, 
-    data_di_assunzione DATE, 
-    iban VARCHAR(34) 
+    codice_fiscale CHAR(16) PRIMARY KEY, 
+    nome VARCHAR(255) NOT NULL, 
+    cognome VARCHAR(255) NOT NULL, 
+    data_di_nascita DATE NOT NULL, 
+    data_di_assunzione DATE NOT NULL, 
+    iban VARCHAR(34) UNIQUE
 ); 
  
 CREATE TABLE EMAIL_O ( 
-    email VARCHAR(255), 
-    operatore VARCHAR(16), 
+    email VARCHAR(255) NOT NULL, 
+    operatore CHAR(16) NOT NULL, 
     PRIMARY KEY (email), 
     FOREIGN KEY (operatore) REFERENCES OPERATORE(codice_fiscale) 
 ); 
  
 CREATE TABLE TELEFONO_O ( 
-    numero VARCHAR(15), 
-    operatore VARCHAR(16), 
+    numero VARCHAR(15) NOT NULL, 
+    operatore CHAR(16) NOT NULL, 
     PRIMARY KEY (numero), 
     FOREIGN KEY (operatore) REFERENCES OPERATORE(codice_fiscale) 
 ); 
@@ -162,8 +160,8 @@ CREATE TABLE ORDINE (
     FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte),
 
     -- Other
-    annullato BOOLEAN,
-    operatore VARCHAR(16),
+    annullato BOOLEAN NOT NULL,
+    operatore CHAR(16) NOT NULL,
     FOREIGN KEY (operatore) REFERENCES OPERATORE(codice_fiscale) 
 ); 
  
@@ -177,26 +175,25 @@ CREATE TABLE PAGAMENTO (
     FOREIGN KEY (ordine) REFERENCES ORDINE(codice), 
 
     -- Other
-    stato VARCHAR(50), 
-    costo_totale DECIMAL(10, 2), 
+    stato VARCHAR(50) NOT NULL, -- Da pagare, Pagato 
+    costo_totale DECIMAL(10, 2) NOT NULL, 
     metodo VARCHAR(255), 
     FOREIGN KEY (metodo) REFERENCES METODO(nome),
     CHECK(costo_totale > 0)
 ); 
  
 CREATE TABLE TIPOLOGIA ( 
-    nome VARCHAR(255), 
-    valore DECIMAL(10, 2), 
-    n_giorni INTEGER, 
-    PRIMARY KEY (nome),
-    CHECK(valore > 0 AND n_giorni > 0)
+    nome VARCHAR(255) PRIMARY KEY, 
+    valore DECIMAL(10, 2) NOT NULL, 
+    n_giorni INTEGER NOT NULL, -- 1 giorno, 7 giorni, 30 giorni 
+    CHECK(valore > 0 AND (n_giorni = 1 OR n_giorni = 7 OR n_giorni = 30))
 ); 
  
 CREATE TABLE PACCHETTO ( 
     ordine INTEGER PRIMARY KEY,
     FOREIGN KEY (ordine) REFERENCES ORDINE(codice),
 
-    tipologia VARCHAR(255),
+    tipologia VARCHAR(255) NOT NULL,
     FOREIGN KEY (tipologia) REFERENCES TIPOLOGIA(nome),
 
     -- Other
@@ -223,7 +220,7 @@ CREATE TABLE SALA (
 CREATE TABLE PRENOTAZIONE ( 
     codice SERIAL PRIMARY KEY, 
     annullata BOOLEAN NOT NULL, 
-    giorno DATE, 
+    giorno DATE NOT NULL, 
     tipo BOOLEAN NOT NULL, 
     pacchetto INTEGER, 
     sala_piano INTEGER NOT NULL, 
@@ -241,7 +238,7 @@ CREATE TABLE ORARIA (
 ); 
  
 CREATE TABLE FASCIA_ORARIA ( 
-    oraria INTEGER, 
+    oraria INTEGER NOT NULL, 
     orario_inizio TIME, 
     orario_fine TIME, 
     PRIMARY KEY (oraria, orario_inizio), 
@@ -250,20 +247,20 @@ CREATE TABLE FASCIA_ORARIA (
  
 -- Creazione della tabella TIPO_TECNICO
 CREATE TABLE TIPO_TECNICO (
-    nome VARCHAR(255) PRIMARY KEY
+    nome VARCHAR(64) PRIMARY KEY
 ); 
  
 -- Creazione della tabella TECNICO
 CREATE TABLE TECNICO (
     codice_fiscale CHAR(16) PRIMARY KEY,
-    sala_piano INT,
-    sala_numero INT,
-    tipo_tecnico VARCHAR(255),
-    nome VARCHAR(255),
-    cognome VARCHAR(255),
-    data_di_nascita DATE,
-    data_di_assunzione DATE,
-    iban VARCHAR(27),
+    sala_piano INT NOT NULL,
+    sala_numero INT NOT NULL,
+    tipo_tecnico VARCHAR(64) NOT NULL,
+    nome VARCHAR(255) NOT NULL,
+    cognome VARCHAR(255) NOT NULL,
+    data_di_nascita DATE NOT NULL,
+    data_di_assunzione DATE NOT NULL,
+    iban VARCHAR(34),
     FOREIGN KEY (sala_piano, sala_numero) REFERENCES SALA(piano, numero),
     FOREIGN KEY (tipo_tecnico) REFERENCES TIPO_TECNICO(nome)
 ); 
@@ -271,14 +268,14 @@ CREATE TABLE TECNICO (
 -- Creazione della tabella EMAIL_T
 CREATE TABLE EMAIL_T (
     email VARCHAR(255) PRIMARY KEY,
-    tecnico CHAR(16),
+    tecnico CHAR(16) NOT NULL,
     FOREIGN KEY (tecnico) REFERENCES TECNICO(codice_fiscale)
 ); 
  
 -- Creazione della tabella TELEFONO_T
 CREATE TABLE TELEFONO_T (
     numero VARCHAR(15) PRIMARY KEY,
-    tecnico CHAR(16),
+    tecnico CHAR(16) NOT NULL,
     FOREIGN KEY (tecnico) REFERENCES TECNICO(codice_fiscale)
 ); 
  
