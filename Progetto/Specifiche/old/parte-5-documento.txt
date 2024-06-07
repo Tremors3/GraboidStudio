@@ -1,0 +1,431 @@
+\newpage
+\section{Schema fisico e sua Implementazione}
+\subsection{Scelta degli Indici}
+\subsection{Procedure}
+\subsection{Trigger}
+\subsection{Schema fisico}
+
+CREATE TABLE ARTISTA (
+
+    nome\_arte VARCHAR(255) PRIMARY KEY,
+    
+    data\_di\_registrazione DATE \\
+); 
+ \\
+CREATE TABLE GRUPPO ( 
+
+    artista VARCHAR(255), 
+    
+    data\_formazione DATE, 
+    
+    PRIMARY KEY (artista), 
+    
+    FOREIGN KEY (artista) REFERENCES ARTISTA(nome\_arte) \\
+); 
+ \\
+CREATE TABLE SOLISTA ( 
+
+    artista VARCHAR(255), 
+    
+    codice\_fiscale VARCHAR(16) UNIQUE, 
+    
+    nome VARCHAR(255), 
+    
+    cognome VARCHAR(255), 
+    
+    data\_di\_nascita DATE, 
+    
+    gruppo VARCHAR(255), 
+    
+    data\_adesione DATE, 
+    
+    PRIMARY KEY (artista), 
+    
+    FOREIGN KEY (artista) REFERENCES ARTISTA(nome\_arte), 
+    
+    FOREIGN KEY (gruppo) REFERENCES GRUPPO(artista) \\
+); 
+ \\
+CREATE TABLE PARTECIPAZIONE\_PASSATA ( 
+    gruppo VARCHAR(255), 
+    
+    solista VARCHAR(255), 
+    
+    data\_adesione DATE, 
+    
+    data\_fine\_adesione DATE, 
+    
+    PRIMARY KEY (gruppo, solista), 
+    
+    FOREIGN KEY (gruppo) REFERENCES GRUPPO(artista), 
+    
+    FOREIGN KEY (solista) REFERENCES SOLISTA(artista) \\
+); 
+ \\
+CREATE TABLE EMAIL\_A ( 
+
+    email VARCHAR(255), 
+    
+    artista VARCHAR(255), 
+    
+    PRIMARY KEY (email), 
+    
+    FOREIGN KEY (artista) REFERENCES ARTISTA(nome\_arte) \\
+); 
+ \\
+CREATE TABLE TELEFONO\_A ( 
+    numero VARCHAR(15), 
+    artista VARCHAR(255), 
+    PRIMARY KEY (numero), 
+    FOREIGN KEY (artista) REFERENCES ARTISTA(nome\_arte) \\
+); 
+ \\
+CREATE TABLE TIPO\_PRODUZIONE ( 
+
+    nome VARCHAR(255) PRIMARY KEY \\
+); 
+ \\
+CREATE TABLE GENERE ( 
+
+    nome VARCHAR(255) PRIMARY KEY \\
+); 
+ \\
+CREATE TABLE PRODUZIONE ( 
+
+    
+    codice SERIAL PRIMARY KEY,
+
+    
+    titolo VARCHAR(255), 
+    
+    artista VARCHAR(255),
+
+    
+    CONSTRAINT unique\_produzione UNIQUE (titolo, artista),
+    
+    FOREIGN KEY (artista) REFERENCES ARTISTA(nome\_arte),
+
+    data\_inizio DATE, 
+    
+    data\_fine DATE, 
+    
+    stato VARCHAR(50), 
+    
+    tipo\_produzione VARCHAR(255), 
+    
+    genere VARCHAR(255), 
+    
+    FOREIGN KEY (tipo\_produzione) REFERENCES TIPO\_PRODUZIONE(nome),
+    
+    FOREIGN KEY (genere) REFERENCES GENERE(nome) \\
+); 
+ \\
+CREATE TABLE CANZONE (
+
+    
+    codice SERIAL PRIMARY KEY,
+
+    
+    titolo VARCHAR(255), 
+    
+    produzione SERIAL,
+
+    
+    CONSTRAINT unique\_canzone UNIQUE (titolo, produzione),
+    
+    FOREIGN KEY (produzione) REFERENCES PRODUZIONE(codice),
+
+    
+    testo TEXT, 
+    
+    data\_di\_registrazione DATE, 
+    
+    lunghezza\_in\_secondi INTEGER, 
+    
+    nome\_del\_file VARCHAR(255), 
+    
+    percorso\_di\_sistema VARCHAR(255), 
+    
+    estensione VARCHAR(10) \\
+); 
+\\
+CREATE TABLE PARTECIPAZIONE ( 
+
+    
+    codice SERIAL PRIMARY KEY,
+
+    
+    solista VARCHAR(255), 
+    
+    canzone SERIAL,
+
+    
+    CONSTRAINT unique\_partecipazione UNIQUE (solista, canzone),
+    
+    FOREIGN KEY (solista) REFERENCES SOLISTA(artista), 
+    
+    FOREIGN KEY (canzone) REFERENCES CANZONE(codice),
+
+    
+    titolo\_produzione VARCHAR(255), 
+    
+    artista\_produzione VARCHAR(255) \\
+); 
+ \\
+CREATE TABLE PRODUTTORE ( 
+
+    solista VARCHAR(255) PRIMARY KEY, 
+    
+    FOREIGN KEY (solista) REFERENCES SOLISTA(artista) \\
+); 
+ \\
+CREATE TABLE CONDURRE ( 
+
+    produttore VARCHAR(255), 
+    
+    produzione SERIAL, 
+    
+    PRIMARY KEY (produttore, produzione), 
+    
+    FOREIGN KEY (produttore) REFERENCES PRODUTTORE(solista),
+    
+    FOREIGN KEY (produzione) REFERENCES PRODUZIONE(codice) \\
+); 
+ \\
+CREATE TABLE OPERATORE ( 
+
+    codice\_fiscale VARCHAR(16) PRIMARY KEY, 
+    
+    nome VARCHAR(255), 
+    
+    cognome VARCHAR(255), 
+    
+    data\_di\_nascita DATE, 
+    
+    data\_di\_assunzione DATE, 
+    
+    iban VARCHAR(34) \\
+); 
+ \\
+CREATE TABLE EMAIL\_O ( 
+
+    email VARCHAR(255), 
+    
+    operatore VARCHAR(16), 
+    
+    PRIMARY KEY (email), 
+    
+    FOREIGN KEY (operatore) REFERENCES OPERATORE(codice\_fiscale) \\
+); 
+ \\
+CREATE TABLE TELEFONO\_O ( 
+
+    numero VARCHAR(15), 
+    
+    operatore VARCHAR(16), 
+    
+    PRIMARY KEY (numero), 
+    
+    FOREIGN KEY (operatore) REFERENCES OPERATORE(codice\_fiscale) \\
+); 
+ \\
+CREATE TABLE ORDINE ( 
+
+    
+    codice SERIAL PRIMARY KEY,
+
+    
+    timestamp TIMESTAMP, 
+    
+    artista VARCHAR(255),
+
+    
+    CONSTRAINT unique\_ordine UNIQUE (timestamp, artista), 
+    
+    FOREIGN KEY (artista) REFERENCES ARTISTA(nome\_arte),
+
+    
+    annullato BOOLEAN, 
+    
+    operatore VARCHAR(16),
+    
+    FOREIGN KEY (operatore) REFERENCES OPERATORE(codice\_fiscale) \\
+); 
+ \\
+CREATE TABLE METODO ( 
+
+    nome VARCHAR(255) PRIMARY KEY \\
+); 
+ \\
+CREATE TABLE PAGAMENTO (
+
+    ordine SERIAL PRIMARY KEY,
+    
+    FOREIGN KEY (ordine) REFERENCES ORDINE(codice), 
+
+    
+    stato VARCHAR(50), 
+    
+    costo\_totale DECIMAL(10, 2), 
+    
+    metodo VARCHAR(255), 
+    
+    FOREIGN KEY (metodo) REFERENCES METODO(nome) \\
+); 
+ \\
+CREATE TABLE TIPOLOGIA ( 
+
+    nome VARCHAR(255), 
+    
+    valore DECIMAL(10, 2), 
+    
+    n\_giorni INTEGER, 
+    
+    PRIMARY KEY (nome) \\
+); 
+ \\
+CREATE TABLE PACCHETTO ( 
+
+    
+    codice SERIAL PRIMARY KEY,
+
+    
+    ordine SERIAL,
+    
+    tipologia VARCHAR(255),
+
+    
+    CONSTRAINT unique\_pacchetto UNIQUE (ordine, tipologia), 
+    
+    FOREIGN KEY (ordine) REFERENCES ORDINE(codice), 
+    
+    FOREIGN KEY (tipologia) REFERENCES TIPOLOGIA(nome),
+
+    
+    n\_giorni\_prenotati\_totali INTEGER \\
+); 
+ \\
+CREATE TABLE ORARIO ( 
+
+    ordine SERIAL,
+    
+    n\_ore\_prenotate\_totali INTEGER, 
+    
+    valore DECIMAL(10, 2), 
+    
+    PRIMARY KEY (ordine), 
+    
+    FOREIGN KEY (ordine) REFERENCES ORDINE(codice) \\
+); 
+ \\
+CREATE TABLE SALA ( 
+
+    piano INTEGER, 
+    
+    numero INTEGER, 
+    
+    PRIMARY KEY (piano, numero) \\
+); 
+ \\
+CREATE TABLE PRENOTAZIONE ( 
+
+    codice SERIAL PRIMARY KEY, 
+    
+    annullata BOOLEAN, 
+    
+    giorno DATE, 
+    
+    tipo VARCHAR(50), 
+    
+    pacchetto SERIAL, 
+    
+    sala\_piano INTEGER,
+    
+    sala\_numero INTEGER,
+    
+    FOREIGN KEY (pacchetto) REFERENCES PACCHETTO(codice), 
+    
+    FOREIGN KEY (sala\_piano, sala\_numero) REFERENCES SALA(piano, numero) \\
+); 
+ \\
+CREATE TABLE ORARIA ( 
+
+    prenotazione SERIAL PRIMARY KEY, 
+    
+    FOREIGN KEY (prenotazione) REFERENCES PRENOTAZIONE(codice) \\
+); 
+ \\
+CREATE TABLE FASCIA\_ORARIA ( 
+
+    oraria SERIAL, 
+    
+    orario\_inizio TIME, 
+    
+    orario\_fine TIME, 
+    
+    PRIMARY KEY (oraria, orario\_inizio),
+    
+    FOREIGN KEY (oraria) REFERENCES ORARIA(prenotazione) \\
+); 
+ \\
+CREATE TABLE TIPO\_TECNICO (
+
+    nome VARCHAR(255) PRIMARY KEY \\
+); 
+ \\
+CREATE TABLE TECNICO (
+
+    codice\_fiscale CHAR(16) PRIMARY KEY,
+    
+    sala\_piano INT,
+    
+    sala\_numero INT,
+    
+    tipo\_tecnico VARCHAR(255),
+    
+    nome VARCHAR(255),
+    
+    cognome VARCHAR(255),
+    
+    data\_di\_nascita DATE,
+    
+    data\_di\_assunzione DATE,
+    
+    iban VARCHAR(27),
+    
+    FOREIGN KEY (sala\_piano, sala\_numero) REFERENCES SALA(piano, numero),
+    
+    FOREIGN KEY (tipo\_tecnico) REFERENCES TIPO\_TECNICO(nome) \\
+); 
+ \\
+CREATE TABLE EMAIL\_T (
+
+    email VARCHAR(255) PRIMARY KEY,
+    
+    tecnico CHAR(16),
+    
+    FOREIGN KEY (tecnico) REFERENCES TECNICO(codice\_fiscale) \\
+); 
+ \\
+CREATE TABLE TELEFONO\_T (
+
+    numero VARCHAR(15) PRIMARY KEY,
+    
+    tecnico CHAR(16),
+    
+    FOREIGN KEY (tecnico) REFERENCES TECNICO(codice\_fiscale) \\
+); 
+ \\
+CREATE TABLE LAVORA\_A (
+
+    tecnico CHAR(16),
+    
+    canzone SERIAL,
+    
+    PRIMARY KEY (tecnico, canzone),
+    
+    FOREIGN KEY (tecnico) REFERENCES TECNICO(codice\_fiscale),
+    
+    FOREIGN KEY (canzone) REFERENCES CANZONE(codice) \\
+); 
+ \\
