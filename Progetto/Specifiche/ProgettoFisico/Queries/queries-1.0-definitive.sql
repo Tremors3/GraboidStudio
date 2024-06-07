@@ -18,7 +18,6 @@ JOIN (
 ) AS subquery
 ON s.artista = subquery.solista;
 
-
 -- A3) VISUALIZZARE UN ELENCO DELLE PRENOTAZIONI EFFETTUATE TRA TUTTI GLI ORDINI DATO UN ARTISTA
 -- Vengono visualizzati i dettagli delle prenotazioni effettuate da un artista.
 
