@@ -76,28 +76,30 @@ INSERT INTO GENERE (nome) VALUES
 ('Rock'), ('Pop'), ('Jazz'), ('Classical'), ('Hip Hop'), ('Electronic');
 
 -- Popolamento della tabella PRODUZIONE
+-- Pubblicazione:   immutabile
+-- Produzione:      ancora modificabile
 INSERT INTO PRODUZIONE (titolo, artista, data_inizio, data_fine, stato, tipo_produzione, genere) VALUES
 ('Album 1', 'BandABC', '2020-02-01', '2020-06-01', 'Pubblicazione', 'Album', 'Rock'),
-('Singolo 1', 'SoloXYZ', '2019-08-01', '2019-08-15', 'Pubblicazione', 'Singolo', 'Pop'),
-('EP 1', 'Group123', '2018-12-01', '2019-01-01', 'Pubblicazione', 'EP', 'Jazz'),
-('Compilation 1', 'DuoLMN', '2021-03-01', '2021-04-01', 'Pubblicazione', 'EP', 'Classical'),
+('Singolo 1', 'SoloXYZ', '2019-08-01', '2019-08-15', 'Produzione', 'Singolo', 'Pop'),
+('EP 1', 'Group123', '2018-12-01', '2019-01-01', 'Produzione', 'EP', 'Jazz'),
+('Compilation 1', 'DuoLMN', '2021-03-01', '2021-04-01', 'Produzione', 'EP', 'Classical'),
 ('Album 2', 'SoloPQR', '2017-06-01', '2017-10-01', 'Pubblicazione', 'Album', 'Hip Hop'),
 ('Singolo 2', 'TrioUVW', '2019-10-10', '2019-10-20', 'Pubblicazione', 'Singolo', 'Electronic'),
-('EP 2', 'BandDEF', '2020-04-01', '2020-05-01', 'Pubblicazione', 'EP', 'Rock'),
+('EP 2', 'BandDEF', '2020-04-01', '2020-05-01', 'Produzione', 'EP', 'Rock'),
 ('Album 3', 'SoloGHI', '2018-07-01', '2018-11-01', 'Pubblicazione', 'Album', 'Pop'),
-('Singolo 3', 'GroupJKL', '2019-05-01', '2019-05-15', 'Pubblicazione', 'Singolo', 'Jazz'),
-('EP 3', 'DuoMNO', '2021-08-01', '2021-09-01', 'Pubblicazione', 'EP', 'Classical');
+('Singolo 3', 'GroupJKL', '2019-05-01', '2019-05-15', 'Produzione', 'Singolo', 'Jazz'),
+('EP 3', 'DuoMNO', '2021-08-01', '2021-09-01', 'Produzione', 'EP', 'Classical');
 
 -- Popolamento della tabella CANZONE
 INSERT INTO CANZONE (titolo, produzione, testo, data_di_registrazione, lunghezza_in_secondi, nome_del_file, percorso_di_sistema, estensione) VALUES
 ('Canzone 1', 1, 'Testo della canzone 1', '2020-02-10', 180, 'canzone1.mp3', '/musica/bandabc', 'mp3'),
-('Canzone 2', 2, 'Testo della canzone 2', '2019-08-05', 210, 'canzone2.mp3', '/musica/soloxyz', 'mp3'),
+('Canzone 2', NULL, 'Testo della canzone 2', '2019-08-05', 210, 'canzone2.mp3', '/musica/soloxyz', 'mp3'),
 ('Canzone 3', 3, 'Testo della canzone 3', '2018-12-10', 240, 'canzone3.mp3', '/musica/group123', 'mp3'),
 ('Canzone 4', 4, 'Testo della canzone 4', '2021-03-10', 200, 'canzone4.mp3', '/musica/duolmn', 'mp3'),
 ('Canzone 5', 5, 'Testo della canzone 5', '2017-07-01', 190, 'canzone5.mp3', '/musica/solopqr', 'mp3'),
-('Canzone 6', 6, 'Testo della canzone 6', '2019-10-15', 220, 'canzone6.mp3', '/musica/triouvw', 'mp3'),
-('Canzone 7', 7, 'Testo della canzone 7', '2020-04-05', 230, 'canzone7.mp3', '/musica/banddef', 'mp3'),
-('Canzone 8', 8, 'Testo della canzone 8', '2018-07-15', 250, 'canzone8.mp3', '/musica/sologhi', 'mp3'),
+('Canzone 6', NULL, 'Testo della canzone 6', '2019-10-15', 220, 'canzone6.mp3', '/musica/triouvw', 'mp3'),
+('Canzone 7', NULL, 'Testo della canzone 7', '2020-04-05', 230, 'canzone7.mp3', '/musica/banddef', 'mp3'),
+('Canzone 8', NULL, 'Testo della canzone 8', '2018-07-15', 250, 'canzone8.mp3', '/musica/sologhi', 'mp3'),
 ('Canzone 9', 9, 'Testo della canzone 9', '2019-05-10', 260, 'canzone9.mp3', '/musica/groupjkl', 'mp3'),
 ('Canzone 10', 10, 'Testo della canzone 10', '2021-08-10', 270, 'canzone10.mp3', '/musica/duomno', 'mp3');
 

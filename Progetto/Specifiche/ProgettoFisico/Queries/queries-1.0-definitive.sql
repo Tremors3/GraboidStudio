@@ -9,13 +9,12 @@ SELECT * FROM produzione AS p WHERE p.artista = 'SoloXYZ';
 -- Data una certa canzone vengono mostrate le informazioni degli artisti che hanno partecipato ad essa.
 
 -- fare giro turistico produzioni e canzoni in questa query
-
 SELECT *
 FROM solista as s
 JOIN (
     SELECT p.solista
     FROM partecipazione AS p
-    WHERE p.canzone = 'ID_canzone'
+    WHERE p.canzone = 123
 ) AS subquery
 ON s.artista = subquery.solista;
 
@@ -23,7 +22,6 @@ ON s.artista = subquery.solista;
 -- A3) VISUALIZZARE UN ELENCO DELLE PRENOTAZIONI EFFETTUATE TRA TUTTI GLI ORDINI DATO UN ARTISTA
 -- Vengono visualizzati i dettagli delle prenotazioni effettuate da un artista.
 
--- bisogna capire cosa esce in output, se è necessario fare un group by p.oraria
 (
     select p.codice, p.giorno, p.annullata
     from prenotazione as p
@@ -53,9 +51,6 @@ union
 --Viene visualizzato un elenco di canzoni a cui lavora un tecnico, viene richiesto di visualizzare il titolo,
 --la produzione di cui fa parte se è in una produzione, la lunghezza, data di registrazione, testo.
 
-SELECT titolo, produzione, lunghezza_in_secondi, data_di_registrazione, testo FROM LAVORA_A
-JOIN CANZONE on LAVORA_A.canzone = CANZONE.codice
-WHERE  LAVORA_A.tecnico = 'TCNAUD85M01H501Z';
 
 --T2) INSERIRE I DATI DI UNA CANZONE
 --Inserimento informazioni generali della canzone titolo, lunghezza, data di registrazione, testo, e il file
@@ -73,15 +68,29 @@ INSERT INTO PRODUZIONE (titolo, artista, data_inizio, data_fine, stato, tipo_pro
 --Viene impostata per una data produzione lo stato di "pubblicazione" che va ad indicare l’immutabilità di essa e viene impostata la data di termine delle registrazioni.
 
 UPDATE PRODUZIONE as p
-SET p.stato = 'Pubblicazione', p.data_fine = YYYY-MM-DD
-WHERE p.codice = '<codice>';
+SET stato = 'Pubblicazione', data_fine = CURRENT_DATE
+WHERE codice = 2;
 
 --T5) INSERIRE UNA CANZONE IN UNA PRODUZIONE
 --Una volta terminata la registrazione di una Canzone essa può inserita nella Produzione di cui fa parte.
 
-UPDATE CANZONE as c
-SET c.produzione = '<codice_produzione>' 
-WHERE c.codice = '<codice_canzone>' AND ((SELECT stato FROM PRODUZIONE WHERE PRODUZIONE.codice = '<codice_produzione>') != 'Pubblicazione');
+UPDATE canzone
+SET produzione = 2 
+WHERE codice = 2 AND (
+    (SELECT stato FROM PRODUZIONE WHERE codice = 2) != 'Pubblicazione'
+);
+
+------------------------------------- FUNZIONA  -------------------------------------
+
+SELECT titolo, produzione, lunghezza_in_secondi, data_di_registrazione, testo FROM LAVORA_A
+JOIN CANZONE on LAVORA_A.canzone = CANZONE.codice
+WHERE  LAVORA_A.tecnico = 'TCNAUD85M01H501Z';
+
+
+
+
+
+
 
 ------------------------------------- OPERATORE -------------------------------------
 
@@ -104,7 +113,7 @@ join (
 
 UPDATE ORDINE
 SET annullato = TRUE
-WHERE codice = '<codice>';
+WHERE codice = 1;
 
 -- O4) CREARE UNA PRENOTAZIONE - procedura
 -- L’operatore registra le prenotazioni previo accordo con il cliente tramite chiamata telefonica.
@@ -114,8 +123,7 @@ WHERE codice = '<codice>';
 
 UPDATE PRENOTAZIONE
 SET annullata = TRUE
-WHERE codice = '<codice>';
-
+WHERE codice = 1;
 
 -- O6) VISUALIZZARE LE INFORMAZIONI RELATIVE AL PAGAMENTO DI UN ORDINE
 -- Vengono visualizzate le informazioni nome, cognome del cliente, data in cui è stata effettuato l’ordine, lo stato "pagato", "da pagare", costo totale dell’ordine.
@@ -152,10 +160,10 @@ JOIN (
     WHERE o.artista = a.nome_arte 
     AND s.artista = a.nome_arte
 	AND te.artista = a.nome_arte
-) as sub ON p.ordine = sub.codice WHERE p.stato = 'Da Pagare'
+) as sub ON p.ordine = sub.codice WHERE p.stato = 'Da pagare'
 
 -- Per i Gruppi
-SELECT sub.nome_arte, p.ordine, sub.numero, sub.timestamp
+SELECT p.ordine, sub.nome_arte, sub.numero, sub.timestamp
 FROM PAGAMENTO AS p
 JOIN ( 
     SELECT a.nome_arte, o.codice, te.numero, o.timestamp
@@ -163,7 +171,7 @@ JOIN (
     WHERE o.artista = a.nome_arte 
     AND g.artista = a.nome_arte
 	AND te.artista = a.nome_arte
-) as sub ON p.ordine = sub.codice WHERE p.stato = 'Da Pagare'
+) as sub ON p.ordine = sub.codice WHERE p.stato = 'Da pagare'
 
 
 
