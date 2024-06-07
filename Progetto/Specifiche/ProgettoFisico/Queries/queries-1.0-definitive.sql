@@ -3,47 +3,39 @@
 -- ELENCARE LE PRODUZIONI COMPOSTE DA UN DETERMINATO ARTISTA
 -- Vengono elencate tutte le informazioni sulle produzioni composte da un determinato artista.
 
-SELECT * FROM produzione AS p WHERE p.artista = 'SoloXYZ';
+SELECT * FROM produzione WHERE artista = 'SoloXYZ';
 
 -- A2) ELENCARE GLI ARTISTI CHE HANNO PARTECIPATO ALLA CREAZIONE DI UNA CANZONE
 -- Data una certa canzone vengono mostrate le informazioni degli artisti che hanno partecipato ad essa.
 
 -- fare giro turistico produzioni e canzoni in questa query
-SELECT *
-FROM solista as s
-JOIN (
-    SELECT p.solista
-    FROM partecipazione AS p
-    WHERE p.canzone = 123
-) AS subquery
-ON s.artista = subquery.solista;
+SELECT * FROM solista WHERE artista IN (
+    SELECT p.solista FROM partecipazione as p WHERE p.canzone = 1
+)
 
 -- A3) VISUALIZZARE UN ELENCO DELLE PRENOTAZIONI EFFETTUATE TRA TUTTI GLI ORDINI DATO UN ARTISTA
 -- Vengono visualizzati i dettagli delle prenotazioni effettuate da un artista.
 
 (
-    select p.codice, p.giorno, p.annullata
-    from prenotazione as p
-    JOIN (  
+    SELECT codice, giorno, annullata FROM prenotazione
+    WHERE codice IN (
         SELECT oraria.prenotazione
         FROM ordine
         JOIN orario ON ordine.codice = orario.ordine
         JOIN oraria ON oraria.orario = orario.ordine
         WHERE ordine.artista = 'SoloXYZ'
-    ) AS subquery ON p.codice = subquery.prenotazione
+    )
 )
-union 
+union
 (
-    select p.codice, p.giorno, p.annullata
-    from prenotazione as p
-    join (
-        SELECT pacchetto.ordine
+    SELECT codice, giorno, annullata FROM prenotazione
+    WHERE pacchetto IN (
+        SELECT pa.ordine  
         FROM ordine AS o
-        JOIN pacchetto ON pacchetto.ordine = o.codice
+        JOIN pacchetto AS pa ON o.codice = pa.ordine
         WHERE o.artista = 'SoloXYZ'
-    ) AS subquery ON p.codice = subquery.ordine
+    )
 )
-
 ------------------------------------- TECNICO -------------------------------------
 
 --T1) ELENCARE LE CANZONI A CUI LAVORA UN TECNICO
@@ -100,12 +92,12 @@ WHERE  LAVORA_A.tecnico = 'TCNAUD85M01H501Z';
 -- Vengono visualizzate tutte le informazioni di interesse di un dato ordine.
 -- controllare se prende i campi s.codice, s.timestamp, s.artista, s.annullato, s.operatore
 SELECT s.codice, s.timestamp, s.artista, s.annullato, s.operatore, p.stato, p.metodo, p.costo_totale
-FROM pagamento as p
-join (
+FROM pagamento AS p
+JOIN (
     SELECT o.codice, o.timestamp, o.artista, o.annullato, o.operatore
-    FROM ordine as o
+    FROM ordine AS o
     WHERE o.codice = 1
-) as s on s.codice = p.ordine
+) AS s ON s.codice = p.ordine
 
 -- O3) ANNULLARE UN ORDINE
 -- L’operatore può annullare un ordine se il cliente lo richiede o non paga dopo aver chiamato l’operatore.
@@ -126,25 +118,22 @@ WHERE codice = 1;
 
 -- O6) VISUALIZZARE LE INFORMAZIONI RELATIVE AL PAGAMENTO DI UN ORDINE
 -- Vengono visualizzate le informazioni nome, cognome del cliente, data in cui è stata effettuato l’ordine, lo stato "pagato", "da pagare", costo totale dell’ordine.
-SELECT p.ordine, sub.nome, sub.cognome, sub.numero, sub.timestamp
-FROM PAGAMENTO AS p
-JOIN ( 
-    SELECT o.codice, s.nome, s.cognome, te.numero, o.timestamp
-    FROM ORDINE AS o, ARTISTA AS a, SOLISTA AS s, TELEFONO_A AS te
-    WHERE o.artista = a.nome_arte 
-    AND s.artista = a.nome_arte
-	AND te.artista = a.nome_arte
-) as sub ON p.ordine = sub.codice
 
-SELECT sub.nome_arte, p.ordine, sub.numero, sub.timestamp
-FROM PAGAMENTO AS p
-JOIN ( 
-    SELECT a.nome_arte, o.codice, te.numero, o.timestamp
-    FROM ORDINE AS o, ARTISTA AS a, GRUPPO AS g, TELEFONO_A AS te
-    WHERE o.artista = a.nome_arte 
-    AND g.artista = a.nome_arte
-	AND te.artista = a.nome_arte
-) as sub ON p.ordine = sub.codice
+SELECT o.codice, s.nome, s.cognome, t.numero, o.timestamp
+FROM ordine AS o
+JOIN artista    AS a ON a.nome_arte = o.artista
+JOIN solista    AS s ON a.nome_arte = s.artista
+JOIN telefono_a AS t ON a.nome_arte = t.artista
+JOIN PAGAMENTO  AS p ON p.ordine = o.codice
+
+
+SELECT o.codice, a.nome_arte, t.numero, o.timestamp
+FROM ORDINE AS o
+JOIN ARTISTA    AS a ON a.nome_arte = o.artista
+JOIN GRUPPO     AS g ON a.nome_arte = g.artista
+JOIN TELEFONO_A AS t ON a.nome_arte = t.artista
+JOIN PAGAMENTO  AS p ON p.ordine = o.codice
+
 
 -- O7) ELENCARE GLI ORDINI CHE NON SONO ANCORA STATI PAGATI
 -- Viene visualizzato un elenco di ordini non pagati e informazioni di chi ha fatto l’ordine: nome, cognome, telefono, data di effettuazione dell’ordine e il costo totale.
@@ -180,15 +169,168 @@ JOIN (
 
 
 -- O8) ELENCARE LE SALE DISPONIBILI
--- Viene visualizzato un elenco di tutte le sale libere per una certa data/ora.
+-- Viene visualizzato un elenco di tutte le sale libere per una certa data, ora di inizio e ora di fine
 
--- fare join oraria e con fascia oraria, per una certa da e ora "between"
-SELECT numero, piano FROM SALA
-WHERE (numero, piano) != (SELECT sala_numero, sala_piano FROM PRENOTAZIONE WHERE giorno != YYYY-MM-DD)
+-- giornaliera è true, oraria è false
 
--- come diamine si fa...
-SELECT numero, piano FROM SALA
-WHERE numero != subquery.sala_numero && piano != subquery.piano (SELECT sala_numero, sala_piano FROM PRENOTAZIONE WHERE giorno != YYYY-MM-DD) as subquery
+-- spiegazione query
+-- in questo giorno 2023-02-04 sappiamo che esiste una prenotazione che tiene la sala 1 numero 101 occupata dalle ore '09:00:00' fino alle '12:00:00' e
+-- dalle ore '13:00:00' fino alle '17:00:00'
+
+-- abbiamo 5 sale in totale
+-- nel popolamento siamo sicuri che quella sala non venga occupata da altre prenotazioni, inoltre le sale rimanenti sappiamo che sono tutte libere per quel giorno.
+-- noi vogliamo che inserendo il giorno 2023-02-04 e l'ora di inizio 18:00:00 alle ore 23:00:00, ci venga mostrato in output il codice di questa sala e anche il codice delle altre sale 
+
+(
+    SELECT s.numero, s.piano
+    FROM SALA s
+    WHERE (s.numero, s.piano) NOT IN (
+        -- tutte le chiave primarie delle sale che sono occupate in un dato giorno in una determinata fascia oraria
+        SELECT DISTINCT p.sala_numero, p.sala_piano
+        FROM PRENOTAZIONE p
+        JOIN ORARIA o ON o.prenotazione = p.codice
+        JOIN FASCIA_ORARIA f ON f.oraria = o.prenotazione
+        WHERE p.annullata = FALSE
+        AND p.tipo = FALSE 
+        AND p.giorno = '2023-02-04'
+        AND not (f.orario_inizio BETWEEN '18:00:00' and '23:00:00')
+        AND not( f.orario_fine  BETWEEN '18:00:00' and '23:00:00')
+        )
+)
+EXCEPT -- rimuovi le sale che sono occupate per tutto il giorno da una prenotazione giornaliera nel giorno dato in input
+(
+    SELECT sala_numero, sala_piano
+    FROM PRENOTAZIONE
+    WHERE annullata = FALSE AND tipo = TRUE AND giorno = '2023-02-04'
+);
 
 
 
+
+SELECT s.numero, s.piano
+FROM SALA s
+WHERE (s.numero, s.piano) NOT IN (
+    SELECT DISTINCT p.sala_numero, p.sala_piano
+    FROM PRENOTAZIONE p
+    JOIN ORARIA o ON o.prenotazione = p.codice
+    JOIN FASCIA_ORARIA f ON f.oraria = o.prenotazione
+    WHERE p.annullata = FALSE
+    AND p.tipo = FALSE 
+    AND p.giorno = '2023-02-04'
+    AND (
+        (f.orario_inizio < '20:00:00' AND f.orario_fine > '20:00:00') OR
+        (f.orario_inizio < '23:00:00' AND f.orario_fine > '23:00:00') OR
+        (f.orario_inizio >= '20:00:00' AND f.orario_fine <= '23:00:00')
+    )
+)
+EXCEPT
+SELECT sala_numero, sala_piano
+FROM PRENOTAZIONE
+WHERE annullata = FALSE AND tipo = TRUE AND giorno = '2023-02-04';
+
+SELECT s.numero, s.piano
+FROM SALA s
+WHERE (s.numero, s.piano) NOT IN (
+    SELECT DISTINCT p.sala_numero, p.sala_piano
+    FROM PRENOTAZIONE p
+    JOIN ORARIA o ON o.prenotazione = p.codice
+    JOIN FASCIA_ORARIA f ON f.oraria = o.prenotazione
+    WHERE p.annullata = FALSE
+    AND p.tipo = FALSE 
+    AND p.giorno = '2023-02-04'
+    AND (
+        (f.orario_inizio < '18:00:00' AND f.orario_fine > '18:00:00') OR
+        (f.orario_inizio < '23:00:00' AND f.orario_fine > '23:00:00') OR
+        (f.orario_inizio >= '18:00:00' AND f.orario_fine <= '23:00:00')
+    )
+)
+EXCEPT
+SELECT sala_numero, sala_piano
+FROM PRENOTAZIONE
+WHERE annullata = FALSE AND tipo = TRUE AND giorno = '2023-02-04';
+
+SELECT s.numero, s.piano
+FROM SALA s
+WHERE (s.numero, s.piano) NOT IN (
+    SELECT DISTINCT p.sala_numero, p.sala_piano
+    FROM PRENOTAZIONE p
+    JOIN ORARIA o ON o.prenotazione = p.codice
+    JOIN FASCIA_ORARIA f ON f.oraria = o.prenotazione
+    WHERE p.annullata = FALSE
+    AND p.tipo = FALSE 
+    AND p.giorno = '2023-02-04'
+    AND (
+        (f.orario_inizio < '10:00:00' AND f.orario_fine > '10:00:00') OR
+        (f.orario_inizio < '12:00:00' AND f.orario_fine > '12:00:00') OR
+        (f.orario_inizio >= '10:00:00' AND f.orario_fine <= '12:00:00')
+    )
+)
+EXCEPT
+SELECT sala_numero, sala_piano
+FROM PRENOTAZIONE
+WHERE annullata = FALSE AND tipo = TRUE AND giorno = '2023-02-04';
+
+
+SELECT s.numero, s.piano
+FROM SALA s
+WHERE (s.numero, s.piano) NOT IN (
+    SELECT DISTINCT p.sala_numero, p.sala_piano
+    FROM PRENOTAZIONE p
+    JOIN ORARIA o ON o.prenotazione = p.codice
+    JOIN FASCIA_ORARIA f ON f.oraria = o.prenotazione
+    WHERE p.annullata = FALSE
+    AND p.tipo = FALSE 
+    AND p.giorno = '2023-02-04'
+    AND (
+        (f.orario_inizio < '12:00:00' AND f.orario_fine > '12:00:00') OR
+        (f.orario_inizio < '13:00:00' AND f.orario_fine > '13:00:00') OR
+        (f.orario_inizio >= '12:00:00' AND f.orario_fine <= '13:00:00')
+    )
+)
+EXCEPT
+SELECT sala_numero, sala_piano
+FROM PRENOTAZIONE
+WHERE annullata = FALSE AND tipo = TRUE AND giorno = '2023-02-04';
+
+
+SELECT s.numero, s.piano
+FROM SALA s
+WHERE (s.numero, s.piano) NOT IN (
+    SELECT DISTINCT p.sala_numero, p.sala_piano
+    FROM PRENOTAZIONE p
+    JOIN ORARIA o ON o.prenotazione = p.codice
+    JOIN FASCIA_ORARIA f ON f.oraria = o.prenotazione
+    WHERE p.annullata = FALSE
+    AND p.tipo = FALSE 
+    AND p.giorno = '2023-02-04'
+    AND (
+        (f.orario_inizio < '12:00:00' AND f.orario_fine > '12:00:00') OR
+        (f.orario_inizio < '14:00:00' AND f.orario_fine > '14:00:00') OR
+        (f.orario_inizio >= '12:00:00' AND f.orario_fine <= '14:00:00')
+    )
+)
+EXCEPT
+SELECT sala_numero, sala_piano
+FROM PRENOTAZIONE
+WHERE annullata = FALSE AND tipo = TRUE AND giorno = '2023-02-04';
+
+SELECT s.numero, s.piano
+FROM SALA s
+WHERE (s.numero, s.piano) NOT IN (
+    SELECT DISTINCT p.sala_numero, p.sala_piano
+    FROM PRENOTAZIONE p
+    JOIN ORARIA o ON o.prenotazione = p.codice
+    JOIN FASCIA_ORARIA f ON f.oraria = o.prenotazione
+    WHERE p.annullata = FALSE
+    AND p.tipo = FALSE 
+    AND p.giorno = '2023-02-04'
+    AND (
+        (f.orario_inizio < '11:00:00' AND f.orario_fine > '11:00:00') OR
+        (f.orario_inizio < '13:00:00' AND f.orario_fine > '13:00:00') OR
+        (f.orario_inizio >= '11:00:00' AND f.orario_fine <= '13:00:00')
+    )
+)
+EXCEPT
+SELECT sala_numero, sala_piano
+FROM PRENOTAZIONE
+WHERE annullata = FALSE AND tipo = TRUE AND giorno = '2023-02-04';

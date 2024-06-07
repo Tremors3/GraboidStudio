@@ -115,6 +115,12 @@ INSERT INTO PARTECIPAZIONE (solista, canzone) VALUES
 ('SoloGHI', 8),
 ('SoloXYZ', 9),
 ('SoloABC', 10);
+('SoloDEF', 4),
+('SoloPQR', 5),
+('SoloGHI', 6),
+('SoloSTU', 7),
+('SoloJKL', 8),
+('SoloGHI', 2),
 
 -- Popolamento della tabella PRODUTTORE
 INSERT INTO PRODUTTORE (solista) VALUES
@@ -215,11 +221,14 @@ INSERT INTO PRENOTAZIONE (annullata, giorno, tipo, pacchetto, sala_piano, sala_n
 (FALSE, '2023-01-20', TRUE, 3, 3, 303),
 (FALSE, '2023-01-25', TRUE, 4, 4, 404),
 (FALSE, '2023-01-30', TRUE, 5, 5, 505),
-(FALSE, '2023-02-04', FALSE, NULL, 1, 101),
+
+
+(FALSE, '2023-02-04', FALSE, NULL, 1, 101), 
 (FALSE, '2023-02-09', FALSE, NULL, 2, 202),
 (FALSE, '2023-02-14', FALSE, NULL, 3, 303),
 (FALSE, '2023-02-19', FALSE, NULL, 4, 404),
 (FALSE, '2023-02-24', FALSE, NULL, 5, 505);
+
 
 -- Le ultime 5 prenotazioni sono orarie
 INSERT INTO ORARIA (prenotazione, orario) VALUES 
@@ -229,6 +238,7 @@ INSERT INTO ORARIA (prenotazione, orario) VALUES
 (9, 9), 
 (10, 10);
 
+
 INSERT INTO FASCIA_ORARIA (oraria, orario_inizio, orario_fine) VALUES 
 (6, '09:00:00', '12:00:00'), 
 (6, '13:00:00', '17:00:00'),
@@ -237,6 +247,7 @@ INSERT INTO FASCIA_ORARIA (oraria, orario_inizio, orario_fine) VALUES
 (9, '17:00:00', '23:00:00'),
 (9, '09:00:00', '11:00:00'),
 (10, '14:00:00', '18:00:00');
+
 
 INSERT INTO TIPO_TECNICO (nome) VALUES 
 ('Fonico'), 

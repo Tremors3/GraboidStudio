@@ -1,6 +1,6 @@
 CREATE TABLE ARTISTA (
     nome_arte VARCHAR(255) PRIMARY KEY,
-    data_di_registrazione DATE 
+    data_di_registrazione DATE NOT NULL
 ); 
  
 CREATE TABLE GRUPPO ( 
@@ -15,7 +15,7 @@ CREATE TABLE SOLISTA (
     codice_fiscale VARCHAR(16) UNIQUE, 
     nome VARCHAR(255), 
     cognome VARCHAR(255), 
-    data_di_nascita DATE, 
+    data_di_nascita DATE NOT NULL, 
     gruppo VARCHAR(255), 
     data_adesione DATE, 
     PRIMARY KEY (artista), 
@@ -74,7 +74,8 @@ CREATE TABLE PRODUZIONE (
     tipo_produzione VARCHAR(255), 
     genere VARCHAR(255), 
     FOREIGN KEY (tipo_produzione) REFERENCES TIPO_PRODUZIONE(nome),
-    FOREIGN KEY (genere) REFERENCES GENERE(nome) 
+    FOREIGN KEY (genere) REFERENCES GENERE(nome),
+    CHECK (data_inizio <= data_fine)
 ); 
  
 CREATE TABLE CANZONE (
@@ -153,8 +154,8 @@ CREATE TABLE ORDINE (
     codice SERIAL PRIMARY KEY,
 
     -- Old Primary Key
-    timestamp TIMESTAMP, 
-    artista VARCHAR(255),
+    timestamp TIMESTAMP NOT NULL, 
+    artista VARCHAR(255) NOT NULL,
 
     -- Old Primary Key Uniqueness Maintained
     CONSTRAINT unique_ordine UNIQUE (timestamp, artista), 
@@ -179,14 +180,16 @@ CREATE TABLE PAGAMENTO (
     stato VARCHAR(50), 
     costo_totale DECIMAL(10, 2), 
     metodo VARCHAR(255), 
-    FOREIGN KEY (metodo) REFERENCES METODO(nome) 
+    FOREIGN KEY (metodo) REFERENCES METODO(nome),
+    CHECK(costo_totale > 0)
 ); 
  
 CREATE TABLE TIPOLOGIA ( 
     nome VARCHAR(255), 
     valore DECIMAL(10, 2), 
     n_giorni INTEGER, 
-    PRIMARY KEY (nome) 
+    PRIMARY KEY (nome),
+    CHECK(valore > 0 AND n_giorni > 0)
 ); 
  
 CREATE TABLE PACCHETTO ( 
@@ -205,8 +208,8 @@ CREATE TABLE ORARIO (
     FOREIGN KEY (ordine) REFERENCES ORDINE(codice),
     
     n_ore_prenotate_totali INTEGER, 
-    valore DECIMAL(10, 2)
-    
+    valore DECIMAL(10, 2),
+    CHECK (valore > 0)
     -- one to one
     --oraria INTEGER REFERENCES ORARIA(prenotazione) UNIQUE DEFERRABLE INITIALLY DEFERRED
 ); 
@@ -219,12 +222,12 @@ CREATE TABLE SALA (
  
 CREATE TABLE PRENOTAZIONE ( 
     codice SERIAL PRIMARY KEY, 
-    annullata BOOLEAN, 
+    annullata BOOLEAN NOT NULL, 
     giorno DATE, 
-    tipo BOOLEAN, 
+    tipo BOOLEAN NOT NULL, 
     pacchetto INTEGER, 
-    sala_piano INTEGER, 
-    sala_numero INTEGER,
+    sala_piano INTEGER NOT NULL, 
+    sala_numero INTEGER NOT NULL,
     FOREIGN KEY (pacchetto) REFERENCES PACCHETTO(ordine), 
     FOREIGN KEY (sala_piano, sala_numero) REFERENCES SALA(piano, numero) 
 ); 
