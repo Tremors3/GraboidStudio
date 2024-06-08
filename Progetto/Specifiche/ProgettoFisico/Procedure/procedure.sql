@@ -10,6 +10,10 @@ BEGIN
     UPDATE PAGAMENTO
     SET costo_totale = CalcolaCostoTotale(ordine_id)
     WHERE ordine = ordine_id;
+EXCEPTION
+    WHEN OTHERS THEN -- Gestione degli errori
+        ROLLBACK;    -- Annulla la transazione in caso di errore
+        RAISE;       -- Sollevamento dell'eccezione
 END
 $$;
 CALL AggiornaCostoOrdine(1);
@@ -40,6 +44,10 @@ BEGIN
     -- inserimento pagamaneto
     INSERT INTO PAGAMENTO (ordine, stato, costo_totale, metodo)
     VALUES(ordine_id, 'Da pagare', CalcolaCostoTotale(ordine_id), NULL);
+EXCEPTION
+    WHEN OTHERS THEN -- Gestione degli errori
+        ROLLBACK;    -- Annulla la transazione in caso di errore
+        RAISE;       -- Sollevamento dell'eccezione
 END
 $$;
 CALL CreaOrdinePacchetto('OPRABC90A01H501X', 'BandABC', 'Mensile');
@@ -47,6 +55,21 @@ CALL CreaOrdinePacchetto('OPRABC90A01H501X', 'BandABC', 'Mensile');
 /* INSERISCE UNA PRENOTAZIONE GIORNALIERA
  * 
  */
+
+CREATE OR REPLACE PROCEDURE CreaPrenotazioneGiornaliera(
+    
+)LANGUAGE plpgsql AS $$
+DECLARE
+
+BEGIN
+
+EXCEPTION
+    WHEN OTHERS THEN -- Gestione degli errori
+        ROLLBACK;    -- Annulla la transazione in caso di errore
+        RAISE;       -- Sollevamento dell'eccezione
+END
+$$;
+CALL CreaOrdineOrario();
 
 /* CREA UN NUOVO ORDINE DI TIPO ORARIO
  * La procedura crea un ordine di tipo pacchetto in diverse fasi.
@@ -115,6 +138,10 @@ BEGIN
     -- inserimento pagamaneto
     INSERT INTO PAGAMENTO (ordine, stato, costo_totale, metodo)
     VALUES(ordine_id, 'Da pagare', CalcolaCostoTotale(ordine_id), NULL);
+EXCEPTION
+    WHEN OTHERS THEN -- Gestione degli errori
+        ROLLBACK;    -- Annulla la transazione in caso di errore
+        RAISE;       -- Sollevamento dell'eccezione
 END
 $$;
 CALL CreaOrdineOrario(

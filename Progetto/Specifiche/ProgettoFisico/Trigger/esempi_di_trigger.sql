@@ -162,3 +162,5 @@ CHECK (
 );
 
 creare un trigger per fare in modo che le fascie orarie non overleappino, guardare la query gia creata per costruirlo.
+
+fare un trigger che controli che n giorni prentoati totali
