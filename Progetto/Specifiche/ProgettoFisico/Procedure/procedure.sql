@@ -416,3 +416,92 @@ CALL CreaPartecipazioneSolistaGruppo('PopStar', 'Artista1234', '2024-06-08');
 CALL CreaPartecipazioneSolistaGruppo('PopStar', 'Artista1234', '2024-06-08');
 CALL CreaPartecipazioneSolistaGruppo('PopStar', 'BandABC', '2024-06-08');
 CALL CreaPartecipazioneSolistaGruppo('PopStar', 'Group123', '2024-06-08');
+PERFORM query;
+
+
+---------------------------------------------------------------------------------------------------
+/*
+PERFORM query explanation, FOUND 
+This executes query and discards the result. Write the query the same way you would write an SQL SELECT command, but replace the initial keyword SELECT with PERFORM. For WITH queries, use PERFORM and then place the query in parentheses. (In this case, the query can only return one row.) PL/pgSQL variables will be substituted into the query just as described above, and the plan is cached in the same way. Also, the special variable FOUND is set to true if the query produced at least one row, or false if it produced no row
+*/
+
+/*
+ * AGGIUNGI CANZONE
+ * Aggiunge una nuova canzone al database e gestisce la relazione "lavora_a" con solisti.
+ *
+ * INPUT:   titolo                      VARCHAR(255)    - Titolo della canzone
+ * INPUT:   testo                       TEXT            - Testo della canzone
+ * INPUT:   data_di_registrazione       DATE            - Data di registrazione della canzone
+ * INPUT:   lunghezza_in_secondi        INT             - Lunghezza in secondi della canzone
+ * INPUT:   nome_del_file               VARCHAR(255)    - Nome del file della canzone
+ * INPUT:   percorso_di_sistema         VARCHAR(255)    - Percorso di sistema del file della canzone
+ * INPUT:   estensione                  VARCHAR(10)     - Estensione del file della canzone
+ * INPUT:   solisti_nome_arte           VARCHAR[]       - Array di nomi d'arte dei solisti che partecipano alla creazione della canzone
+ * INPUT:   codice_fiscale_tecnico      CHAR(16)        - Codice fiscale del tecnico che lavora sulla canzone
+ */
+CREATE OR REPLACE PROCEDURE AggiungiCanzoneEPartecipazioni(
+    titolo VARCHAR(255), 
+    testo TEXT, 
+    data_di_registrazione DATE, 
+    lunghezza_in_secondi INT,
+    nome_del_file VARCHAR(255), 
+    percorso_di_sistema VARCHAR(255), 
+    estensione VARCHAR(10), 
+    solisti_nome_arte VARCHAR[],
+    codice_fiscale_tecnico CHAR(16)
+)
+LANGUAGE plpgsql AS $$
+declare
+    codice_canzone INT;
+    solista_nome VARCHAR(255);
+BEGIN
+    -- Inserisce la canzone
+    INSERT INTO CANZONE (titolo, testo, data_di_registrazione, lunghezza_in_secondi, nome_del_file, percorso_di_sistema, estensione)
+    VALUES (titolo, testo, data_di_registrazione, lunghezza_in_secondi, nome_del_file, percorso_di_sistema, estensione)
+    RETURNING codice INTO codice_canzone;
+    -- Inserisce la partecipazione dei solisti
+    FOREACH solista_nome IN ARRAY solisti_nome_arte LOOP
+
+        -- Inserisce la partecipazione solo se il solista esiste nella tabella SOLISTA
+        -- Cerca l'artista (solista) per nome d'arte
+        PERFORM artista
+        FROM SOLISTA
+        WHERE artista = solista_nome;
+
+        -- Se l'artista (solista) esiste, inserisce la partecipazione nella canzone
+        IF FOUND THEN
+            -- Verifica se il solista è già presente nella canzone
+            INSERT INTO PARTECIPAZIONE (solista, canzone)
+            VALUES (solista_nome, codice_canzone);
+
+        ELSE
+            -- Solleva un avviso se l'artista (solista) non esiste
+            RAISE NOTICE 'Solista non trovato con nome d arte %, non è stato possibile aggiungere la partecipazione.', solista_nome;
+        END IF;
+    END LOOP;
+    
+    -- Aggiunge il tecnico alla tabella Lavora_a
+    INSERT INTO LAVORA_A (tecnico, canzone)
+    VALUES (codice_fiscale_tecnico, codice_canzone);
+
+EXCEPTION
+    -- Gestione degli errori
+    WHEN OTHERS THEN
+        -- Solleva l'eccezione per visualizzare l'errore
+        RAISE NOTICE 'Errore durante l aggiunta della canzone: %', SQLERRM;
+END;
+$$;
+
+CALL AggiungiCanzoneEPartecipazioni(
+    'Titolo della Canzone',
+    'Testo della canzone',
+    '2024-06-09',
+    300, -- Lunghezza in secondi
+    'nome_file.mp3',
+    '/percorso/di/sistema',
+    'mp3', -- Estensione del file
+    ARRAY['SoloXYZ', 'SoloABC'], -- Array di nomi d'arte dei solisti
+    'TCNAUD85M01H501Z' -- Codice fiscale del tecnico
+);
+
+

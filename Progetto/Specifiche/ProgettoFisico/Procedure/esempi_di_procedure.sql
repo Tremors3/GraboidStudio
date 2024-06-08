@@ -1,4 +1,4 @@
-Gestione Produzione e Canzone
+ Gestione Produzione e Canzone
 
     -- aggiunta di una canzone, e quindi anche di relazione "lavora_a" e lista di id dei solisti
 
