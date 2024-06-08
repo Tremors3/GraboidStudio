@@ -48,7 +48,8 @@ CREATE TABLE TELEFONO_A (
 ); 
  
 CREATE TABLE TIPO_PRODUZIONE ( 
-    nome VARCHAR(25) PRIMARY KEY 
+    nome VARCHAR(25) PRIMARY KEY,
+    CHECK (nome IN ('Album', 'Singolo', 'EP'))
 ); 
 
 CREATE TABLE GENERE ( 
@@ -254,7 +255,8 @@ CREATE TABLE FASCIA_ORARIA (
  
 -- Creazione della tabella TIPO_TECNICO
 CREATE TABLE TIPO_TECNICO (
-    nome VARCHAR(64) PRIMARY KEY
+    nome VARCHAR(64) PRIMARY KEY,
+    CHECK (nome IN ('Fonico', 'Tecnico del Suono', 'Tecnico del suono_AND_Fonico'))
 ); 
  
 -- Creazione della tabella TECNICO

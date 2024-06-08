@@ -1,6 +1,3 @@
- Gestione Produzione e Canzone
-
-    -- aggiunta di una canzone, e quindi anche di relazione "lavora_a" e lista di id dei solisti
 
 Gestione Eliminazione Oraria
     -- annullamento di una prenotazione oraria

@@ -253,7 +253,8 @@ INSERT INTO FASCIA_ORARIA (oraria, orario_inizio, orario_fine) VALUES
 
 INSERT INTO TIPO_TECNICO (nome) VALUES 
 ('Fonico'), 
-('Tecnico del Suono');
+('Tecnico del Suono'),
+'Tecnico del suono_AND_Fonico';
 
 -- Popolamento della tabella TECNICO
 INSERT INTO TECNICO (codice_fiscale, sala_piano, sala_numero, tipo_tecnico, nome, cognome, data_di_nascita, data_di_assunzione, iban) VALUES
