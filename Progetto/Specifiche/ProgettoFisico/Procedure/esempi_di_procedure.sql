@@ -8,25 +8,16 @@
 Gestion Solista 
     -- Crea un nuovo artista e un solista associato nel database.
     create_new_artist_and_solista(nome_arte VARCHAR(255), data_di_registrazione DATE, codice_fiscale CHAR(16), nome VARCHAR(255), cognome VARCHAR(255), data_di_nascita DATE, gruppo VARCHAR(255), data_adesione DATE):
+ e anche del gruppo
+ partecipazione solista-al-gruppo
 
-        
 
-Gestione Ordini
-    -- come si gestisce l'input delle fascie orararie?, viene creata prima la prenotazione? e dopo l'ordine? viene prima la gallina o l'uovo?
-    create_new_order(artista VARCHAR(255), operatore CHAR(16)):
-        Crea un nuovo ordine per un artista specificato.
-
-    cancel_order(ordine_id INTEGER):
-        Annulla un ordine esistente nel database.
-
-    -- sarebbe la nostra query in pratica
-    generate_invoice(ordine_id INTEGER):
-        Genera una fattura per un ordine dato il suo identificativo.
+-- annullamento di una prenotazione oraria
+se si annulla una prenotazione oraria, bisogna eliminare, i record di oraria e fascia oraria annesse
+-- se lo stato dell'ordine è Pagato, allora si possono avere al massimo un totale di ore = costo_totale/orario.valore
+-- se lo stato dell'ordine è Da pagare, allora si imposta a 0 il costo totale dell'ordine, e si possono prenotare un numero di ore a scelta visto che il costo_totale ricalcolato ed è ancora da pagare.
 
 Gestione Prenotazioni
-    -- fare due procedure che seguano i due flussi di esecuzione giornaliera, oraria
-    create_new_booking(tipo BOOLEAN, pacchetto INTEGER, sala_piano INTEGER, sala_numero INTEGER, giorno DATE):
-        Crea una nuova prenotazione di sala.
 
     cancel_booking(codice_prenotazione INTEGER):
         Annulla una prenotazione di sala esistente.

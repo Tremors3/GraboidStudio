@@ -203,3 +203,10 @@ BEFORE INSERT OR UPDATE ON ORARIA
 FOR EACH ROW
 EXECUTE FUNCTION ControllaGiorniPrenotati();
 
+-- trigger che controlla che se un ordine è stato già pagato allora il campo annullato non può essere false
+
+-- trigger annullando una prenotazione giornaliera dobbiamo andare a decrementare di uno il numero di giorni prenotati totali di un ordine di tipo pacchetto
+
+-- un ordine e una prenotazione possono essere annullati solo se il giorno a cui fanno riferimento non è antecedente al giorno in cui si fa la richiesta
+
+-- TRIGGER: "Aggiunta una fascia oraria": "FASCIA-->ORARIA-->ORARIO": controllo "numero ore prenotate totali"

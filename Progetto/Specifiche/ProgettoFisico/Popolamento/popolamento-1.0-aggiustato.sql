@@ -257,11 +257,11 @@ INSERT INTO TIPO_TECNICO (nome) VALUES
 
 -- Popolamento della tabella TECNICO
 INSERT INTO TECNICO (codice_fiscale, sala_piano, sala_numero, tipo_tecnico, nome, cognome, data_di_nascita, data_di_assunzione, iban) VALUES
-('TCNAUD85M01H501Z', 1, 101, 'Fonico', 'Luca', 'Verdi', '1985-03-01', '2010-01-01', 'IT60X0542811101000000123456'),
-('TCNPRO90A01H501X', 2, 202, 'Tecnico del Suono', 'Sara', 'Bianchi', '1990-01-01', '2015-01-01', 'IT60X0542811101000000654321'),
-('TCNAUD92D01H501Y', 3, 303, 'Fonico', 'Giovanni', 'Russo', '1992-04-01', '2012-02-01', 'IT60X0542811101000000765432'),
-('TCNPRO88M01H501Z', 4, 404, 'Fonico', 'Marco', 'Neri', '1988-05-15', '2013-05-01', 'IT60X0542811101000000543210'),
-('TCNAUD90A01H501X', 5, 505, 'Tecnico del Suono', 'Elena', 'Verdi', '1990-11-20', '2016-03-01', 'IT60X0542811101000000987654');
+('TCNAUD85M01H501Z', 1, 1, 'Fonico', 'Luca', 'Verdi', '1985-03-01', '2010-01-01', 'IT60X0542811101000000123456'),
+('TCNPRO90A01H501X', 2, 2, 'Tecnico del Suono', 'Sara', 'Bianchi', '1990-01-01', '2015-01-01', 'IT60X0542811101000000654321'),
+('TCNAUD92D01H501Y', 2, 1, 'Fonico', 'Giovanni', 'Russo', '1992-04-01', '2012-02-01', 'IT60X0542811101000000765432'),
+('TCNPRO88M01H501Z', 3, 1, 'Fonico', 'Marco', 'Neri', '1988-05-15', '2013-05-01', 'IT60X0542811101000000543210'),
+('TCNAUD90A01H501X', 3, 2, 'Tecnico del Suono', 'Elena', 'Verdi', '1990-11-20', '2016-03-01', 'IT60X0542811101000000987654');
 
 -- Popolamento della tabella EMAIL_T
 INSERT INTO EMAIL_T (email, tecnico) VALUES

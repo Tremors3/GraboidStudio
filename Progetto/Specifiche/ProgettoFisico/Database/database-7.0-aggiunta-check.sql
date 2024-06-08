@@ -179,11 +179,12 @@ CREATE TABLE PAGAMENTO (
     FOREIGN KEY (ordine) REFERENCES ORDINE(codice), 
 
     -- Other
-    stato VARCHAR(50) NOT NULL, -- Da pagare, Pagato 
-    costo_totale DECIMAL(10, 2) NOT NULL, 
+    stato VARCHAR(50) NOT NULL CHECK (stato IN ('Da pagare', 'Pagato')), -- Da pagare, Pagato 
+    costo_totale DECIMAL(10, 2), 
     metodo VARCHAR(255), 
     FOREIGN KEY (metodo) REFERENCES METODO(nome),
     CONSTRAINT costo_totale_maggiore CHECK(costo_totale > 0)
+
 ); 
  
 CREATE TABLE TIPOLOGIA ( 
