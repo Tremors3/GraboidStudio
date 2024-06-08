@@ -39,7 +39,6 @@ BEFORE INSERT ON CANZONE
 FOR EACH ROW
 EXECUTE FUNCTION check_production_immutable();
 
-chiederlo a gpt
 RV3: L’entità Singolo comprende da una a tre canzoni, l’entità Extended Play comprende dalle 4 alle 5 canzoni e l’entità Album non ha un limite al numero di canzoni fintanto che la durata complessiva stia tra la mezz’ora e l’ora.
 
     Implementazione: Questo vincolo può essere implementato con un vincolo CHECK sulla tabella CANZONE.
@@ -112,7 +111,11 @@ ADD CONSTRAINT check_tipo_nome
 CHECK (nome IN ('giornaliero', 'settimanale', 'mensile'));
 
 --
--- ATTENZIONE ATTENZIONE ATTENZIONE, ma se il costo totale di ordine è derivato dalle prenotazioni, ma le prenotazioni sono prenotabili solo dopo, ciò significa che il costo totale non sarebbe un dato derivato ma viene passato in input dal sito quando l'utente effettua la scelta, è un bel problema questo, quindi suggerisco di rimuovere questo vincolo o effettuarci delle modifiche sensate..., direi di rimuoverlo tanto è l'operatore che ha la lista di chi non paga ed è compito suo fare in modo che chi non paga non si presenti allo studio cancellandone la prenotazione e di conseguenza l'ordine
+-- ATTENZIONE ATTENZIONE ATTENZIONE, ma se il costo totale di ordine è derivato dalle prenotazioni, ma le prenotazioni sono prenotabili solo dopo,
+-- ciò significa che il costo totale non sarebbe un dato derivato ma viene passato in input dal sito quando l'utente effettua la scelta,
+-- è un bel problema questo, quindi suggerisco di rimuovere questo vincolo o effettuarci delle modifiche sensate..., direi di rimuoverlo tanto
+-- è l'operatore che ha la lista di chi non paga ed è compito suo fare in modo che chi non paga non si presenti allo studio cancellandone 
+--   la prenotazione e di conseguenza l'ordine
 RV7: Un artista deve aver pagato l’Ordine altrimenti non è possibile effettuare la prenotazione.
 
     Implementazione: Questo vincolo può essere implementato con un vincolo CHECK sulla tabella PRENOTAZIONE.
@@ -157,3 +160,5 @@ CHECK (
         SELECT nome FROM TIPOLOGIA WHERE nome = NEW.tipologia AND n_giorni_prenotati_totali = NEW.n_giorni
     ) IN ('giornaliero', 'settimanale', 'mensile')
 );
+
+creare un trigger per fare in modo che le fascie orarie non overleappino, guardare la query gia creata per costruirlo.

@@ -1,0 +1,67 @@
+################### FUNZIONI ###################
+
+funzioni.sql:12
+AggiungiArtista(nome_arte, data_registrazione)
+    AGGIUNGE UN ARTISTA
+    La funzione crea il record di un artista con i parametri passati come argomento.
+        INPUT:   nome_arte               VARCHAR(50)
+        INPUT:   data_registrazione      DATE
+
+funzioni.sql:28
+CalcolaEtaArtista(cd)
+    CALCOLA L'ETA DELL'ARTISTA
+    La funzione calcola l'età dell'artista del quale è stato fornito il codice fiscale.
+        INPUT:   cd      INT
+        OUTPUT:  eta     DECIMAL
+
+funzioni.sql:47
+ControllaTipoOrdine(ordine_id)
+    CONTROLLA IL TIPO DI UN ORDINE
+    La funzione controlla il tipo di un ordine.
+    Un ordine può essere di tipo Orario o di tipo Giornaliero.
+
+        INPUT:   ordine_id   INT
+        OUTPUT:
+                 TRUE        BOOL        :se orario
+                 FALSE       BOOL        :se giornaliero
+
+funzioni.sql:64
+CalcolaCostoTotale(ordine_id)
+    CALCOLA IL COSTO TOTALE DI UN ORDINE
+    La funzione calcola il costo totale dato il codice univoco di un ordine.
+    Il calcolo del costo totale cambia a seconda della tipologia dell'ordine.
+
+        INPUT:   ordine_id       INT
+        OUTPUT:  costo_totale    DECIMAL
+
+################### PROCEDURE ###################
+
+procedure.sql:8
+AggiornaCostoOrdine(ordine_id)
+    AGGIORNA IL COSTO TOTALE
+    Ricalcola ed aggiorna il costo totale di un ordine.
+    Da eseguire una sola volta dopo la creazione di un ordine di tipo "Pacchetto".
+    Da eseguire tutte le volte che si inseriscono delle nuove "Prenotazioni orarie"/"Fasce orarie".
+
+        INPUT:   ordine_id   INT
+
+procedure.sql:28
+CreaOrdinePacchetto(operatore_codice_fiscale, artista_nome_arte, pacchetto_nome)
+    CREA UN NUOVO ORDINE DI TIPO PACCHETTO
+    La procedura crea un ordine di tipo pacchetto in diverse fasi.
+
+        INPUT:   operatore_codice_fiscale    INT
+        INPUT:   artista_nome_arte           INT
+        INPUT:   pacchetto_nome              INT
+
+procedure.sql:68
+PROCEDURE CreaOrdineOrario(operatore_codice_fiscale, artista_nome_arte, orario_inizio, orario_fine, giorno)
+
+    CREA UN NUOVO ORDINE DI TIPO ORARIO
+    La procedura crea un ordine di tipo pacchetto in diverse fasi.
+
+        INPUT:   operatore_codice_fiscale    INT
+        INPUT:   artista_nome_arte           INT
+        INPUT:   pacchetto_nome              INT
+
+

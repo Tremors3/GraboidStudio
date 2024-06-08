@@ -174,7 +174,7 @@ JOIN (
 -- giornaliera è true, oraria è false
 
 -- spiegazione query
--- in questo giorno 2023-02-04 sappiamo che esiste una prenotazione che tiene la sala 1 numero 101 occupata dalle ore '09:00:00' fino alle '12:00:00' e
+-- in questo giorno 2023-02-04 sappiamo che esiste una prenotazione che tiene la sala 1 numero 1 occupata dalle ore '09:00:00' fino alle '12:00:00' e
 -- dalle ore '13:00:00' fino alle '17:00:00'
 
 -- abbiamo 5 sale in totale

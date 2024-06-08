@@ -9,7 +9,7 @@
  * INPUT:   nome_arte               VARCHAR(50)
  * INPUT:   data_registrazione      DATE
  */
-CREATE OR REPLACE FUNCTION AggiungiArtista(nome_arte VARCHAR(50), data_registrazione DATE) RETURNS VOID LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION AggiungiArtista(nome_arte VARCHAR(50), data_registrazione DATE) RETURNS INT LANGUAGE plpgsql AS $$
 BEGIN
     INSERT INTO ARTISTA (nome_arte, data_di_registrazione)
     VALUES (nome_arte, data_registrazione);

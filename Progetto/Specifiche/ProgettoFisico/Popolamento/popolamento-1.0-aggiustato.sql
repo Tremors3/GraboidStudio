@@ -178,12 +178,12 @@ INSERT INTO METODO (nome) VALUES
 -- Popolamento della tabella PAGAMENTO
 INSERT INTO PAGAMENTO (ordine, stato, costo_totale, metodo) VALUES
 (1, 'Pagato', 150.00, 'Carta di Credito'),
-(2, 'Da pagare', 200.00, 'PayPal'),
+(2, 'Da pagare', 200.00, NULL),
 (3, 'Pagato', 250.00, 'Bonifico Bancario'),
-(4, 'Da pagare', 300.00, 'Contanti'),
+(4, 'Da pagare', 300.00, NULL),
 (5, 'Pagato', 350.00, 'Carta di Credito'),
 (6, 'Pagato', 400.00, 'PayPal'),
-(7, 'Da pagare', 450.00, 'Bonifico Bancario'),
+(7, 'Da pagare', 450.00, NULL),
 (8, 'Pagato', 500.00, 'Contanti'),
 (9, 'Pagato', 550.00, 'Carta di Credito'),
 (10, 'Pagato', 600.00, 'PayPal');
@@ -202,32 +202,34 @@ INSERT INTO PACCHETTO (ordine, tipologia, n_giorni_prenotati_totali) VALUES
 
 -- Popolamento della tabella ORARIO
 INSERT INTO ORARIO (ordine, n_ore_prenotate_totali, valore) VALUES
-(6, 20, 1000.00),
-(7, 30, 1500.00),
-(8, 40, 2000.00),
-(9, 10, 500.00),
-(10, 20, 1000.00);
+(6, 20, 15),
+(7, 30, 15),
+(8, 40, 15),
+(9, 10, 15),
+(10, 20, 15);
 
 -- Popolamento della tabella SALA
 INSERT INTO SALA (piano, numero) VALUES
-(1, 101), (2, 202), (3, 303), (4, 404), (5, 505);
+(1, 1), (1, 2), 
+(2, 1), (2, 2), 
+(3, 1), (3, 2);
 
 -- Popolamento della tabella PRENOTAZIONE
 -- PRENOTAZIONE ORARIA:     tipo=FALSE
 -- PRENOTAZIONE PACCHETTO:  tipo=TRUE
 INSERT INTO PRENOTAZIONE (annullata, giorno, tipo, pacchetto, sala_piano, sala_numero) VALUES
-(FALSE, '2023-01-10', TRUE, 1, 1, 101),
-(FALSE, '2023-01-15', TRUE, 2, 2, 202),
-(FALSE, '2023-01-20', TRUE, 3, 3, 303),
-(FALSE, '2023-01-25', TRUE, 4, 4, 404),
-(FALSE, '2023-01-30', TRUE, 5, 5, 505),
+(FALSE, '2023-01-10', TRUE, 1, 1, 1),
+(FALSE, '2023-01-15', TRUE, 2, 2, 1),
+(FALSE, '2023-01-20', TRUE, 3, 3, 2),
+(FALSE, '2023-01-25', TRUE, 4, 3, 1),
+(FALSE, '2023-01-30', TRUE, 5, 1, 2),
 
 
-(FALSE, '2023-02-04', FALSE, NULL, 1, 101), 
-(FALSE, '2023-02-09', FALSE, NULL, 2, 202),
-(FALSE, '2023-02-14', FALSE, NULL, 3, 303),
-(FALSE, '2023-02-19', FALSE, NULL, 4, 404),
-(FALSE, '2023-02-24', FALSE, NULL, 5, 505);
+(FALSE, '2023-02-04', FALSE, NULL, 1, 1), 
+(FALSE, '2023-02-09', FALSE, NULL, 2, 1),
+(FALSE, '2023-02-14', FALSE, NULL, 3, 2),
+(FALSE, '2023-02-19', FALSE, NULL, 2, 2),
+(FALSE, '2023-02-24', FALSE, NULL, 2, 1);
 
 
 -- Le ultime 5 prenotazioni sono orarie
