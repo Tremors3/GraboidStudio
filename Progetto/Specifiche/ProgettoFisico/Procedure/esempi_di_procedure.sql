@@ -1,11 +1,3 @@
-Gestione Solista 
-    -- Crea un nuovo artista e un solista associato nel database.
-    create_new_artist_and_solista(nome_arte VARCHAR(255), data_di_registrazione DATE, codice_fiscale CHAR(16), nome VARCHAR(255), cognome VARCHAR(255), data_di_nascita DATE, gruppo VARCHAR(255), data_adesione DATE):
-    
-    -- Crea un nuovo artista e un gruppo associato nel database.
-    
-    -- Crea una partecipazione di un solista ad un gruppo
-
 Gestione Produzione e Canzone
 
     -- aggiunta di una canzone, e quindi anche di relazione "lavora_a" e lista di id dei solisti

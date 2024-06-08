@@ -31,7 +31,7 @@ CREATE TABLE PARTECIPAZIONE_PASSATA (
     PRIMARY KEY (gruppo, solista), 
     FOREIGN KEY (gruppo) REFERENCES GRUPPO(artista), 
     FOREIGN KEY (solista) REFERENCES SOLISTA(artista),
-    CONSTRAINT data_fine_adesione_corretta CHECK(data_fine_adesione > data_adesione)
+    CONSTRAINT data_fine_adesione_corretta CHECK(data_fine_adesione >= data_adesione)
 );
  
 CREATE TABLE EMAIL_A ( 
@@ -41,7 +41,7 @@ CREATE TABLE EMAIL_A (
 ); 
  
 CREATE TABLE TELEFONO_A ( 
-    numero CHAR(15), 
+    numero VARCHAR(15), 
     artista VARCHAR(255), 
     PRIMARY KEY (numero), 
     FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte) 
