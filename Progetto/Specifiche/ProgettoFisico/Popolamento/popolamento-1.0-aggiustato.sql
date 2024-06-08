@@ -114,13 +114,13 @@ INSERT INTO PARTECIPAZIONE (solista, canzone) VALUES
 ('SoloJKL', 7),
 ('SoloGHI', 8),
 ('SoloXYZ', 9),
-('SoloABC', 10);
+('SoloABC', 10),
 ('SoloDEF', 4),
 ('SoloPQR', 5),
 ('SoloGHI', 6),
 ('SoloSTU', 7),
 ('SoloJKL', 8),
-('SoloGHI', 2),
+('SoloGHI', 2);
 
 -- Popolamento della tabella PRODUTTORE
 INSERT INTO PRODUTTORE (solista) VALUES
