@@ -77,12 +77,6 @@ SELECT titolo, produzione, lunghezza_in_secondi, data_di_registrazione, testo FR
 JOIN CANZONE on LAVORA_A.canzone = CANZONE.codice
 WHERE  LAVORA_A.tecnico = 'TCNAUD85M01H501Z';
 
-
-
-
-
-
-
 ------------------------------------- OPERATORE -------------------------------------
 
 -- O1) CREARE UN ORDINE -- procedura
@@ -161,13 +155,6 @@ JOIN (
 	AND te.artista = a.nome_arte
 ) as sub ON p.ordine = sub.codice WHERE p.stato = 'Da pagare'
 
-
-
-
-
-
-
-
 -- O8) ELENCARE LE SALE DISPONIBILI
 -- Viene visualizzato un elenco di tutte le sale libere per una certa data, ora di inizio e ora di fine
 
@@ -204,8 +191,7 @@ EXCEPT -- rimuovi le sale che sono occupate per tutto il giorno da una prenotazi
     WHERE annullata = FALSE AND tipo = TRUE AND giorno = '2023-02-04'
 );
 
-
-
+--
 
 SELECT s.numero, s.piano
 FROM SALA s

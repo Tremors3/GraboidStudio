@@ -102,7 +102,6 @@ CREATE OR REPLACE PROCEDURE CreaOrdineEPrenotazioneOrarie(
     operatore_codice_fiscale VARCHAR(16), 
     artista_nome_arte VARCHAR(255),
     costo_ora DECIMAL(10, 2),
-
     giorno DATE,
     orari_inizio TIME[],
     orari_fine TIME[],
