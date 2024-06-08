@@ -9,7 +9,6 @@ DECLARE
     data_nascita DATE;
 BEGIN
     SELECT data_di_nascita INTO data_nascita FROM SOLISTA WHERE codice_fiscale = cd;
-	--return TIMESTAMPDIFF(YEAR, data_nascita, CURRENT_DATE);
 	return (date_part('year', CURRENT_DATE) - date_part('year', data_nascita));
 END
 $$;
