@@ -163,4 +163,43 @@ CHECK (
 
 creare un trigger per fare in modo che le fascie orarie non overleappino, guardare la query gia creata per costruirlo.
 
-fare un trigger che controli che n giorni prentoati totali
+fare un trigger che controli che n giorni prentoati totali non superi il numero di giorni nella tipologia di un dato ordine
+
+CREATE OR REPLACE FUNCTION ControllaGiorniPrenotati()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Controllo solo se è un ordine di tipo pacchetto
+    IF EXISTS (
+        SELECT 1
+        FROM PACCHETTO p
+        WHERE p.ordine = NEW.ordine
+    ) THEN
+        -- Calcola il numero totale di giorni prenotati per l'ordine
+        SELECT SUM(t.n_giorni_prenotati_totali)
+        INTO NEW.numero_giorni_prenotati
+        FROM PACCHETTO p
+        JOIN TIPOLOGIA t ON p.tipologia = t.nome
+        WHERE p.ordine = NEW.ordine;
+
+        -- Ottieni il numero massimo di giorni dalla tipologia
+        SELECT t.n_giorni
+        INTO NEW.numero_giorni_massimi
+        FROM PACCHETTO p
+        JOIN TIPOLOGIA t ON p.tipologia = t.nome
+        WHERE p.ordine = NEW.ordine;
+
+        -- Se il numero di giorni prenotati supera il numero massimo, genera un errore
+        IF NEW.numero_giorni_prenotati > NEW.numero_giorni_massimi THEN
+            RAISE EXCEPTION 'Numero di giorni prenotati supera il massimo consentito per la tipologia';
+        END IF;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER controllo_giorni_prenotati
+BEFORE INSERT OR UPDATE ON ORARIA
+FOR EACH ROW
+EXECUTE FUNCTION ControllaGiorniPrenotati();
+

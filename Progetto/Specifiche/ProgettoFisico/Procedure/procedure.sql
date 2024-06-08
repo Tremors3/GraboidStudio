@@ -18,6 +18,8 @@ END
 $$;
 CALL AggiornaCostoOrdine(1);
 
+---------------------------------------------------------------------------------------------------
+
 /* CREA UN NUOVO ORDINE DI TIPO PACCHETTO
  * La procedura crea un ordine di tipo pacchetto in diverse fasi.
  *
@@ -54,22 +56,33 @@ CALL CreaOrdinePacchetto('OPRABC90A01H501X', 'BandABC', 'Mensile');
 
 /* INSERISCE UNA PRENOTAZIONE GIORNALIERA
  * 
+ * INPUT:   pacchetto_id               INT
+ * INPUT:   giorno                     DATE
+ * INPUT:   sala_piano                 INT
+ * INPUT:   sala_numero                INT
  */
-
 CREATE OR REPLACE PROCEDURE CreaPrenotazioneGiornaliera(
-    
+    pacchetto_id INT,
+    giorno DATE,
+    sala_piano INT,
+    sala_numero INT
 )LANGUAGE plpgsql AS $$
-DECLARE
-
 BEGIN
+    -- inserimento prenotazione
+    INSERT INTO PRENOTAZIONE (annullata, giorno, tipo, pacchetto, sala_piano, sala_numero)
+    VALUES (FALSE, giorno, TRUE, pacchetto_id, sala_piano, sala_numero);
 
+    -- aggiornamento contatore giorni prenotati
+    UPDATE PACCHETTO
+    SET n_giorni_prenotati_totali = n_giorni_prenotati_totali + 1
+    WHERE ordine = pacchetto_id;
 EXCEPTION
     WHEN OTHERS THEN -- Gestione degli errori
         ROLLBACK;    -- Annulla la transazione in caso di errore
         RAISE;       -- Sollevamento dell'eccezione
 END
 $$;
-CALL CreaOrdineOrario();
+CALL CreaPrenotazioneGiornaliera(3, '2024-07-10', 1, 101);
 
 /* CREA UN NUOVO ORDINE DI TIPO ORARIO
  * La procedura crea un ordine di tipo pacchetto in diverse fasi.
