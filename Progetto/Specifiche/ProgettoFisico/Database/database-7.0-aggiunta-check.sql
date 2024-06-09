@@ -7,6 +7,7 @@ CREATE TABLE GRUPPO (
     artista VARCHAR(255) PRIMARY KEY, 
     data_formazione DATE NOT NULL, 
     FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte) 
+    ON UPDATE CASCADE ON DELETE RESTRICT
 ); 
  
 CREATE TABLE SOLISTA ( 
@@ -18,8 +19,8 @@ CREATE TABLE SOLISTA (
     gruppo VARCHAR(255), 
     data_adesione DATE, 
     PRIMARY KEY (artista), 
-    FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte), 
-    FOREIGN KEY (gruppo) REFERENCES GRUPPO(artista),
+    FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (gruppo) REFERENCES GRUPPO(artista) ON UPDATE CASCADE ON DELETE SET NULL,
     CONSTRAINT data_di_nascita_corretta CHECK(date_part('year', data_di_nascita)>date_part('year', CURRENT_DATE)-100)
 ); 
  
@@ -29,22 +30,22 @@ CREATE TABLE PARTECIPAZIONE_PASSATA (
     data_adesione DATE NOT NULL, 
     data_fine_adesione DATE NOT NULL, 
     PRIMARY KEY (gruppo, solista), 
-    FOREIGN KEY (gruppo) REFERENCES GRUPPO(artista), 
-    FOREIGN KEY (solista) REFERENCES SOLISTA(artista),
+    FOREIGN KEY (gruppo) REFERENCES GRUPPO(artista) ON UPDATE CASCADE ON DELETE CASCADE, 
+    FOREIGN KEY (solista) REFERENCES SOLISTA(artista) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT data_fine_adesione_corretta CHECK(data_fine_adesione >= data_adesione)
 );
  
 CREATE TABLE EMAIL_A ( 
     email VARCHAR(255) PRIMARY KEY, 
     artista VARCHAR(255) NOT NULL, 
-    FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte) 
+    FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte) ON UPDATE CASCADE ON DELETE CASCADE
 ); 
  
 CREATE TABLE TELEFONO_A ( 
     numero VARCHAR(15), 
     artista VARCHAR(255), 
     PRIMARY KEY (numero), 
-    FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte) 
+    FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte) ON UPDATE CASCADE ON DELETE CASCADE
 ); 
  
 CREATE TABLE TIPO_PRODUZIONE ( 
@@ -66,7 +67,7 @@ CREATE TABLE PRODUZIONE (
 
     -- Old Primary Key Uniqueness Maintained
     CONSTRAINT unique_produzione UNIQUE (titolo, artista),
-    FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte),
+    FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte) ON UPDATE CASCADE ON DELETE RESTRICT,
 
     -- Other
     data_inizio DATE NOT NULL, 
@@ -74,8 +75,8 @@ CREATE TABLE PRODUZIONE (
     stato VARCHAR(13) NOT NULL, 
     tipo_produzione VARCHAR(25), 
     genere VARCHAR(255), 
-    FOREIGN KEY (tipo_produzione) REFERENCES TIPO_PRODUZIONE(nome),
-    FOREIGN KEY (genere) REFERENCES GENERE(nome),
+    FOREIGN KEY (tipo_produzione) REFERENCES TIPO_PRODUZIONE(nome) ON UPDATE CASCADE ON DELETE SET NULL,
+    FOREIGN KEY (genere) REFERENCES GENERE(nome) ON UPDATE CASCADE ON DELETE SET NULL,
     CHECK (data_inizio <= data_fine)
 ); 
  
@@ -89,8 +90,7 @@ CREATE TABLE CANZONE (
 
     -- Old Primary Key Uniqueness Maintained
     CONSTRAINT unique_canzone UNIQUE (titolo, produzione),
-    FOREIGN KEY (produzione) REFERENCES PRODUZIONE(codice),
-
+    FOREIGN KEY (produzione) REFERENCES PRODUZIONE(codice) ON UPDATE CASCADE ON DELETE RESTRICT,
     -- Other
     testo TEXT, 
     data_di_registrazione DATE, 
@@ -111,21 +111,22 @@ CREATE TABLE PARTECIPAZIONE (
 
     -- Old Primary Key Uniqueness Maintained
     CONSTRAINT unique_partecipazione UNIQUE (solista, canzone),
-    FOREIGN KEY (solista) REFERENCES SOLISTA(artista), 
-    FOREIGN KEY (canzone) REFERENCES CANZONE(codice)
+    FOREIGN KEY (solista) REFERENCES SOLISTA(artista) ON UPDATE CASCADE ON DELETE CASCADE, 
+    FOREIGN KEY (canzone) REFERENCES CANZONE(codice) ON UPDATE CASCADE ON DELETE CASCADE
 ); 
  
 CREATE TABLE PRODUTTORE ( 
     solista VARCHAR(255) PRIMARY KEY, 
     FOREIGN KEY (solista) REFERENCES SOLISTA(artista)
+    ON UPDATE CASCADE ON DELETE CASCADE
 ); 
  
 CREATE TABLE CONDURRE ( 
     produttore VARCHAR(255), 
     produzione INTEGER, 
     PRIMARY KEY (produttore, produzione), 
-    FOREIGN KEY (produttore) REFERENCES PRODUTTORE(solista), 
-    FOREIGN KEY (produzione) REFERENCES PRODUZIONE(codice)
+    FOREIGN KEY (produttore) REFERENCES PRODUTTORE(solista) ON UPDATE CASCADE ON DELETE CASCADE, 
+    FOREIGN KEY (produzione) REFERENCES PRODUZIONE(codice) ON UPDATE CASCADE ON DELETE CASCADE
 ); 
  
 CREATE TABLE OPERATORE ( 
@@ -142,14 +143,14 @@ CREATE TABLE EMAIL_O (
     email VARCHAR(255) NOT NULL, 
     operatore CHAR(16) NOT NULL, 
     PRIMARY KEY (email), 
-    FOREIGN KEY (operatore) REFERENCES OPERATORE(codice_fiscale) 
+    FOREIGN KEY (operatore) REFERENCES OPERATORE(codice_fiscale) ON UPDATE CASCADE ON DELETE CASCADE
 ); 
  
 CREATE TABLE TELEFONO_O ( 
     numero VARCHAR(15) NOT NULL, 
     operatore CHAR(16) NOT NULL, 
     PRIMARY KEY (numero), 
-    FOREIGN KEY (operatore) REFERENCES OPERATORE(codice_fiscale) 
+    FOREIGN KEY (operatore) REFERENCES OPERATORE(codice_fiscale) ON UPDATE CASCADE ON DELETE CASCADE 
 ); 
  
 CREATE TABLE ORDINE ( 
@@ -162,12 +163,12 @@ CREATE TABLE ORDINE (
 
     -- Old Primary Key Uniqueness Maintained
     CONSTRAINT unique_ordine UNIQUE (timestamp, artista), 
-    FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte),
+    FOREIGN KEY (artista) REFERENCES ARTISTA(nome_arte) ON UPDATE CASCADE ON DELETE RESTRICT,
 
     -- Other
     annullato BOOLEAN NOT NULL,
     operatore CHAR(16) NOT NULL,
-    FOREIGN KEY (operatore) REFERENCES OPERATORE(codice_fiscale) 
+    FOREIGN KEY (operatore) REFERENCES OPERATORE(codice_fiscale)  ON UPDATE CASCADE ON DELETE RESTRICT
 ); 
  
 CREATE TABLE METODO ( 
@@ -183,7 +184,7 @@ CREATE TABLE PAGAMENTO (
     stato VARCHAR(50) NOT NULL CHECK (stato IN ('Da pagare', 'Pagato')), -- Da pagare, Pagato 
     costo_totale DECIMAL(10, 2), 
     metodo VARCHAR(255), 
-    FOREIGN KEY (metodo) REFERENCES METODO(nome),
+    FOREIGN KEY (metodo) REFERENCES METODO(nome) ON UPDATE CASCADE ON DELETE RESTRICT,
     CONSTRAINT costo_totale_maggiore CHECK(costo_totale > 0)
 
 ); 
@@ -198,10 +199,10 @@ CREATE TABLE TIPOLOGIA (
  
 CREATE TABLE PACCHETTO ( 
     ordine INTEGER PRIMARY KEY,
-    FOREIGN KEY (ordine) REFERENCES ORDINE(codice),
+    FOREIGN KEY (ordine) REFERENCES ORDINE(codice) ON UPDATE CASCADE ON DELETE CASCADE,
 
     tipologia VARCHAR(255) NOT NULL,
-    FOREIGN KEY (tipologia) REFERENCES TIPOLOGIA(nome),
+    FOREIGN KEY (tipologia) REFERENCES TIPOLOGIA(nome) ON UPDATE CASCADE ON DELETE RESTRICT,
 
     -- Other
     n_giorni_prenotati_totali INTEGER
@@ -209,7 +210,7 @@ CREATE TABLE PACCHETTO (
  
 CREATE TABLE ORARIO ( 
     ordine INTEGER PRIMARY KEY,
-    FOREIGN KEY (ordine) REFERENCES ORDINE(codice),
+    FOREIGN KEY (ordine) REFERENCES ORDINE(codice) ON UPDATE CASCADE ON DELETE CASCADE,
     
     n_ore_prenotate_totali INTEGER, 
     valore DECIMAL(10, 2),
@@ -232,24 +233,23 @@ CREATE TABLE PRENOTAZIONE (
     pacchetto INTEGER, 
     sala_piano INTEGER NOT NULL, 
     sala_numero INTEGER NOT NULL,
-    FOREIGN KEY (pacchetto) REFERENCES PACCHETTO(ordine), 
-    FOREIGN KEY (sala_piano, sala_numero) REFERENCES SALA(piano, numero) 
+    FOREIGN KEY (pacchetto) REFERENCES PACCHETTO(ordine) ON UPDATE CASCADE ON DELETE RESTRICT, 
+    FOREIGN KEY (sala_piano, sala_numero) REFERENCES SALA(piano, numero) ON UPDATE CASCADE ON DELETE RESTRICT
 ); 
  
 CREATE TABLE ORARIA ( 
     prenotazione INTEGER PRIMARY KEY, 
-    FOREIGN KEY (prenotazione) REFERENCES PRENOTAZIONE(codice),
+    orario INTEGER UNIQUE NOT NULL, --one to one
+    FOREIGN KEY (prenotazione) REFERENCES PRENOTAZIONE(codice) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (orario) REFERENCES ORARIO(ordine) ON UPDATE CASCADE ON DELETE CASCADE
+);
 
-    -- one to one
-    orario INTEGER REFERENCES ORARIO(ordine) UNIQUE NOT NULL
-); 
- 
 CREATE TABLE FASCIA_ORARIA ( 
     oraria INTEGER NOT NULL, 
     orario_inizio TIME, 
     orario_fine TIME, 
     PRIMARY KEY (oraria, orario_inizio), 
-    FOREIGN KEY (oraria) REFERENCES ORARIA(prenotazione),
+    FOREIGN KEY (oraria) REFERENCES ORARIA(prenotazione) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT orario_fine_maggiore CHECK(orario_fine>orario_inizio)
 ); 
  
@@ -270,22 +270,22 @@ CREATE TABLE TECNICO (
     data_di_nascita DATE NOT NULL,
     data_di_assunzione DATE NOT NULL,
     iban VARCHAR(34),
-    FOREIGN KEY (sala_piano, sala_numero) REFERENCES SALA(piano, numero),
-    FOREIGN KEY (tipo_tecnico) REFERENCES TIPO_TECNICO(nome)
+    FOREIGN KEY (sala_piano, sala_numero) REFERENCES SALA(piano, numero) ON UPDATE CASCADE ON DELETE RESTRICT,
+    FOREIGN KEY (tipo_tecnico) REFERENCES TIPO_TECNICO(nome) ON UPDATE CASCADE ON DELETE RESTRICT
 ); 
  
 -- Creazione della tabella EMAIL_T
 CREATE TABLE EMAIL_T (
     email VARCHAR(255) PRIMARY KEY,
     tecnico CHAR(16) NOT NULL,
-    FOREIGN KEY (tecnico) REFERENCES TECNICO(codice_fiscale)
+    FOREIGN KEY (tecnico) REFERENCES TECNICO(codice_fiscale) ON UPDATE CASCADE ON DELETE CASCADE
 ); 
  
 -- Creazione della tabella TELEFONO_T
 CREATE TABLE TELEFONO_T (
     numero VARCHAR(15) PRIMARY KEY,
     tecnico CHAR(16) NOT NULL,
-    FOREIGN KEY (tecnico) REFERENCES TECNICO(codice_fiscale)
+    FOREIGN KEY (tecnico) REFERENCES TECNICO(codice_fiscale) ON UPDATE CASCADE ON DELETE CASCADE
 ); 
  
 -- Creazione della tabella LAVORA_A
@@ -293,7 +293,7 @@ CREATE TABLE LAVORA_A (
     tecnico CHAR(16),
     canzone INTEGER,
     PRIMARY KEY (tecnico, canzone),
-    FOREIGN KEY (tecnico) REFERENCES TECNICO(codice_fiscale),
-    FOREIGN KEY (canzone) REFERENCES CANZONE(codice)
+    FOREIGN KEY (tecnico) REFERENCES TECNICO(codice_fiscale) ON UPDATE CASCADE ON DELETE RESTRICT,
+    FOREIGN KEY (canzone) REFERENCES CANZONE(codice) ON UPDATE CASCADE ON DELETE CASCADE
 ); 
  
