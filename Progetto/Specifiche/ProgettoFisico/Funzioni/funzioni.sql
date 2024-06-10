@@ -87,7 +87,7 @@ END;
 $$ LANGUAGE plpgsql;
 SELECT conta_canzoni_di_una_produzione(1);
 
-/* CONTA NUMERO DI CANZONI
+/* CALCOLA LUNGHEZZA CANZONI DI UNA PRODUZIONE
  * Dato il codice di una produzione, la funzione calcola la 
  * lunghezza media in secondi delle sue canzoni.
  * 

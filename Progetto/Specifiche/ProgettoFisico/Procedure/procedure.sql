@@ -70,7 +70,7 @@ END
 $$;
 CALL CreaOrdinePacchetto('OPRABC90A01H501X', 'BandABC', 'Mensile');
 
-/* INSERISCE UNA PRENOTAZIONE GIORNALIERA
+/* CREA UNA PRENOTAZIONE DI TIPO GIORNALIERA
  * Procedura che inserisce una nuova prenotazione associandola al 
  * ordine di tipo pacchetto il cui id è dato come argomento.
  * 
