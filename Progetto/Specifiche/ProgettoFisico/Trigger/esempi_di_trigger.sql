@@ -23,7 +23,49 @@ Se esiste almeno una riga con codice = 123 nella tabella PRODUZIONE, questa quer
 
 ---------------------------------------------------------------------------------------------------
 
+-- TRIGGER T2: una sala può avere al massimo due tecnici, uno di tipo Fonico e uno di tipo Tecnico Del Suono o  "Tecnico del Suono_AND_Fonico": t, f -- f, t -- tf opzioni disponibili
 
+CREATE OR REPLACE FUNCTION check_max_tecnici()
+RETURNS TRIGGER AS $$
+DECLARE
+    numero_fonici INTEGER;
+    numero_tecnici INTEGER;
+    numero_tecnico_e_fonico INTEGER;
+BEGIN
+
+    -- Conta dei Fonici
+    SELECT COUNT(codice_fiscale) INTO numero_fonici 
+    FROM TECNICO WHERE sala_piano = NEW.sala_piano AND sala_numero = NEW.sala_numero AND tipo_tecnico = 'Fonico';
+
+    -- Conta dei Tecnici del Suono
+    SELECT COUNT(codice_fiscale) INTO numero_tecnici 
+    FROM TECNICO WHERE sala_piano = NEW.sala_piano AND sala_numero = NEW.sala_numero AND tipo_tecnico = 'Tecnico del Suono';
+
+    -- Conta dei Tecnico del Suono_AND_Fonico
+    SELECT COUNT(codice_fiscale) INTO numero_tecnico_e_fonico 
+    FROM TECNICO WHERE sala_piano = NEW.sala_piano AND sala_numero = NEW.sala_numero AND tipo_tecnico = 'Tecnico del Suono_AND_Fonico';
+
+    IF ((numero_fonici + numero_tecnici) = 2)
+        THEN RAISE EXCEPTION 'Impossibile aggiungere un tecnico, la sala comprende già un Tecnico del Suono e un Fonico.';
+    ELSEIF (numero_fonici = 1 AND NEW.tipo_tecnico = 'Fonico')
+        THEN RAISE EXCEPTION 'Impossibile aggiungere il tecnico, la sala comprende già un Fonico.';
+    ELSEIF (numero_tecnici = 1 AND NEW.tipo_tecnico = 'Tecnico del Suono')
+        THEN RAISE EXCEPTION 'Impossibile aggiungere il tecnico, la sala comprende già un Tecnico del Suono.';
+    ELSEIF (numero_tecnico_e_fonico = 1)
+        THEN RAISE EXCEPTION 'Impossibile aggiungere un tecnico, la sala comprende già un Tecnico del Suono_AND_Fonico.';
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Creazione del trigger BEFORE INSERT o BEFORE UPDATE sulla tabella TECNICO
+CREATE TRIGGER T2
+BEFORE INSERT OR UPDATE ON TECNICO
+FOR EACH ROW
+EXECUTE FUNCTION check_max_tecnici();
+
+---------------------------------------------------------------------------------------------------
 
 -- trigger che controlla che se un ordine è stato già pagato allora il campo annullato non può essere false
 
@@ -43,7 +85,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Creazione del trigger
-CREATE TRIGGER check_ordine_pagato_trigger
+CREATE TRIGGER T3
 BEFORE UPDATE ON ORDINE
 FOR EACH ROW
 EXECUTE FUNCTION check_ordine_pagato();
@@ -67,7 +109,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Creazione del trigger
-CREATE TRIGGER decrementa_giorni_pacchetto_trigger
+CREATE TRIGGER T4
 AFTER UPDATE ON PRENOTAZIONE
 FOR EACH ROW
 WHEN (OLD.tipo = TRUE AND NEW.annullata = TRUE AND OLD.annullata = FALSE)
@@ -97,53 +139,11 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Creazione del trigger
-CREATE TRIGGER aggiorna_ore_prenotate_trigger
+CREATE TRIGGER T5
 AFTER INSERT ON FASCIA_ORARIA
 FOR EACH ROW
 EXECUTE FUNCTION aggiorna_ore_prenotate();
 
 
--- TRIGGER : una sala può avere al massimo due tecnici, uno di tipo Fonico e uno di tipo Tecnico Del Suono o  "Tecnico del Suono_AND_Fonico"
--- Creazione della funzione plpgsql per il controllo del vincolo
-CREATE OR REPLACE FUNCTION check_max_tecnici()
-RETURNS TRIGGER AS $$
-DECLARE
-    count_tecnico_fonico INTEGER;
-    count_tecnico_suono INTEGER;
-BEGIN
-    -- Contiamo il numero di tecnici di tipo 'Fonico' e 'Tecnico del Suono_AND_Fonico'
-    SELECT 
-        COUNT(*) INTO count_tecnico_fonico 
-    FROM 
-        TECNICO 
-    WHERE 
-        sala = NEW.sala 
-        AND tipo = 'Fonico';
-    
-    SELECT 
-        COUNT(*) INTO count_tecnico_suono 
-    FROM 
-        TECNICO 
-    WHERE 
-        sala = NEW.sala 
-        AND (tipo = 'Tecnico del Suono' OR tipo = 'Tecnico del Suono_AND_Fonico');
-    
-    -- Controlliamo se il numero di tecnici supera quello consentito
-    IF count_tecnico_fonico >= 1 THEN
-        RAISE EXCEPTION 'Impossibile aggiungere un tecnico di tipo Fonico. La sala ha già un tecnico di tipo Fonico.';
-    END IF;
 
-    IF count_tecnico_suono >= 1 THEN
-        RAISE EXCEPTION 'Impossibile aggiungere un tecnico di tipo Tecnico del Suono o Tecnico del Suono_AND_Fonico. La sala ha già un tecnico di uno di questi tipi.';
-    END IF;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Creazione del trigger BEFORE INSERT o BEFORE UPDATE sulla tabella TECNICO
-CREATE TRIGGER check_max_tecnici_trigger
-BEFORE INSERT OR UPDATE ON TECNICO
-FOR EACH ROW
-EXECUTE FUNCTION check_max_tecnici();
 -- creare un trigger per fare in modo che le fascie orarie non overleappino, guardare la query gia creata per costruirlo.

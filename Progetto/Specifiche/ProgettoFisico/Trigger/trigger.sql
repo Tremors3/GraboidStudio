@@ -219,3 +219,47 @@ FOR EACH ROW WHEN (NEW.tipo = TRUE)
 EXECUTE FUNCTION ControllaGiorniPrenotati();
 
 ---------------------------------------------------------------------------------------------------
+
+-- TRIGGER T2: una sala può avere al massimo due tecnici, uno di tipo Fonico e uno di tipo Tecnico Del Suono o  "Tecnico del Suono_AND_Fonico": t, f -- f, t -- tf opzioni disponibili
+
+CREATE OR REPLACE FUNCTION check_max_tecnici()
+RETURNS TRIGGER AS $$
+DECLARE
+    numero_fonici INTEGER;
+    numero_tecnici INTEGER;
+    numero_tecnico_e_fonico INTEGER;
+BEGIN
+
+    -- Conta dei Fonici
+    SELECT COUNT(codice_fiscale) INTO numero_fonici 
+    FROM TECNICO WHERE sala_piano = NEW.sala_piano AND sala_numero = NEW.sala_numero AND tipo_tecnico = 'Fonico';
+
+    -- Conta dei Tecnici del Suono
+    SELECT COUNT(codice_fiscale) INTO numero_tecnici 
+    FROM TECNICO WHERE sala_piano = NEW.sala_piano AND sala_numero = NEW.sala_numero AND tipo_tecnico = 'Tecnico del Suono';
+
+    -- Conta dei Tecnico del Suono_AND_Fonico
+    SELECT COUNT(codice_fiscale) INTO numero_tecnico_e_fonico 
+    FROM TECNICO WHERE sala_piano = NEW.sala_piano AND sala_numero = NEW.sala_numero AND tipo_tecnico = 'Tecnico del Suono_AND_Fonico';
+
+    IF ((numero_fonici + numero_tecnici) = 2)
+        THEN RAISE EXCEPTION 'Impossibile aggiungere un tecnico, la sala comprende già un Tecnico del Suono e un Fonico.';
+    ELSEIF (numero_fonici = 1 AND NEW.tipo_tecnico = 'Fonico')
+        THEN RAISE EXCEPTION 'Impossibile aggiungere il tecnico, la sala comprende già un Fonico.';
+    ELSEIF (numero_tecnici = 1 AND NEW.tipo_tecnico = 'Tecnico del Suono')
+        THEN RAISE EXCEPTION 'Impossibile aggiungere il tecnico, la sala comprende già un Tecnico del Suono.';
+    ELSEIF (numero_tecnico_e_fonico = 1)
+        THEN RAISE EXCEPTION 'Impossibile aggiungere un tecnico, la sala comprende già un Tecnico del Suono_AND_Fonico.';
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Creazione del trigger BEFORE INSERT o BEFORE UPDATE sulla tabella TECNICO
+CREATE TRIGGER T2
+BEFORE INSERT OR UPDATE ON TECNICO
+FOR EACH ROW
+EXECUTE FUNCTION check_max_tecnici();
+
+---------------------------------------------------------------------------------------------------
