@@ -244,6 +244,7 @@ CALL CreaPrenotazioneOraria(
 );
 
 ---------------------------------------------------------------------------------------------------
+
 /* CREA UN SOLISTA
  * Crea un nuovo artista e un solista associato nel database.
  *
@@ -361,6 +362,7 @@ CALL CreaArtistaGruppo(
 );
 
 ---------------------------------------------------------------------------------------------------
+
 /* CREA PARTECIPAZIONE SOLISTA GRUPPO
  * Gestisce la partecipazione di un solista a un gruppo nel database.
  *
@@ -420,6 +422,7 @@ PERFORM query;
 
 
 ---------------------------------------------------------------------------------------------------
+
 /*
 PERFORM query explanation, FOUND 
 This executes query and discards the result. Write the query the same way you would write an SQL SELECT command, but replace the initial keyword SELECT with PERFORM. For WITH queries, use PERFORM and then place the query in parentheses. (In this case, the query can only return one row.) PL/pgSQL variables will be substituted into the query just as described above, and the plan is cached in the same way. Also, the special variable FOUND is set to true if the query produced at least one row, or false if it produced no row
@@ -503,5 +506,3 @@ CALL AggiungiCanzoneEPartecipazioni(
     ARRAY['SoloXYZ', 'SoloABC'], -- Array di nomi d'arte dei solisti
     'TCNAUD85M01H501Z' -- Codice fiscale del tecnico
 );
-
-
