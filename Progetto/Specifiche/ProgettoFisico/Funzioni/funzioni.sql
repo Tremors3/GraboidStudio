@@ -39,8 +39,8 @@ SELECT ControllaTipoOrdine(1);
  * La funzione calcola il costo totale dato il codice univoco di un ordine.
  * Il calcolo del costo totale cambia a seconda della tipologia dell'ordine.
  * 
- * INPUT:   ordine_id       INT
- * OUTPUT:  costo_totale    DECIMAL
+ * INPUT:   ordine_id       INTEGER
+ * OUTPUT:  costo_totale    DECIMAL(10, 2)
  */
 CREATE OR REPLACE FUNCTION CalcolaCostoTotale(ordine_id INT) RETURNS DECIMAL(10, 2) LANGUAGE plpgsql AS $$
 DECLARE
@@ -86,7 +86,7 @@ SELECT conta_canzoni_di_una_produzione(1);
  * lunghezza media in secondi delle sue canzoni.
  * 
  * INPUT:   codice_produzione   INTEGER
- * OUTPUT:  lunghezza_media     NUMERIC
+ * OUTPUT:  lunghezza_in_secondi_media     NUMERIC
  */
 CREATE OR REPLACE FUNCTION calcola_lunghezza_media_canzoni_di_una_produzione(codice_produzione INTEGER) RETURNS NUMERIC AS $$
 DECLARE
