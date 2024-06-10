@@ -68,7 +68,6 @@ SELECT CalcolaCostoTotale(6);
 ---------------------------------------------------------------------------------------------------
 
 -- Conta il numero di canzoni per una produzione.
-
 CREATE OR REPLACE FUNCTION conta_canzoni_di_una_produzione(codice_produzione INTEGER) RETURNS INTEGER AS $$
 DECLARE
     numero_canzoni INTEGER;
@@ -84,7 +83,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Calcola la lunghezza media delle canzoni per una produzione.
-
 CREATE OR REPLACE FUNCTION calcola_lunghezza_media_canzoni_di_una_produzione(codice_produzione INTEGER) RETURNS NUMERIC AS $$
 DECLARE
     lunghezza_in_secondi_totale INTEGER;
