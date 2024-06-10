@@ -101,56 +101,8 @@ EXCEPTION
 END
 $$;
 CALL CreaPrenotazioneGiornaliera(1, '2023-01-10', 2, 2); -- Funzionante
-CALL CreaPrenotazioneGiornaliera(1, '2022-01-01', 2, 2); -- Eccezzione: Indietro nel tempo
-CALL CreaPrenotazioneGiornaliera(1, '2023-05-01', 2, 2); -- Eccezzione: Più di 90 giorni
-
-/* ANNULLAMENTO DI UNA PRENOTAZIONE GIORNALIERA
- * Procedura che si occupa di annullare una prenotazione giornaliera e 
- * di decrementare il counter di giorni totali prenotati.
- * 
- * INPUT:   
- *
- * [TODO]
- */
-CREATE OR REPLACE PROCEDURE AnnullaPrenotazioneGiornaliera(
-    prenotazione_id INTEGER
-)
-LANGUAGE plpgsql AS $$
-DECLARE
-    pacchetto_id INTEGER;
-    n_giorni_prenotati INTEGER;
-BEGIN
-    -- Verifica se la prenotazione esiste e non è già annullata
-    IF NOT EXISTS (SELECT 1 FROM PRENOTAZIONE WHERE codice = prenotazione_id AND annullata = FALSE) THEN
-        RAISE EXCEPTION 'Prenotazione non esistente o già annullata';
-    END IF;
-
-    -- Imposta lo stato della prenotazione su "annullata"
-    UPDATE PRENOTAZIONE
-    SET annullata = TRUE
-    WHERE codice = prenotazione_id;
-
-    -- Ottiene l'ID del pacchetto relativo e il numero di giorni prenotati
-    SELECT pacchetto INTO pacchetto_id
-    FROM PRENOTAZIONE
-    WHERE codice = prenotazione_id;
-
-    -- Decrementa il counter di giorni totali prenotati del pacchetto relativo
-    UPDATE PACCHETTO
-    SET n_giorni_prenotati_totali = n_giorni_prenotati_totali - 1
-    WHERE ordine = pacchetto_id;
-
-    -- Verifica se il decremento è stato effettuato correttamente
-    SELECT n_giorni_prenotati_totali INTO n_giorni_prenotati
-    FROM PACCHETTO
-    WHERE ordine = pacchetto_id;
-
-    IF n_giorni_prenotati < 0 THEN
-        RAISE EXCEPTION 'Errore nel decrementare il counter dei giorni prenotati del pacchetto relativo';
-    END IF;
-
-END;
-$$;
+CALL CreaPrenotazioneGiornaliera(1, '2022-01-01', 2, 2); -- Eccezione: Indietro nel tempo
+CALL CreaPrenotazioneGiornaliera(1, '2023-05-01', 2, 2); -- Eccezione: Più di 90 giorni
 
 ---------------------------------------------------------------------------------------------------
 
