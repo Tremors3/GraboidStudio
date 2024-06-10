@@ -186,7 +186,36 @@ FOR EACH ROW
 EXECUTE FUNCTION check_participation_rule();
 
 ---------------------------------------------------------------------------------------------------
+-- INIZIO NOMENCLATURA TRIGGERS
 
+T1: fare un trigger che controli che n giorni prenotati totali non superi il numero di giorni nella tipologia di un dato ordine
 
+CREATE OR REPLACE FUNCTION ControllaGiorniPrenotati()
+RETURNS TRIGGER AS $$
+DECLARE
+    numero_giorni_prenotati INT;
+    numero_giorni_prenotabili INT;
+    nome_tipologia VARCHAR(255);
+BEGIN
+
+    -- Recuperiamo il numero di giorni già prenotati e il numero massimo di giorni prenotabili
+    SELECT p.n_giorni_prenotati_totali, t.n_giorni INTO numero_giorni_prenotati, numero_giorni_prenotabili
+    FROM pacchetto as p
+    JOIN tipologia as t ON t.nome = p.tipologia
+    WHERE p.ordine = NEW.pacchetto;
+
+    -- Se il numero di giorni prenotati più il corrente supera il numero massimo di giorni prenotabili
+    IF numero_giorni_prenotati + 1 > numero_giorni_prenotabili THEN
+        RAISE EXCEPTION 'Numero di giorni prenotati supera il massimo consentito per la tipologia.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER T1
+BEFORE INSERT ON prenotazione
+FOR EACH ROW WHEN (NEW.tipo = TRUE) 
+EXECUTE FUNCTION ControllaGiorniPrenotati();
 
 ---------------------------------------------------------------------------------------------------

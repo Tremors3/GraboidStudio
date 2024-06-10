@@ -23,97 +23,85 @@ Se esiste almeno una riga con codice = 123 nella tabella PRODUZIONE, questa quer
 
 ---------------------------------------------------------------------------------------------------
 
-RV9: Nel caso si vogliano prenotare due giorni [settimane o mesi] è necessario effettuare due ordini distinti; quindi un ordine di tipo Giornaliero [Settimanale o Mensile] per giorno [settimana o mese] che si vuole prenotare. Gli ordini di tipo Giornaliero, Settimanale e Mensile possono effettuare prenotazioni Giornaliere, NON Orarie.
-
-    Implementazione:
-
-Funzione check_tipo_pacchetto:
-
-    Questa funzione controlla se il nuovo pacchetto che si sta inserendo nella tabella PACCHETTO rispetta il vincolo RV10.
-    Utilizza una query per verificare se esiste una tipologia nella tabella TIPOLOGIA che corrisponda al tipo di tipologia e al numero di giorni prenotati totali specificato nel nuovo pacchetto.
-    Se la tipologia non esiste o non è tra 'giornaliero', 'settimanale' o 'mensile', viene sollevata un eccezione.
-
-Trigger check_tipo_pacchetto_trigger:
-
-    Questo trigger viene attivato prima di ogni inserimento nella tabella PACCHETTO.
-    Esegue la funzione check_tipo_pacchetto appena definita per ogni riga che viene inserita nella tabella PACCHETTO.
-    Se la funzione plpgsql solleva un'eccezione, l'inserimento del pacchetto non avviene.
-
--- Creazione della funzione per il controllo del vincolo RV10
-CREATE OR REPLACE FUNCTION check_tipo_pacchetto()
-RETURNS TRIGGER AS $$
-BEGIN
-    -- Controllo se il tipo di tipologia è corretto
-    IF NOT EXISTS (
-        SELECT 1 FROM TIPOLOGIA 
-        WHERE nome = NEW.tipologia 
-        AND n_giorni_prenotati_totali = NEW.n_giorni
-        AND nome IN ('giornaliero', 'settimanale', 'mensile')
-    ) THEN
-        RAISE EXCEPTION 'Impossibile creare un pacchetto con questo tipo di tipologia e numero di giorni prenotati';
-    END IF;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Creazione del trigger BEFORE INSERT sulla tabella PACCHETTO
-CREATE TRIGGER check_tipo_pacchetto_trigger
-BEFORE INSERT ON PACCHETTO
-FOR EACH ROW
-EXECUTE FUNCTION check_tipo_pacchetto();
-
----------------------------------------------------------------------------------------------------
-
-fare un trigger che controli che n giorni prentoati totali non superi il numero di giorni nella tipologia di un dato ordine
-
-CREATE OR REPLACE FUNCTION ControllaGiorniPrenotati()
-RETURNS TRIGGER AS $$
-BEGIN
-    -- Controllo solo se è un ordine di tipo pacchetto
-    IF EXISTS (
-        SELECT 1
-        FROM PACCHETTO p
-        WHERE p.ordine = NEW.ordine
-    ) THEN
-        -- Calcola il numero totale di giorni prenotati per l'ordine
-        SELECT SUM(t.n_giorni_prenotati_totali)
-        INTO NEW.numero_giorni_prenotati
-        FROM PACCHETTO p
-        JOIN TIPOLOGIA t ON p.tipologia = t.nome
-        WHERE p.ordine = NEW.ordine;
-
-        -- Ottieni il numero massimo di giorni dalla tipologia
-        SELECT t.n_giorni
-        INTO NEW.numero_giorni_massimi
-        FROM PACCHETTO p
-        JOIN TIPOLOGIA t ON p.tipologia = t.nome
-        WHERE p.ordine = NEW.ordine;
-
-        -- Se il numero di giorni prenotati supera il numero massimo, genera un errore
-        IF NEW.numero_giorni_prenotati > NEW.numero_giorni_massimi THEN
-            RAISE EXCEPTION 'Numero di giorni prenotati supera il massimo consentito per la tipologia';
-        END IF;
-    END IF;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER controllo_giorni_prenotati
-BEFORE INSERT OR UPDATE ON ORARIA
-FOR EACH ROW
-EXECUTE FUNCTION ControllaGiorniPrenotati();
-
 -- creare un trigger per fare in modo che le fascie orarie non overleappino, guardare la query gia creata per costruirlo.
 
 -- trigger che controlla che se un ordine è stato già pagato allora il campo annullato non può essere false
 
+-- Creazione della funzione trigger
+CREATE OR REPLACE FUNCTION check_ordine_pagato()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Verifica se l'ordine è stato pagato
+    IF EXISTS (SELECT 1 FROM PAGAMENTO WHERE ordine = NEW.codice AND stato = 'Pagato') THEN
+        -- Se l'ordine è stato pagato, impedisce che il campo annullato sia impostato su FALSE
+        IF NEW.annullato = FALSE THEN
+            RAISE EXCEPTION 'Non è possibile annullare un ordine già pagato';
+        END IF;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Creazione del trigger
+CREATE TRIGGER check_ordine_pagato_trigger
+BEFORE UPDATE ON ORDINE
+FOR EACH ROW
+EXECUTE FUNCTION check_ordine_pagato();
+
+
 -- trigger annullando una prenotazione giornaliera dobbiamo andare a decrementare di uno il numero di giorni prenotati totali di un ordine di tipo pacchetto
+
+-- Creazione della funzione trigger
+CREATE OR REPLACE FUNCTION decrementa_giorni_pacchetto()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Verifica se la prenotazione è di tipo giornaliera (tipo = TRUE) e se è stata annullata
+    IF OLD.tipo = TRUE AND NEW.annullata = TRUE AND OLD.annullata = FALSE THEN
+        -- Decrementa il numero di giorni prenotati totali del pacchetto associato
+        UPDATE PACCHETTO
+        SET n_giorni_prenotati_totali = n_giorni_prenotati_totali - 1
+        WHERE ordine = OLD.pacchetto;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Creazione del trigger
+CREATE TRIGGER decrementa_giorni_pacchetto_trigger
+AFTER UPDATE ON PRENOTAZIONE
+FOR EACH ROW
+WHEN (OLD.tipo = TRUE AND NEW.annullata = TRUE AND OLD.annullata = FALSE)
+EXECUTE FUNCTION decrementa_giorni_p
+
 
 -- un ordine e una prenotazione possono essere annullati solo se il giorno a cui fanno riferimento non è antecedente al giorno in cui si fa la richiesta
 
 -- TRIGGER: "Aggiunta una fascia oraria": "FASCIA-->ORARIA-->ORARIO": controllo "numero ore prenotate totali"
+
+-- Creazione della funzione trigger
+CREATE OR REPLACE FUNCTION aggiorna_ore_prenotate()
+RETURNS TRIGGER AS $$
+DECLARE
+    ore_prenotate INTERVAL;
+BEGIN
+    -- Calcolo delle ore prenotate
+    ore_prenotate := NEW.orario_fine - NEW.orario_inizio;
+    
+    -- Aggiorna il numero totale di ore prenotate nella tabella ORARIO
+    UPDATE ORARIO
+    SET n_ore_prenotate_totali = n_ore_prenotate_totali + EXTRACT(EPOCH FROM ore_prenotate) / 3600
+    WHERE ordine = NEW.oraria;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Creazione del trigger
+CREATE TRIGGER aggiorna_ore_prenotate_trigger
+AFTER INSERT ON FASCIA_ORARIA
+FOR EACH ROW
+EXECUTE FUNCTION aggiorna_ore_prenotate();
+
 
 -- TRIGGER : una sala può avere al massimo due tecnici, uno di tipo Fonico e uno di tipo Tecnico Del Suono o  "Tecnico del Suono_AND_Fonico"
 -- Creazione della funzione plpgsql per il controllo del vincolo
