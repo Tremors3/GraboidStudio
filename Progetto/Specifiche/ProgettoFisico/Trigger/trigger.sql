@@ -277,6 +277,7 @@ BEGIN
 
     -- Verifica se l'ordine è stato pagato
     IF FOUND THEN
+    
         -- Se l'ordine è stato pagato, impedisce che il campo annullato sia impostato su TRUE
         RAISE EXCEPTION 'Non è possibile annullare un ordine già pagato.';
     END IF;
@@ -288,6 +289,7 @@ $$ LANGUAGE plpgsql;
 -- Creazione del trigger
 CREATE TRIGGER T3
 BEFORE UPDATE ON ORDINE
-FOR EACH ROW WHEN (NEW.annullato = TRUE AND OLD.annullato = FALSE) -- se stiamo aggior
+FOR EACH ROW WHEN (NEW.annullato = TRUE AND OLD.annullato = FALSE) -- il trigger viene chiamato quando si imposta a true (da false) il campo annullato
+EXECUTE FUNCTION check_ordine_pagato();
 
 ---------------------------------------------------------------------------------------------------

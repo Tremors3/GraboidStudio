@@ -42,10 +42,10 @@ $$ LANGUAGE plpgsql;
 -- Creazione del trigger
 CREATE TRIGGER T4
 AFTER UPDATE ON PRENOTAZIONE
-FOR EACH ROW
-WHEN (OLD.tipo = TRUE AND NEW.annullata = TRUE AND OLD.annullata = FALSE)
+FOR EACH ROW WHEN (OLD.tipo = TRUE AND NEW.annullata = TRUE AND OLD.annullata = FALSE)
 EXECUTE FUNCTION decrementa_giorni_pacchetto
 
+---------------------------------------------------------------------------------------------------
 
 -- un ordine e una prenotazione possono essere annullati solo se il giorno a cui fanno riferimento non è antecedente al giorno in cui si fa la richiesta
 
