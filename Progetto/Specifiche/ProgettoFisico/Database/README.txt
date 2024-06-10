@@ -27,3 +27,5 @@ MOTIVI
 1. Complicazione delle query.
 2. ~(NON CERTO) Ripetizione dei dati da tabella a tabella in cascata.
 3. Avere un codice univoco fa comodo; è più simile ad un caso reale.
+
+In modo da semplificare esponenzialmente le query abbiamo scelto di sostituire ad alcune chiavi primarie composte un codice seriale. In questo modo evitiamo di avere a che fare con delle chiavi composte molto lunghe.
