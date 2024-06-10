@@ -23,7 +23,7 @@ Se esiste almeno una riga con codice = 123 nella tabella PRODUZIONE, questa quer
 
 ---------------------------------------------------------------------------------------------------
 
--- creare un trigger per fare in modo che le fascie orarie non overleappino, guardare la query gia creata per costruirlo.
+
 
 -- trigger che controlla che se un ordine è stato già pagato allora il campo annullato non può essere false
 
@@ -146,3 +146,4 @@ CREATE TRIGGER check_max_tecnici_trigger
 BEFORE INSERT OR UPDATE ON TECNICO
 FOR EACH ROW
 EXECUTE FUNCTION check_max_tecnici();
+-- creare un trigger per fare in modo che le fascie orarie non overleappino, guardare la query gia creata per costruirlo.
