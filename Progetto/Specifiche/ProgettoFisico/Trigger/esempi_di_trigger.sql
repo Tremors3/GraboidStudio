@@ -24,3 +24,4 @@ Se esiste almeno una riga con codice = 123 nella tabella PRODUZIONE, questa quer
 ---------------------------------------------------------------------------------------------------
 
 -- TRIGGER: creare un trigger per fare in modo che le fascie orarie non overleappino, guardare la query gia creata per costruirlo.
+

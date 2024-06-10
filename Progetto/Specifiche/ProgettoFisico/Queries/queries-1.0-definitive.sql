@@ -168,11 +168,33 @@ JOIN (
 -- nel popolamento siamo sicuri che quella sala non venga occupata da altre prenotazioni, inoltre le sale rimanenti sappiamo che sono tutte libere per quel giorno.
 -- noi vogliamo che inserendo il giorno 2023-02-04 e l'ora di inizio 18:00:00 alle ore 23:00:00, ci venga mostrato in output il codice di questa sala e anche il codice delle altre sale 
 
+-- VANNO BENE ---
+
+()  [10:00 11:00]
+
+[10:00 11:00]  ()
+
+-- VANNO MALE ---
+
+[ 10:00 ( 11:00] )
+OR
+( [ 10:00 ) 11:00]
+OR
+( [ 10:00 11:00] )
+
+-- GIA COPERTA ---
+
+[ 10:00 () 11:00]
+
+([ 10:00 12:00)]  --8 - 12 
+[ (10:00 12:00])  --11 -13
+------------------
+
 (
     SELECT s.numero, s.piano
     FROM SALA s
     WHERE (s.numero, s.piano) NOT IN (
-        -- tutte le chiave primarie delle sale che sono occupate in un dato giorno in una determinata fascia oraria
+
         SELECT DISTINCT p.sala_numero, p.sala_piano
         FROM PRENOTAZIONE p
         JOIN ORARIA o ON o.prenotazione = p.codice
@@ -180,143 +202,22 @@ JOIN (
         WHERE p.annullata = FALSE
         AND p.tipo = FALSE 
         AND p.giorno = '2023-02-04'
-        AND not (f.orario_inizio BETWEEN '18:00:00' and '23:00:00')
-        AND not( f.orario_fine  BETWEEN '18:00:00' and '23:00:00')
+        AND (
+            (f.orario_inizio <= '<orario_inizio>' AND '<orario_inizio>' < f.orario_fine) OR -- [ 10:00 ( 11:00] )
+            (f.orario_inizio < '<orario_fine>' AND '<orario_fine>' <= f.orario_fine) OR     -- ( [ 10:00 ) 11:00]
+            ('<orario_inizio>' <= f.orario_inizio AND f.orario_fine <= '<orario_fine>')     -- ( [ 10:00 11:00] )
         )
+    )
 )
-EXCEPT -- rimuovi le sale che sono occupate per tutto il giorno da una prenotazione giornaliera nel giorno dato in input
+EXCEPT 
 (
     SELECT sala_numero, sala_piano
     FROM PRENOTAZIONE
-    WHERE annullata = FALSE AND tipo = TRUE AND giorno = '2023-02-04'
-);
-
---
-
-SELECT s.numero, s.piano
-FROM SALA s
-WHERE (s.numero, s.piano) NOT IN (
-    SELECT DISTINCT p.sala_numero, p.sala_piano
-    FROM PRENOTAZIONE p
-    JOIN ORARIA o ON o.prenotazione = p.codice
-    JOIN FASCIA_ORARIA f ON f.oraria = o.prenotazione
-    WHERE p.annullata = FALSE
-    AND p.tipo = FALSE 
-    AND p.giorno = '2023-02-04'
-    AND (
-        (f.orario_inizio < '20:00:00' AND f.orario_fine > '20:00:00') OR
-        (f.orario_inizio < '23:00:00' AND f.orario_fine > '23:00:00') OR
-        (f.orario_inizio >= '20:00:00' AND f.orario_fine <= '23:00:00')
-    )
+    WHERE annullata = FALSE AND tipo = TRUE AND giorno = '2023-02-04';
 )
-EXCEPT
-SELECT sala_numero, sala_piano
-FROM PRENOTAZIONE
-WHERE annullata = FALSE AND tipo = TRUE AND giorno = '2023-02-04';
 
-SELECT s.numero, s.piano
-FROM SALA s
-WHERE (s.numero, s.piano) NOT IN (
-    SELECT DISTINCT p.sala_numero, p.sala_piano
-    FROM PRENOTAZIONE p
-    JOIN ORARIA o ON o.prenotazione = p.codice
-    JOIN FASCIA_ORARIA f ON f.oraria = o.prenotazione
-    WHERE p.annullata = FALSE
-    AND p.tipo = FALSE 
-    AND p.giorno = '2023-02-04'
-    AND (
-        (f.orario_inizio < '18:00:00' AND f.orario_fine > '18:00:00') OR
-        (f.orario_inizio < '23:00:00' AND f.orario_fine > '23:00:00') OR
-        (f.orario_inizio >= '18:00:00' AND f.orario_fine <= '23:00:00')
-    )
-)
-EXCEPT
-SELECT sala_numero, sala_piano
-FROM PRENOTAZIONE
-WHERE annullata = FALSE AND tipo = TRUE AND giorno = '2023-02-04';
-
-SELECT s.numero, s.piano
-FROM SALA s
-WHERE (s.numero, s.piano) NOT IN (
-    SELECT DISTINCT p.sala_numero, p.sala_piano
-    FROM PRENOTAZIONE p
-    JOIN ORARIA o ON o.prenotazione = p.codice
-    JOIN FASCIA_ORARIA f ON f.oraria = o.prenotazione
-    WHERE p.annullata = FALSE
-    AND p.tipo = FALSE 
-    AND p.giorno = '2023-02-04'
-    AND (
-        (f.orario_inizio < '10:00:00' AND f.orario_fine > '10:00:00') OR
-        (f.orario_inizio < '12:00:00' AND f.orario_fine > '12:00:00') OR
-        (f.orario_inizio >= '10:00:00' AND f.orario_fine <= '12:00:00')
-    )
-)
-EXCEPT
-SELECT sala_numero, sala_piano
-FROM PRENOTAZIONE
-WHERE annullata = FALSE AND tipo = TRUE AND giorno = '2023-02-04';
-
-
-SELECT s.numero, s.piano
-FROM SALA s
-WHERE (s.numero, s.piano) NOT IN (
-    SELECT DISTINCT p.sala_numero, p.sala_piano
-    FROM PRENOTAZIONE p
-    JOIN ORARIA o ON o.prenotazione = p.codice
-    JOIN FASCIA_ORARIA f ON f.oraria = o.prenotazione
-    WHERE p.annullata = FALSE
-    AND p.tipo = FALSE 
-    AND p.giorno = '2023-02-04'
-    AND (
-        (f.orario_inizio < '12:00:00' AND f.orario_fine > '12:00:00') OR
-        (f.orario_inizio < '13:00:00' AND f.orario_fine > '13:00:00') OR
-        (f.orario_inizio >= '12:00:00' AND f.orario_fine <= '13:00:00')
-    )
-)
-EXCEPT
-SELECT sala_numero, sala_piano
-FROM PRENOTAZIONE
-WHERE annullata = FALSE AND tipo = TRUE AND giorno = '2023-02-04';
-
-
-SELECT s.numero, s.piano
-FROM SALA s
-WHERE (s.numero, s.piano) NOT IN (
-    SELECT DISTINCT p.sala_numero, p.sala_piano
-    FROM PRENOTAZIONE p
-    JOIN ORARIA o ON o.prenotazione = p.codice
-    JOIN FASCIA_ORARIA f ON f.oraria = o.prenotazione
-    WHERE p.annullata = FALSE
-    AND p.tipo = FALSE 
-    AND p.giorno = '2023-02-04'
-    AND (
-        (f.orario_inizio < '12:00:00' AND f.orario_fine > '12:00:00') OR
-        (f.orario_inizio < '14:00:00' AND f.orario_fine > '14:00:00') OR
-        (f.orario_inizio >= '12:00:00' AND f.orario_fine <= '14:00:00')
-    )
-)
-EXCEPT
-SELECT sala_numero, sala_piano
-FROM PRENOTAZIONE
-WHERE annullata = FALSE AND tipo = TRUE AND giorno = '2023-02-04';
-
-SELECT s.numero, s.piano
-FROM SALA s
-WHERE (s.numero, s.piano) NOT IN (
-    SELECT DISTINCT p.sala_numero, p.sala_piano
-    FROM PRENOTAZIONE p
-    JOIN ORARIA o ON o.prenotazione = p.codice
-    JOIN FASCIA_ORARIA f ON f.oraria = o.prenotazione
-    WHERE p.annullata = FALSE
-    AND p.tipo = FALSE 
-    AND p.giorno = '2023-02-04'
-    AND (
-        (f.orario_inizio < '11:00:00' AND f.orario_fine > '11:00:00') OR
-        (f.orario_inizio < '13:00:00' AND f.orario_fine > '13:00:00') OR
-        (f.orario_inizio >= '11:00:00' AND f.orario_fine <= '13:00:00')
-    )
-)
-EXCEPT
-SELECT sala_numero, sala_piano
-FROM PRENOTAZIONE
-WHERE annullata = FALSE AND tipo = TRUE AND giorno = '2023-02-04';
+-- in questo giorno 2023-02-04 sappiamo che esiste una prenotazione che tiene la sala 1 numero 1 occupata dalle ore '09:00:00' fino alle '12:00:00' e
+-- dalle ore '13:00:00' fino alle '17:00:00', noi abbiamo 5 sale in totale
+giorno '2023-02-04'
+orari_inizi['20:00:00', '18:00:00', '10:00:00', '12:00:00', '12:00:00', '11:00:00']
+orarifine['23:00:00', '23:00:00', '12:00:00', '13:00:00', '14:00:00', '13:00:00']
