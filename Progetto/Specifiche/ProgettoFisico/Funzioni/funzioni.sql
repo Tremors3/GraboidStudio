@@ -7,7 +7,8 @@
  * La funzione calcola l'età dell'artista del quale è stato fornito il codice fiscale.
  *
  * INPUT:   cd      INT
- * OUTPUT:  eta     DECIMAL
+ * OUTPUT:  
+ *          eta     DECIMAL
  */
 CREATE OR REPLACE FUNCTION CalcolaEtaArtista(cd VARCHAR(16)) RETURNS INT LANGUAGE plpgsql AS $$
 DECLARE
@@ -67,22 +68,31 @@ SELECT CalcolaCostoTotale(6);
 
 ---------------------------------------------------------------------------------------------------
 
--- Conta il numero di canzoni per una produzione.
+/* CONTA NUMERO DI CANZONI
+ * La funzione conta il numero di canzoni della produzione di cui è fornito il codice.
+ * 
+ * INPUT:   codice_produzione   INTEGER
+ * OUTPUT:  numero_canzoni      INTEGER
+ */
 CREATE OR REPLACE FUNCTION conta_canzoni_di_una_produzione(codice_produzione INTEGER) RETURNS INTEGER AS $$
 DECLARE
     numero_canzoni INTEGER;
 BEGIN
     -- Conta il numero di canzoni per la produzione specificata
-    SELECT COUNT(*)
-    INTO numero_canzoni
-    FROM canzone
-    WHERE produzione = codice_produzione;
+    SELECT COUNT(*) INTO numero_canzoni
+    FROM canzone WHERE produzione = codice_produzione;
 
     RETURN numero_canzoni;
 END;
 $$ LANGUAGE plpgsql;
 
--- Calcola la lunghezza media delle canzoni per una produzione.
+/* CONTA NUMERO DI CANZONI
+ * Dato il codice di una produzione, la funzione calcola la 
+ * lunghezza media in secondi delle sue canzoni.
+ * 
+ * INPUT:   codice_produzione   INTEGER
+ * OUTPUT:  lunghezza_media     NUMERIC
+ */
 CREATE OR REPLACE FUNCTION calcola_lunghezza_media_canzoni_di_una_produzione(codice_produzione INTEGER) RETURNS NUMERIC AS $$
 DECLARE
     lunghezza_in_secondi_totale INTEGER;
