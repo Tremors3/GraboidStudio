@@ -66,3 +66,46 @@ $$;
 SELECT CalcolaCostoTotale(6);
 
 ---------------------------------------------------------------------------------------------------
+
+-- Conta il numero di canzoni per una produzione.
+
+CREATE OR REPLACE FUNCTION conta_canzoni_di_una_produzione(codice_produzione INTEGER) RETURNS INTEGER AS $$
+DECLARE
+    numero_canzoni INTEGER;
+BEGIN
+    -- Conta il numero di canzoni per la produzione specificata
+    SELECT COUNT(*)
+    INTO numero_canzoni
+    FROM canzone
+    WHERE produzione = codice_produzione;
+
+    RETURN numero_canzoni;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Calcola la lunghezza media delle canzoni per una produzione.
+
+CREATE OR REPLACE FUNCTION calcola_lunghezza_media_canzoni_di_una_produzione(codice_produzione INTEGER) RETURNS NUMERIC AS $$
+DECLARE
+    lunghezza_in_secondi_totale INTEGER;
+    numero_canzoni INTEGER;
+    lunghezza_in_secondi_media NUMERIC;
+BEGIN
+    -- Calcola la somma delle lunghezze delle canzoni per la produzione specificata
+    SELECT SUM(lunghezza_in_secondi) INTO lunghezza_in_secondi_totale
+    FROM canzone
+    WHERE produzione = codice_produzione;
+
+    
+    SELECT conta_canzoni_di_una_produzione(codice_produzione) INTO numero_canzoni;
+    -- Calcola la lunghezza media delle canzoni
+    IF numero_canzoni > 0 THEN
+        lunghezza_in_secondi_media := lunghezza_in_secondi_totale / numero_canzoni;
+    ELSE
+        -- Se non ci sono canzoni, la lunghezza media è 0
+        lunghezza_in_secondi_media := 0;  
+    END IF;
+
+    RETURN lunghezza_in_secondi_media;
+END;
+$$ LANGUAGE plpgsql;
