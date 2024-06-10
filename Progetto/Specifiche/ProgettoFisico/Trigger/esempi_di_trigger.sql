@@ -23,35 +23,6 @@ Se esiste almeno una riga con codice = 123 nella tabella PRODUZIONE, questa quer
 
 ---------------------------------------------------------------------------------------------------
 
-RV7: Le fasce orarie prenotabili vanno dalle 8:00 alle 12:00, dalle 14:00 alle 23:00.
-
-    Implementazione: Questo vincolo può essere implementato con un vincolo CHECK sulla tabella FASCIA_ORARIA.
-
-ALTER TABLE FASCIA_ORARIA
-ADD CONSTRAINT check_orario
-CHECK (
-    (orario_inizio >= '08:00' AND orario_fine <= '12:00')
-    OR (orario_inizio >= '14:00' AND orario_fine <= '23:00')
-);
-
-RV8: Le Fascie Orarie di un Ordine Orario devono essere scelte nel momento in cui si effettua l’ordine.
-    Implementazione: Questo vincolo può essere implementato tramite un trigger che verifichi la corretta selezione delle fasce orarie.
-CREATE OR REPLACE FUNCTION check_ordine_orario() RETURNS TRIGGER AS $$
-BEGIN
-    IF NEW.ordine IS NOT NULL THEN
-        RAISE EXCEPTION 'Le fasce orarie devono essere scelte al momento dell''ordine.';
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER check_ordine_orario_trigger
-BEFORE INSERT ON ORARIO
-FOR EACH ROW
-EXECUTE FUNCTION check_ordine_orario();
-
----------------------------------------------------------------------------------------------------
-
 RV9: Nel caso si vogliano prenotare due giorni [settimane o mesi] è necessario effettuare due ordini distinti; quindi un ordine di tipo Giornaliero [Settimanale o Mensile] per giorno [settimana o mese] che si vuole prenotare. Gli ordini di tipo Giornaliero, Settimanale e Mensile possono effettuare prenotazioni Giornaliere, NON Orarie.
 
     Implementazione:
@@ -92,7 +63,7 @@ BEFORE INSERT ON PACCHETTO
 FOR EACH ROW
 EXECUTE FUNCTION check_tipo_pacchetto();
 
-
+---------------------------------------------------------------------------------------------------
 
 fare un trigger che controli che n giorni prentoati totali non superi il numero di giorni nella tipologia di un dato ordine
 
@@ -144,7 +115,7 @@ EXECUTE FUNCTION ControllaGiorniPrenotati();
 
 -- TRIGGER: "Aggiunta una fascia oraria": "FASCIA-->ORARIA-->ORARIO": controllo "numero ore prenotate totali"
 
--- TRIGGER : una sala può avere al massimo due tecnici, uno di tipo Fonico e uno di tipo Tecnico Del Suono o  "Tecnico del suono_AND_Fonico"
+-- TRIGGER : una sala può avere al massimo due tecnici, uno di tipo Fonico e uno di tipo Tecnico Del Suono o  "Tecnico del Suono_AND_Fonico"
 -- Creazione della funzione plpgsql per il controllo del vincolo
 CREATE OR REPLACE FUNCTION check_max_tecnici()
 RETURNS TRIGGER AS $$

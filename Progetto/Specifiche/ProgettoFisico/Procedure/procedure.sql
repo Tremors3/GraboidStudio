@@ -220,7 +220,12 @@ DECLARE
 BEGIN
     -- Controllo lunghezze array di orari
     IF array_length(orari_inizio, 1) != array_length(orari_fine, 1) THEN
-        RAISE EXCEPTION 'Gli array di orari di inizio e fine devono avere la stessa lunghezza';
+        RAISE EXCEPTION 'Gli array di orari di inizio e fine devono avere la stessa lunghezza.';
+    END IF;
+
+    -- Controllo lunghezze array di orari
+    IF array_length(orari_inizio, 1) IS NULL OR array_length(orari_fine, 1) IS NULL THEN
+        RAISE EXCEPTION 'Gli array di orari di inizio e fine devono contenere almento una fascia oraria.';
     END IF;
 
     -- inserimento prenotazione
