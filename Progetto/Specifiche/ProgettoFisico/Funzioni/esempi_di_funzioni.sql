@@ -6,7 +6,6 @@ CALCOLI E AGGREGAZIONI
     -- Conta il numero di canzoni per una produzione.
    count_songs_in_production(codice_produzione INTEGER) RETURNS INTEGER:
 
-
 CREATE OR REPLACE FUNCTION count_songs_in_production(codice_produzione INTEGER)
 RETURNS INTEGER AS $$
 DECLARE
@@ -35,15 +34,10 @@ BEGIN
     FROM canzone
     WHERE produzione = codice_produzione;
 
-    -- Conta il numero di canzoni per la produzione specificata
-    SELECT COUNT(*)
-    INTO num_songs
-    FROM canzone
-    WHERE produzione = codice_produzione;
-
+    avg_length := count_songs_in_production()
     -- Calcola la lunghezza media delle canzoni
     IF num_songs > 0 THEN
-        avg_length := total_length / num_songs;
+        avg_length := total_length / avg_length;
     ELSE
         avg_length := 0;  -- Se non ci sono canzoni, la lunghezza media è 0
     END IF;
@@ -51,7 +45,3 @@ BEGIN
     RETURN avg_length;
 END;
 $$ LANGUAGE plpgsql;
-
-
-
-
