@@ -19,6 +19,8 @@ END
 $$;
 SELECT CalcolaEtaArtista('VCTFNC90A01H501X');
 
+---------------------------------------------------------------------------------------------------
+
 /* CONTROLLA IL TIPO DI UN ORDINE
  * La funzione controlla il tipo di un ordine.
  * Un ordine può essere di tipo Orario o di tipo Giornaliero.
@@ -62,3 +64,5 @@ BEGIN
 END
 $$;
 SELECT CalcolaCostoTotale(6);
+
+---------------------------------------------------------------------------------------------------
