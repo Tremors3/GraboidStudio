@@ -93,13 +93,13 @@ INSERT INTO PRODUZIONE (titolo, artista, data_inizio, data_fine, stato, tipo_pro
 -- Popolamento della tabella CANZONE
 INSERT INTO CANZONE (titolo, produzione, testo, data_di_registrazione, lunghezza_in_secondi, nome_del_file, percorso_di_sistema, estensione) VALUES
 ('Canzone 1', 1, 'Testo della canzone 1', '2020-02-10', 180, 'canzone1.mp3', '/musica/bandabc', 'mp3'),
-('Canzone 2', NULL, 'Testo della canzone 2', '2019-08-05', 210, 'canzone2.mp3', '/musica/soloxyz', 'mp3'),
+('Canzone 2', 2, 'Testo della canzone 2', '2019-08-05', 210, 'canzone2.mp3', '/musica/soloxyz', 'mp3'),
 ('Canzone 3', 3, 'Testo della canzone 3', '2018-12-10', 240, 'canzone3.mp3', '/musica/group123', 'mp3'),
 ('Canzone 4', 4, 'Testo della canzone 4', '2021-03-10', 200, 'canzone4.mp3', '/musica/duolmn', 'mp3'),
 ('Canzone 5', 5, 'Testo della canzone 5', '2017-07-01', 190, 'canzone5.mp3', '/musica/solopqr', 'mp3'),
-('Canzone 6', NULL, 'Testo della canzone 6', '2019-10-15', 220, 'canzone6.mp3', '/musica/triouvw', 'mp3'),
-('Canzone 7', NULL, 'Testo della canzone 7', '2020-04-05', 230, 'canzone7.mp3', '/musica/banddef', 'mp3'),
-('Canzone 8', NULL, 'Testo della canzone 8', '2018-07-15', 250, 'canzone8.mp3', '/musica/sologhi', 'mp3'),
+('Canzone 6', 3, 'Testo della canzone 6', '2019-10-15', 220, 'canzone6.mp3', '/musica/triouvw', 'mp3'),
+('Canzone 7', 4, 'Testo della canzone 7', '2020-04-05', 230, 'canzone7.mp3', '/musica/banddef', 'mp3'),
+('Canzone 8', 5, 'Testo della canzone 8', '2018-07-15', 250, 'canzone8.mp3', '/musica/sologhi', 'mp3'),
 ('Canzone 9', 9, 'Testo della canzone 9', '2019-05-10', 260, 'canzone9.mp3', '/musica/groupjkl', 'mp3'),
 ('Canzone 10', 10, 'Testo della canzone 10', '2021-08-10', 270, 'canzone10.mp3', '/musica/duomno', 'mp3');
 
@@ -215,15 +215,14 @@ INSERT INTO SALA (piano, numero) VALUES
 (3, 1), (3, 2);
 
 -- Popolamento della tabella PRENOTAZIONE
--- PRENOTAZIONE ORARIA:     tipo=FALSE
 -- PRENOTAZIONE PACCHETTO:  tipo=TRUE
+-- PRENOTAZIONE ORARIA:     tipo=FALSE
 INSERT INTO PRENOTAZIONE (annullata, giorno, tipo, pacchetto, sala_piano, sala_numero) VALUES
 (FALSE, '2023-01-10', TRUE, 1, 1, 1),
 (FALSE, '2023-01-15', TRUE, 2, 2, 1),
 (FALSE, '2023-01-20', TRUE, 3, 3, 2),
 (FALSE, '2023-01-25', TRUE, 4, 3, 1),
 (FALSE, '2023-01-30', TRUE, 5, 1, 2),
-
 
 (FALSE, '2023-02-04', FALSE, NULL, 1, 1), 
 (FALSE, '2023-02-09', FALSE, NULL, 2, 1),
@@ -254,7 +253,7 @@ INSERT INTO FASCIA_ORARIA (oraria, orario_inizio, orario_fine) VALUES
 INSERT INTO TIPO_TECNICO (nome) VALUES 
 ('Fonico'), 
 ('Tecnico del Suono'),
-'Tecnico del suono_AND_Fonico';
+('Tecnico del suono_AND_Fonico');
 
 -- Popolamento della tabella TECNICO
 INSERT INTO TECNICO (codice_fiscale, sala_piano, sala_numero, tipo_tecnico, nome, cognome, data_di_nascita, data_di_assunzione, iban) VALUES

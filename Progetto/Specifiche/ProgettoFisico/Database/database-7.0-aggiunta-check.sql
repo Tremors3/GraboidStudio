@@ -77,7 +77,8 @@ CREATE TABLE PRODUZIONE (
     genere VARCHAR(255), 
     FOREIGN KEY (tipo_produzione) REFERENCES TIPO_PRODUZIONE(nome) ON UPDATE CASCADE ON DELETE SET NULL,
     FOREIGN KEY (genere) REFERENCES GENERE(nome) ON UPDATE CASCADE ON DELETE SET NULL,
-    CHECK (data_inizio <= data_fine)
+    CHECK (data_inizio <= data_fine),
+    CHECK (stato IN ('Pubblicato', 'Pubblicazione'))
 ); 
  
 CREATE TABLE CANZONE (
@@ -86,7 +87,7 @@ CREATE TABLE CANZONE (
 
     -- Old Primary Key
     titolo VARCHAR(255) NOT NULL, 
-    produzione INTEGER,
+    produzione INTEGER NOT NULL,
 
     -- Old Primary Key Uniqueness Maintained
     CONSTRAINT unique_canzone UNIQUE (titolo, produzione),

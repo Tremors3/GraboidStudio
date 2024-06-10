@@ -3,22 +3,6 @@
 */
 ---------------------------------------------------------------------------------------------------
 
-/* AGGIUNGE UN ARTISTA
- * La funzione crea il record di un artista con i parametri passati come argomento.
- *
- * INPUT:   nome_arte               VARCHAR(50)
- * INPUT:   data_registrazione      DATE
- */
-CREATE OR REPLACE FUNCTION AggiungiArtista(nome_arte VARCHAR(50), data_registrazione DATE) RETURNS INT LANGUAGE plpgsql AS $$
-BEGIN
-    INSERT INTO ARTISTA (nome_arte, data_di_registrazione)
-    VALUES (nome_arte, data_registrazione);
-END
-$$;
-SELECT AggiungiArtista('Tremore', '2024-06-08');
-
----------------------------------------------------------------------------------------------------
-
 /* CALCOLA L'ETA DELL'ARTISTA
  * La funzione calcola l'età dell'artista del quale è stato fornito il codice fiscale.
  *

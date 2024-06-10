@@ -1,3 +1,9 @@
+SELECT * 
+FROM information_schema.triggers 
+WHERE event_object_table = 'prenotazione';
+
+---------------------------------------------------------------------------------------------------
+
 -- Spiegazione di SELECT 1
 In SQL, SELECT 1 è usato per:
 
@@ -14,35 +20,100 @@ FROM PRODUZIONE
 WHERE codice = 123;
 
 Se esiste almeno una riga con codice = 123 nella tabella PRODUZIONE, questa query restituirà una riga con valore 1. Se non esiste alcuna riga che soddisfi la condizione, la query non restituirà alcun risultato.
---------------------
+
+---------------------------------------------------------------------------------------------------
+
 Inizio reale del file
+
+---------------------------------------------------------------------------------------------------
+
 -- Implementazione dei vincoli
-RV1: Non è necessario utilizzare i giorni di un pacchetto tutti in fila ma possono essere sfruttati nell’arco di 90 giorni.
+RV1: Non è necessario utilizzare i giorni di un pacchetto tutti in fila ma possono essere sfruttati nell’arco di 90 giorni. 
 
-Questo vincolo non può essere implementato direttamente tramite un vincolo di tabella. È più adatto come regola di business all'interno delle procedure e funzioni per la gestione delle prenotazioni.
+    Implementazione: Impedire la creazione di una prenotazione dopo 90 giorni dall effettuazione dell ordine. Impedire inoltre di inserire una prenotazione in una data antecedente alla data di effettuazione dell ordine.
 
-RV2: Una produzione una volta pubblicata diventa immutabile quindi non è più possibile aggiungere canzoni.
-
-    Implementazione: Questo vincolo può essere implementato con un trigger che si attiva dopo l'inserimento di una produzione, per garantire che non possano essere aggiunte nuove canzoni.
--- da testare.
-CREATE OR REPLACE FUNCTION controlla_produzione_immutabile() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION check_ordine_orario() 
+RETURNS TRIGGER AS $$
+DECLARE
+    ordine_timestamp TIMESTAMP;
+    differenza_giorni INTEGER;
 BEGIN
-    IF EXISTS (
-        SELECT 1 
-        FROM PRODUZIONE 
-        WHERE codice = NEW.produzione AND stato = 'pubblicato'
-    ) THEN
-        RAISE EXCEPTION 'Impossibile aggiungere canzoni a una produzione pubblicata (codice produzione: %).', NEW.produzione;
+    IF NEW.tipo THEN
+        -- Otteniamo la data di effettuazione dell'ordine
+        SELECT timestamp INTO ordine_timestamp
+        FROM ordine WHERE codice = NEW.PACCHETTO; -- il pacchetto ha la stessa chiave primaria dell'ordine
+        
+        -- Calcoliamo la differenza dei giorni
+        differenza_giorni := (NEW.giorno::date - ordine_timestamp::date);
+
+        -- Controlliamo che la differenza non sia negativa
+        IF differenza_giorni < 0 THEN
+            RAISE EXCEPTION 'Non è possibile creare una prenotazione che vada indietro nel tempo.';
+        END IF;
+        
+        -- Stampa la differenza dei giorni
+        --RAISE NOTICE 'differenza giorni: %', differenza_giorni;
+
+        -- Controlliamo se la differenza è maggiore di 90 giorni
+        IF differenza_giorni > 90 THEN
+            RAISE EXCEPTION 'Non è possibile creare una prenotazione dopo 90 giorni dall effettuazione dell ordine.';
+        END IF;
     END IF;
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_controlla_produzione_immutabile
+CREATE TRIGGER RV1
+BEFORE INSERT ON prenotazione 
+FOR EACH ROW WHEN (NEW.tipo = TRUE)
+EXECUTE FUNCTION check_ordine_orario();
+
+---------------------------------------------------------------------------------------------------
+
+RV2: Una produzione una volta pubblicata diventa immutabile quindi non è più possibile aggiungere canzoni.
+
+    Implementazione: Questo vincolo può essere implementato con un trigger che si attiva prima dell inserimento di una produzione, per garantire che non possano essere aggiunte nuove canzoni.
+
+Spiegazione:
+
+    Funzione PL/pgSQL (check_production_immutable):
+        Questa funzione controlla se la produzione associata alla nuova canzone (NEW.produzione) è stata pubblicata (stato = 'pubblicato').
+        Se la produzione è stata pubblicata, lancia un eccezione che impedisce l inserimento della nuova canzone.
+        Se la produzione non è stata pubblicata, restituisce semplicemente NEW.
+
+    Trigger check_production_immutable_trigger:
+        Questo trigger viene eseguito prima dell inserimento di una nuova riga nella tabella CANZONE.
+        Per ogni riga inserita (FOR EACH ROW), esegue la funzione check_production_immutable.
+        Il trigger è associato all evento BEFORE INSERT ON CANZONE, quindi viene attivato prima che i dati vengano effettivamente inseriti.
+
+Come funziona:
+
+    Quando si tenta di inserire una nuova canzone (INSERT INTO CANZONE), il trigger check_production_immutable_trigger verifica se la produzione associata (NEW.produzione) è già stata pubblicata.
+    Se la produzione è stata pubblicata (stato = 'pubblicato'), il trigger solleva un eccezione che impedisce l inserimento della canzone.
+    Se la produzione non è stata pubblicata, la nuova riga di CANZONE viene inserita con successo.
+
+CREATE OR REPLACE FUNCTION controlla_produzione_immutabile() RETURNS TRIGGER AS $$
+BEGIN
+    PERFORM artista
+    FROM PRODUZIONE 
+    WHERE codice = NEW.produzione AND stato = 'Pubblicazione';
+    
+    -- Se la produzione interessata è già stata pubblicata
+    IF FOUND THEN
+        RAISE EXCEPTION 'Impossibile aggiungere canzoni a una produzione in stato di Pubblicazione (codice produzione: %).', NEW.produzione;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER RV2
 BEFORE INSERT ON CANZONE
 FOR EACH ROW
 EXECUTE FUNCTION controlla_produzione_immutabile();
 
+---------------------------------------------------------------------------------------------------
 
 RV3: L’entità Singolo comprende da una a tre canzoni, l’entità Extended Play comprende dalle 4 alle 5 canzoni e l’entità Album non ha un limite al numero di canzoni fintanto che la durata complessiva stia tra la mezz’ora e l’ora.
 
@@ -101,8 +172,8 @@ ADD CONSTRAINT check_group_composition
 CHECK (
     NOT EXISTS (
         SELECT 1 FROM CANZONE C, GRUPPO G -- errata direi (almeno la selezione che seleziona 1) ma giusto per avere un idea
-        WHERE C.codice = NEW.canzone 
-        AND C.artista = G.artista
+        WHERE C.artista = G.artista
+        AND C.codice = NEW.canzone
         AND G.artista = NEW.solista
     )
 );

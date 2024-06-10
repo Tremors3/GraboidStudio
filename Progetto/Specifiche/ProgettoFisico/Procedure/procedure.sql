@@ -12,11 +12,27 @@ BEGIN
     WHERE ordine = ordine_id;
 EXCEPTION
     WHEN OTHERS THEN -- Gestione degli errori
-        ROLLBACK;    -- Annulla la transazione in caso di errore
         RAISE NOTICE 'Errore nell aggiornamento del costo totale di un ordine: %', SQLERRM;
+        ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
 CALL AggiornaCostoOrdine(1);
+
+---------------------------------------------------------------------------------------------------
+
+/* AGGIUNGE UN ARTISTA
+ * La funzione crea il record di un artista con i parametri passati come argomento.
+ *
+ * INPUT:   nome_arte               VARCHAR(50)
+ * INPUT:   data_registrazione      DATE
+ */
+CREATE OR REPLACE PROCEDURE AggiungiArtista(nome_arte VARCHAR(50), data_registrazione DATE) LANGUAGE plpgsql AS $$
+BEGIN
+    INSERT INTO ARTISTA (nome_arte, data_di_registrazione)
+    VALUES (nome_arte, data_registrazione);
+END
+$$;
+CALL AggiungiArtista('Tremore', '2024-06-08');
 
 ---------------------------------------------------------------------------------------------------
 
@@ -48,8 +64,8 @@ BEGIN
     VALUES(ordine_id, 'Da pagare', CalcolaCostoTotale(ordine_id), NULL);
 EXCEPTION
     WHEN OTHERS THEN -- Gestione degli errori
-        ROLLBACK;    -- Annulla la transazione in caso di errore
         RAISE NOTICE 'Errore nella creazione di un ordine di tipo pacchetto: %', SQLERRM;
+        ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
 CALL CreaOrdinePacchetto('OPRABC90A01H501X', 'BandABC', 'Mensile');
@@ -80,11 +96,13 @@ BEGIN
     WHERE ordine = pacchetto_id;
 EXCEPTION
     WHEN OTHERS THEN -- Gestione degli errori
-        ROLLBACK;    -- Annulla la transazione in caso di errore
         RAISE NOTICE 'Errore nella creazione di una prenotazione giornaliera: %', SQLERRM;
+        ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
-CALL CreaPrenotazioneGiornaliera(3, '2024-07-10', 1, 101);
+CALL CreaPrenotazioneGiornaliera(1, '2023-01-10', 2, 2); -- Funzionante
+CALL CreaPrenotazioneGiornaliera(1, '2022-01-01', 2, 2); -- Eccezzione: Indietro nel tempo
+CALL CreaPrenotazioneGiornaliera(1, '2023-05-01', 2, 2); -- Eccezzione: Più di 90 giorni
 
 ---------------------------------------------------------------------------------------------------
 
@@ -126,8 +144,8 @@ BEGIN
     );
 EXCEPTION
     WHEN OTHERS THEN -- Gestione degli errori
-        ROLLBACK;    -- Annulla la transazione in caso di errore
         RAISE NOTICE 'Errore nella creazione di un ordine e di una prenotazione oraria: %', SQLERRM;
+        ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
 CALL CreaOrdineEPrenotazioneOrarie(
@@ -144,6 +162,8 @@ CALL CreaOrdineEPrenotazioneOrarie(
  * INPUT:   operatore_codice_fiscale   VARCHAR(16)
  * INPUT:   artista_nome_arte          VARCHAR(255)
  * INPUT:   costo_ora                  DECIMAL(10, 2)
+ *
+ * OUTPUT:  ordine_id                  INT
  */
 CREATE OR REPLACE FUNCTION CreaOrdineOrario(
     operatore_codice_fiscale VARCHAR(16), 
@@ -169,8 +189,8 @@ BEGIN
     RETURN ordine_id;
 EXCEPTION
     WHEN OTHERS THEN -- Gestione degli errori
-        ROLLBACK;    -- Annulla la transazione in caso di errore
         RAISE NOTICE 'Errore nella creazione di un ordine orario: %', SQLERRM;
+        ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
 SELECT CreaOrdineOrario(
@@ -231,9 +251,8 @@ BEGIN
     WHERE p.ordine = ordine_id;
 EXCEPTION
     WHEN OTHERS THEN -- Gestione degli errori
-        ROLLBACK;    -- Annulla la transazione in caso di errore
-        RAISE;       -- Sollevamento dell'eccezione
         RAISE NOTICE 'Errore nella creazione di una prenotazione oraria: %', SQLERRM;
+        ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
 CALL CreaPrenotazioneOraria(
@@ -289,9 +308,8 @@ EXCEPTION
     
     WHEN OTHERS THEN -- Gestione degli errori
        
-        ROLLBACK;  -- Annulla la transazione in caso di errore
-        -- Solleva l'eccezione per visualizzare l'errore
         RAISE NOTICE 'Errore nella creazione dell artista e del solista: %', SQLERRM;
+        ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
 CALL CreaArtistaSolista(
@@ -345,10 +363,9 @@ BEGIN
 EXCEPTION
     -- Gestione degli errori
     WHEN OTHERS THEN
-        -- Annulla la transazione in caso di errore
-        ROLLBACK;
         -- Solleva l'eccezione per visualizzare l'errore
         RAISE NOTICE 'Errore nella creazione dell artista e del gruppo: %', SQLERRM;
+        ROLLBACK;    -- Annulla la transazione in caso di errore
 
 END
 $$;
@@ -372,34 +389,34 @@ CALL CreaArtistaGruppo(
  */
 CREATE OR REPLACE PROCEDURE CreaPartecipazioneSolistaGruppo(
     nome_arte_solista VARCHAR(255), 
-    nome_arte_gruppo VARCHAR(255), 
+    gruppo_nuovo VARCHAR(255), 
     data_adesione_corrente DATE
 ) 
 LANGUAGE plpgsql AS $$
 DECLARE
-    solista_gruppo VARCHAR(255);
+    gruppo_vecchio VARCHAR(255);
 BEGIN
     -- Cerca il gruppo attuale del solista
-    SELECT gruppo INTO solista_gruppo
+    SELECT gruppo INTO gruppo_vecchio
     FROM SOLISTA
     WHERE artista = nome_arte_solista;
 
-    -- Se il solista non è in nessun gruppo, aggiorna con il nuovo gruppo
-    IF solista_gruppo IS NULL THEN
+    -- Se il solista non è in nessun gruppo, il gruppo diventa il suo corrente
+    IF gruppo_vecchio IS NULL THEN
         UPDATE SOLISTA
-        SET gruppo = nome_arte_gruppo, data_adesione = data_adesione_corrente
+        SET gruppo = gruppo_nuovo, data_adesione = data_adesione_corrente
         WHERE artista = nome_arte_solista;
     ELSE
-         -- Se il solista è già nel gruppo specificato, non fare nulla
-        IF solista_gruppo = nome_arte_gruppo THEN
+        -- Se il solista è già nel gruppo specificato, non fare nulla
+        IF gruppo_vecchio = gruppo_nuovo THEN -- partecipazione corrente
             RAISE NOTICE 'Il solista è già nel gruppo specificato.';
         ELSE
             -- Se il solista è già in un gruppo, aggiorna la partecipazione passata e crea una nuova partecipazione
             INSERT INTO PARTECIPAZIONE_PASSATA (gruppo, solista, data_adesione, data_fine_adesione)
-            VALUES (solista_gruppo, nome_arte_solista, data_adesione_corrente, CURRENT_DATE);
+            VALUES (gruppo_vecchio, nome_arte_solista, data_adesione_corrente, CURRENT_DATE);
             
             UPDATE SOLISTA
-            SET gruppo = nome_arte_gruppo, data_adesione = data_adesione_corrente
+            SET gruppo = gruppo_nuovo, data_adesione = data_adesione_corrente
             WHERE artista = nome_arte_solista;
         END IF;
     END IF;
@@ -407,19 +424,17 @@ BEGIN
     EXCEPTION
         -- Gestione degli errori
         WHEN OTHERS THEN
-        -- Annulla la transazione in caso di errore
-        ROLLBACK;
-        -- Solleva l'eccezione per visualizzare l'errore
-        RAISE NOTICE 'Errore nella creazione della partecipazione del solista al gruppo: %', SQLERRM;
+            -- Solleva l'eccezione per visualizzare l'errore
+            RAISE NOTICE 'Errore nella creazione della partecipazione del solista al gruppo: %', SQLERRM;
+            ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
 
 CALL CreaPartecipazioneSolistaGruppo('PopStar', 'Artista1234', '2024-06-08');
-CALL CreaPartecipazioneSolistaGruppo('PopStar', 'Artista1234', '2024-06-08');
-CALL CreaPartecipazioneSolistaGruppo('PopStar', 'BandABC', '2024-06-08');
-CALL CreaPartecipazioneSolistaGruppo('PopStar', 'Group123', '2024-06-08');
+CALL CreaPartecipazioneSolistaGruppo('PopStar', 'Artista1234', '2024-06-08'); -- controllo Il solista è già nel gruppo specificato
+CALL CreaPartecipazioneSolistaGruppo('PopStar', 'BandABC',     '2024-06-08');
+CALL CreaPartecipazioneSolistaGruppo('PopStar', 'Group123',    '2024-06-08');
 PERFORM query;
-
 
 ---------------------------------------------------------------------------------------------------
 
@@ -433,6 +448,7 @@ This executes query and discards the result. Write the query the same way you wo
  * Aggiunge una nuova canzone al database e gestisce la relazione "lavora_a" con solisti.
  *
  * INPUT:   titolo                      VARCHAR(255)    - Titolo della canzone
+ * INPUT:   produzione_id               INT         - Id della produzione
  * INPUT:   testo                       TEXT            - Testo della canzone
  * INPUT:   data_di_registrazione       DATE            - Data di registrazione della canzone
  * INPUT:   lunghezza_in_secondi        INT             - Lunghezza in secondi della canzone
@@ -443,7 +459,8 @@ This executes query and discards the result. Write the query the same way you wo
  * INPUT:   codice_fiscale_tecnico      CHAR(16)        - Codice fiscale del tecnico che lavora sulla canzone
  */
 CREATE OR REPLACE PROCEDURE AggiungiCanzoneEPartecipazioni(
-    titolo VARCHAR(255), 
+    titolo VARCHAR(255),
+    produzione_id INT,
     testo TEXT, 
     data_di_registrazione DATE, 
     lunghezza_in_secondi INT,
@@ -459,9 +476,10 @@ declare
     solista_nome VARCHAR(255);
 BEGIN
     -- Inserisce la canzone
-    INSERT INTO CANZONE (titolo, testo, data_di_registrazione, lunghezza_in_secondi, nome_del_file, percorso_di_sistema, estensione)
-    VALUES (titolo, testo, data_di_registrazione, lunghezza_in_secondi, nome_del_file, percorso_di_sistema, estensione)
+    INSERT INTO CANZONE (titolo, produzione, testo, data_di_registrazione, lunghezza_in_secondi, nome_del_file, percorso_di_sistema, estensione)
+    VALUES (titolo, produzione_id, testo, data_di_registrazione, lunghezza_in_secondi, nome_del_file, percorso_di_sistema, estensione)
     RETURNING codice INTO codice_canzone;
+
     -- Inserisce la partecipazione dei solisti
     FOREACH solista_nome IN ARRAY solisti_nome_arte LOOP
 
@@ -473,6 +491,7 @@ BEGIN
 
         -- Se l'artista (solista) esiste, inserisce la partecipazione nella canzone
         IF FOUND THEN
+
             -- Verifica se il solista è già presente nella canzone
             INSERT INTO PARTECIPAZIONE (solista, canzone)
             VALUES (solista_nome, codice_canzone);
@@ -491,12 +510,14 @@ EXCEPTION
     -- Gestione degli errori
     WHEN OTHERS THEN
         -- Solleva l'eccezione per visualizzare l'errore
-        RAISE NOTICE 'Errore durante l aggiunta della canzone: %', SQLERRM;
+        RAISE EXCEPTION 'Errore durante l aggiunta della canzone: %', SQLERRM;
+        ROLLBACK;    -- Annulla la transazione in caso di errore
 END;
 $$;
 
 CALL AggiungiCanzoneEPartecipazioni(
     'Titolo della Canzone',
+    1,
     'Testo della canzone',
     '2024-06-09',
     300, -- Lunghezza in secondi
