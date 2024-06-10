@@ -23,33 +23,6 @@ Se esiste almeno una riga con codice = 123 nella tabella PRODUZIONE, questa quer
 
 ---------------------------------------------------------------------------------------------------
 
--- TRIGGER: "Aggiunta una fascia oraria": "FASCIA-->ORARIA-->ORARIO": controllo "numero ore prenotate totali"
-
--- Creazione della funzione trigger
-CREATE OR REPLACE FUNCTION aggiorna_ore_prenotate()
-RETURNS TRIGGER AS $$
-DECLARE
-    ore_prenotate INTERVAL;
-BEGIN
-    -- Calcolo delle ore prenotate
-    ore_prenotate := NEW.orario_fine - NEW.orario_inizio;
-    
-    -- Aggiorna il numero totale di ore prenotate nella tabella ORARIO
-    UPDATE ORARIO
-    SET n_ore_prenotate_totali = n_ore_prenotate_totali + EXTRACT(EPOCH FROM ore_prenotate) / 3600
-    WHERE ordine = NEW.oraria;
-    
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Creazione del trigger
-CREATE TRIGGER T5
-AFTER INSERT ON FASCIA_ORARIA
-FOR EACH ROW
-EXECUTE FUNCTION aggiorna_ore_prenotate();
-
-
 -- TRIGGER: un ordine e una prenotazione possono essere annullati solo se il giorno a cui fanno riferimento non è antecedente al giorno in cui si fa la richiesta
 
 -- creare un trigger per fare in modo che le fascie orarie non overleappino, guardare la query gia creata per costruirlo.

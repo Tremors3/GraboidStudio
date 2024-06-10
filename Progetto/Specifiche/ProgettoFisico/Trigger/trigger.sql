@@ -317,3 +317,32 @@ FOR EACH ROW WHEN (OLD.tipo = TRUE AND NEW.annullata = TRUE AND OLD.annullata = 
 EXECUTE FUNCTION decrementa_giorni_pacchetto();
 
 ---------------------------------------------------------------------------------------------------
+-- TRIGGER: Aggiorna il numero totale di ore prenotate dopo la modifica di una fascia oraria.
+
+-- Creazione della funzione trigger
+CREATE OR REPLACE FUNCTION aggiorna_ore_prenotate()
+RETURNS TRIGGER AS $$
+DECLARE
+    nuove_ore_prenotate INTERVAL;
+    vecchie_ore_prenotate INTERVAL;
+BEGIN
+    -- Calcolo delle ore prenotate
+    nuove_ore_prenotate := NEW.orario_fine - NEW.orario_inizio;
+    vecchie_ore_prenotate := OLD.orario_fine - OLD.orario_inizio;
+
+    -- Aggiorna il numero totale di ore prenotate nella tabella ORARIO
+    UPDATE ORARIO
+    SET n_ore_prenotate_totali = 
+        n_ore_prenotate_totali + EXTRACT(HOUR FROM nuove_ore_prenotate) - EXTRACT(HOUR FROM vecchie_ore_prenotate)
+    WHERE ordine = NEW.oraria;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER T5
+AFTER UPDATE ON FASCIA_ORARIA
+FOR EACH ROW WHEN (NEW.orario_inizio != OLD.orario_inizio OR NEW.orario_fine != OLD.orario_fine)
+EXECUTE FUNCTION aggiorna_ore_prenotate();
+
+---------------------------------------------------------------------------------------------------

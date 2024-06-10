@@ -12,7 +12,7 @@ BEGIN
     WHERE ordine = ordine_id;
 EXCEPTION
     WHEN OTHERS THEN -- Gestione degli errori
-        RAISE NOTICE 'Errore nell aggiornamento del costo totale di un ordine: %', SQLERRM;
+        RAISE EXCEPTION 'Errore nell aggiornamento del costo totale di un ordine: %', SQLERRM;
         ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
@@ -64,7 +64,7 @@ BEGIN
     VALUES(ordine_id, 'Da pagare', CalcolaCostoTotale(ordine_id), NULL);
 EXCEPTION
     WHEN OTHERS THEN -- Gestione degli errori
-        RAISE NOTICE 'Errore nella creazione di un ordine di tipo pacchetto: %', SQLERRM;
+        RAISE EXCEPTION 'Errore nella creazione di un ordine di tipo pacchetto: %', SQLERRM;
         ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
@@ -96,7 +96,7 @@ BEGIN
     WHERE ordine = pacchetto_id;
 EXCEPTION
     WHEN OTHERS THEN -- Gestione degli errori
-        RAISE NOTICE 'Errore nella creazione di una prenotazione giornaliera: %', SQLERRM;
+        RAISE EXCEPTION 'Errore nella creazione di una prenotazione giornaliera: %', SQLERRM;
         ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
@@ -192,7 +192,7 @@ BEGIN
     );
 EXCEPTION
     WHEN OTHERS THEN -- Gestione degli errori
-        RAISE NOTICE 'Errore nella creazione di un ordine e di una prenotazione oraria: %', SQLERRM;
+        RAISE EXCEPTION 'Errore nella creazione di un ordine e di una prenotazione oraria: %', SQLERRM;
         ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
@@ -237,7 +237,7 @@ BEGIN
     RETURN ordine_id;
 EXCEPTION
     WHEN OTHERS THEN -- Gestione degli errori
-        RAISE NOTICE 'Errore nella creazione di un ordine orario: %', SQLERRM;
+        RAISE EXCEPTION 'Errore nella creazione di un ordine orario: %', SQLERRM;
         ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
@@ -264,6 +264,7 @@ CREATE OR REPLACE PROCEDURE CreaPrenotazioneOraria(
     sala_numero INT) LANGUAGE plpgsql AS $$
 DECLARE
     prenotazione_id INT;
+    ore_prenotate_parziali INT;
     ore_prenotate_totali INT;
 BEGIN
     -- Controllo lunghezze array di orari
@@ -286,11 +287,13 @@ BEGIN
     VALUES (prenotazione_id, ordine_id);
 
     -- inserimento fasce orarie
+    ore_prenotate_totali := 0;
     FOR i IN 1..array_length(orari_inizio, 1) LOOP
         INSERT INTO FASCIA_ORARIA (oraria, orario_inizio, orario_fine)
         VALUES (prenotazione_id, orari_inizio[i], orari_fine[i]);
         -- numero di ore
-        SELECT EXTRACT(HOUR FROM orari_fine[i] - orari_inizio[i]) INTO ore_prenotate_totali;
+        SELECT EXTRACT(HOUR FROM orari_fine[i] - orari_inizio[i]) INTO ore_prenotate_parziali;
+        ore_prenotate_totali := ore_prenotate_totali + ore_prenotate_parziali;
     END LOOP;
     
     -- aggiornamento numero totale di ore
@@ -304,7 +307,7 @@ BEGIN
     WHERE p.ordine = ordine_id;
 EXCEPTION
     WHEN OTHERS THEN -- Gestione degli errori
-        RAISE NOTICE 'Errore nella creazione di una prenotazione oraria: %', SQLERRM;
+        RAISE EXCEPTION 'Errore nella creazione di una prenotazione oraria: %', SQLERRM;
         ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
@@ -361,7 +364,7 @@ EXCEPTION
     
     WHEN OTHERS THEN -- Gestione degli errori
        
-        RAISE NOTICE 'Errore nella creazione dell artista e del solista: %', SQLERRM;
+        RAISE EXCEPTION 'Errore nella creazione dell artista e del solista: %', SQLERRM;
         ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
@@ -417,7 +420,7 @@ EXCEPTION
     -- Gestione degli errori
     WHEN OTHERS THEN
         -- Solleva l'eccezione per visualizzare l'errore
-        RAISE NOTICE 'Errore nella creazione dell artista e del gruppo: %', SQLERRM;
+        RAISE EXCEPTION 'Errore nella creazione dell artista e del gruppo: %', SQLERRM;
         ROLLBACK;    -- Annulla la transazione in caso di errore
 
 END
@@ -478,7 +481,7 @@ BEGIN
         -- Gestione degli errori
         WHEN OTHERS THEN
             -- Solleva l'eccezione per visualizzare l'errore
-            RAISE NOTICE 'Errore nella creazione della partecipazione del solista al gruppo: %', SQLERRM;
+            RAISE EXCEPTION 'Errore nella creazione della partecipazione del solista al gruppo: %', SQLERRM;
             ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
