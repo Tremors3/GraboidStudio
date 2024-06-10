@@ -25,35 +25,71 @@ Se esiste almeno una riga con codice = 123 nella tabella PRODUZIONE, questa quer
 
 RV4: Nella relazione partecipazione, si tiene traccia solo degli artisti che non sono membri del gruppo musicale che ha composto la produzione e che non sia il solista che abbia composto da solo una canzone.
 
-    Implementazione: Questo vincolo può essere implementato tramite un vincolo CHECK sulla tabella PARTECIPAZIONE.
+    Implementazione: .
 
-ALTER TABLE PARTECIPAZIONE
-ADD CONSTRAINT check_participation_rule
-CHECK (
-    (
-        SELECT COUNT(*) 
+CREATE OR REPLACE FUNCTION check_participation_rule() 
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Controllo per il solista
+    IF EXISTS (
+        SELECT 1 
         FROM SOLISTA 
         WHERE artista = NEW.solista 
         AND NOT EXISTS (
             SELECT 1 FROM GRUPPO WHERE artista = NEW.solista
         )
-    ) > 0
-);
+    ) THEN
+        RETURN NEW;
+    ELSE
+        RAISE EXCEPTION 'Un solista può partecipare solo se non è già associato a un gruppo.';
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_participation_rule_trigger
+BEFORE INSERT ON PARTECIPAZIONE
+FOR EACH ROW
+EXECUTE FUNCTION check_participation_rule();
+
 
 ---------------------------------------------------------------------------------------------------
-
 RV5: Non è possibile che un Gruppo partecipi alla composizione di una canzone appartenente ad un altro artista.
 
-ALTER TABLE PARTECIPAZIONE
-ADD CONSTRAINT check_group_composition
-CHECK (
-    NOT EXISTS (
-        SELECT 1 FROM CANZONE C, GRUPPO G -- errata direi (almeno la selezione che seleziona 1) ma giusto per avere un idea
-        WHERE C.artista = G.artista
-        AND C.codice = NEW.canzone
-        AND G.artista = NEW.solista
-    )
-);
+Spiegazione:
+
+    Funzione check_group_composition:
+        La funzione verifica se il Gruppo (identificato da NEW.solista) sta partecipando alla composizione di una canzone (identificata da NEW.canzone) appartenente a un artista diverso.
+        Se trova che il Gruppo sta partecipando alla composizione di una canzone di un altro artista, solleva un eccezione con il messaggio appropriato.
+    Trigger RV5:
+        Questo trigger si attiva prima di ogni inserimento nella tabella PARTECIPAZIONE.
+        Il trigger esegue la funzione check_group_composition per verificare il vincolo desiderato.
+
+CREATE OR REPLACE FUNCTION check_group_composition() 
+RETURNS TRIGGER AS $$
+DECLARE
+    group_artist VARCHAR(255);
+    song_artist VARCHAR(255);
+BEGIN
+    -- Otteniamo l'artista del gruppo
+    SELECT artista INTO group_artist FROM GRUPPO WHERE artista = NEW.solista;
+
+    -- Otteniamo l'artista della canzone
+    SELECT artista INTO song_artist FROM CANZONE WHERE codice = NEW.canzone;
+
+    -- Verifichiamo se il gruppo sta partecipando alla composizione di una canzone di un altro artista
+    IF group_artist IS NOT NULL AND group_artist <> song_artist THEN
+        RAISE EXCEPTION 'Un gruppo non può partecipare alla composizione di una canzone di un altro artista.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER RV5
+BEFORE INSERT ON PARTECIPAZIONE
+FOR EACH ROW
+EXECUTE FUNCTION check_group_composition();
+
 
 RV6: L’attributo nome di Tipologia comprende il seguente dominio "giornaliero", "settimanale", "mensile".
 
@@ -104,17 +140,45 @@ EXECUTE FUNCTION check_ordine_orario();
 
 RV10: Nel caso si vogliano prenotare due giorni [settimane o mesi] è necessario effettuare due ordini distinti; quindi un ordine di tipo Giornaliero [Settimanale o Mensile] per giorno [settimana o mese] che si vuole prenotare. Gli ordini di tipo Giornaliero, Settimanale e Mensile possono effettuare prenotazioni Giornaliere, NON Orarie.
 
-    Implementazione: Questo vincolo può essere implementato con un vincolo CHECK sulla tabella PACCHETTO.
+    Implementazione:
 
-ALTER TABLE PACCHETTO
-ADD CONSTRAINT check_tipo_pacchetto
-CHECK (
-    (
-        SELECT nome FROM TIPOLOGIA WHERE nome = NEW.tipologia AND n_giorni_prenotati_totali = NEW.n_giorni
-    ) IN ('giornaliero', 'settimanale', 'mensile')
-);
+Funzione check_tipo_pacchetto:
 
-creare un trigger per fare in modo che le fascie orarie non overleappino, guardare la query gia creata per costruirlo.
+    Questa funzione controlla se il nuovo pacchetto che si sta inserendo nella tabella PACCHETTO rispetta il vincolo RV10.
+    Utilizza una query per verificare se esiste una tipologia nella tabella TIPOLOGIA che corrisponda al tipo di tipologia e al numero di giorni prenotati totali specificato nel nuovo pacchetto.
+    Se la tipologia non esiste o non è tra 'giornaliero', 'settimanale' o 'mensile', viene sollevata un eccezione.
+
+Trigger check_tipo_pacchetto_trigger:
+
+    Questo trigger viene attivato prima di ogni inserimento nella tabella PACCHETTO.
+    Esegue la funzione check_tipo_pacchetto appena definita per ogni riga che viene inserita nella tabella PACCHETTO.
+    Se la funzione plpgsql solleva un'eccezione, l'inserimento del pacchetto non avviene.
+
+-- Creazione della funzione per il controllo del vincolo RV10
+CREATE OR REPLACE FUNCTION check_tipo_pacchetto()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Controllo se il tipo di tipologia è corretto
+    IF NOT EXISTS (
+        SELECT 1 FROM TIPOLOGIA 
+        WHERE nome = NEW.tipologia 
+        AND n_giorni_prenotati_totali = NEW.n_giorni
+        AND nome IN ('giornaliero', 'settimanale', 'mensile')
+    ) THEN
+        RAISE EXCEPTION 'Impossibile creare un pacchetto con questo tipo di tipologia e numero di giorni prenotati';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Creazione del trigger BEFORE INSERT sulla tabella PACCHETTO
+CREATE TRIGGER check_tipo_pacchetto_trigger
+BEFORE INSERT ON PACCHETTO
+FOR EACH ROW
+EXECUTE FUNCTION check_tipo_pacchetto();
+
+-- creare un trigger per fare in modo che le fascie orarie non overleappino, guardare la query gia creata per costruirlo.
 
 fare un trigger che controli che n giorni prentoati totali non superi il numero di giorni nella tipologia di un dato ordine
 
