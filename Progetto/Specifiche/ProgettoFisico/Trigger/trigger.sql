@@ -346,3 +346,48 @@ FOR EACH ROW WHEN (NEW.orario_inizio != OLD.orario_inizio OR NEW.orario_fine != 
 EXECUTE FUNCTION aggiorna_ore_prenotate();
 
 ---------------------------------------------------------------------------------------------------
+
+-- TRIGGER: una prenotazione può essere annullata solo se fa riferimento ad una data futura.
+
+-- Creazione della funzione per il trigger
+CREATE OR REPLACE FUNCTION check_data_futura_per_prenotazione()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Verifica se la data della prenotazione è futura
+    IF NEW.giorno < CURRENT_DATE THEN
+        -- Se la data non è futura, impedisce l'annullamento
+        RAISE EXCEPTION 'Non è possibile annullare una prenotazione passata.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER T6
+AFTER UPDATE ON prenotazione
+FOR EACH ROW WHEN (NEW.annullata = TRUE AND OLD.annullata = FALSE)
+EXECUTE FUNCTION check_data_futura_per_prenotazione();
+
+---------------------------------------------------------------------------------------------------
+
+-- TRIGGER: un ordine può essere annullato solo se fa riferimento ad una data futura.
+
+CREATE OR REPLACE FUNCTION check_data_futura_per_ordine()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Verifica se la data della prenotazione è futura
+    IF NEW.timestamp < CURRENT_DATE THEN
+        -- Se la data non è futura, impedisce l'annullamento
+        RAISE EXCEPTION 'Non è possibile annullare un ordine passato.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER T7
+AFTER UPDATE ON ordine
+FOR EACH ROW WHEN (NEW.annullato = TRUE AND OLD.annullato = FALSE)
+EXECUTE FUNCTION check_data_futura_per_ordine();
+
+---------------------------------------------------------------------------------------------------

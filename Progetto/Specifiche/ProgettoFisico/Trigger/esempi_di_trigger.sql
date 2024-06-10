@@ -23,6 +23,4 @@ Se esiste almeno una riga con codice = 123 nella tabella PRODUZIONE, questa quer
 
 ---------------------------------------------------------------------------------------------------
 
--- TRIGGER: un ordine e una prenotazione possono essere annullati solo se il giorno a cui fanno riferimento non è antecedente al giorno in cui si fa la richiesta
-
--- creare un trigger per fare in modo che le fascie orarie non overleappino, guardare la query gia creata per costruirlo.
+-- TRIGGER: creare un trigger per fare in modo che le fascie orarie non overleappino, guardare la query gia creata per costruirlo.
