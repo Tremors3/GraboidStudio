@@ -263,3 +263,34 @@ FOR EACH ROW
 EXECUTE FUNCTION check_max_tecnici();
 
 ---------------------------------------------------------------------------------------------------
+
+-- T3 Creazione della funzione trigger che controlla che se un ordine è stato già pagato allora il campo annullato non può essere false
+
+CREATE OR REPLACE FUNCTION check_ordine_pagato()
+RETURNS TRIGGER AS $$
+BEGIN
+
+    PERFORM FROM ORDINE
+    JOIN PAGAMENTO ON ordine = NEW.codice
+    WHERE stato = 'Pagato';
+
+    -- Verifica se l'ordine è stato pagato
+    IF FOUND THEN
+        -- Se l'ordine è stato pagato, impedisce che il campo annullato sia impostato su TRUE
+        IF NEW.annullato = TRUE THEN
+            RAISE EXCEPTION 'Non è possibile annullare un ordine già pagato.';
+        END IF;
+
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Creazione del trigger
+CREATE TRIGGER T3
+BEFORE UPDATE ON ORDINE
+FOR EACH ROW
+EXECUTE FUNCTION check_ordine_pagato();
+
+---------------------------------------------------------------------------------------------------

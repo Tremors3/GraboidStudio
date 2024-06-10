@@ -23,31 +23,6 @@ Se esiste almeno una riga con codice = 123 nella tabella PRODUZIONE, questa quer
 
 ---------------------------------------------------------------------------------------------------
 
--- trigger che controlla che se un ordine è stato già pagato allora il campo annullato non può essere false
-
--- Creazione della funzione trigger
-CREATE OR REPLACE FUNCTION check_ordine_pagato()
-RETURNS TRIGGER AS $$
-BEGIN
-    -- Verifica se l'ordine è stato pagato
-    IF EXISTS (SELECT 1 FROM PAGAMENTO WHERE ordine = NEW.codice AND stato = 'Pagato') THEN
-        -- Se l'ordine è stato pagato, impedisce che il campo annullato sia impostato su FALSE
-        IF NEW.annullato = FALSE THEN
-            RAISE EXCEPTION 'Non è possibile annullare un ordine già pagato';
-        END IF;
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Creazione del trigger
-CREATE TRIGGER T3
-BEFORE UPDATE ON ORDINE
-FOR EACH ROW
-EXECUTE FUNCTION check_ordine_pagato();
-
----------------------------------------------------------------------------------------------------
-
 -- trigger annullando una prenotazione giornaliera dobbiamo andare a decrementare di uno il numero di giorni prenotati totali di un ordine di tipo pacchetto
 
 -- Creazione della funzione trigger
