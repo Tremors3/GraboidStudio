@@ -42,6 +42,9 @@ union
 --Viene visualizzato un elenco di canzoni a cui lavora un tecnico, viene richiesto di visualizzare il titolo,
 --la produzione di cui fa parte se è in una produzione, la lunghezza, data di registrazione, testo.
 
+SELECT titolo, produzione, lunghezza_in_secondi, data_di_registrazione, testo FROM LAVORA_A
+JOIN CANZONE on LAVORA_A.canzone = CANZONE.codice
+WHERE LAVORA_A.tecnico = 'TCNAUD85M01H501Z';
 
 --T2) INSERIRE I DATI DI UNA CANZONE
 --Inserimento informazioni generali della canzone titolo, lunghezza, data di registrazione, testo, e il file
@@ -70,12 +73,6 @@ SET produzione = 2
 WHERE codice = 2 AND (
     (SELECT stato FROM PRODUZIONE WHERE codice = 2) != 'Pubblicazione'
 );
-
-------------------------------------- FUNZIONA  -------------------------------------
-
-SELECT titolo, produzione, lunghezza_in_secondi, data_di_registrazione, testo FROM LAVORA_A
-JOIN CANZONE on LAVORA_A.canzone = CANZONE.codice
-WHERE  LAVORA_A.tecnico = 'TCNAUD85M01H501Z';
 
 ------------------------------------- OPERATORE -------------------------------------
 
@@ -168,6 +165,7 @@ JOIN (
 -- nel popolamento siamo sicuri che quella sala non venga occupata da altre prenotazioni, inoltre le sale rimanenti sappiamo che sono tutte libere per quel giorno.
 -- noi vogliamo che inserendo il giorno 2023-02-04 e l'ora di inizio 18:00:00 alle ore 23:00:00, ci venga mostrato in output il codice di questa sala e anche il codice delle altre sale 
 
+/*
 -- VANNO BENE ---
 
 ()  [10:00 11:00]
@@ -189,6 +187,7 @@ OR
 ([ 10:00 12:00)]  --8 - 12 
 [ (10:00 12:00])  --11 -13
 ------------------
+*/
 
 (
     SELECT s.numero, s.piano
@@ -213,11 +212,13 @@ EXCEPT
 (
     SELECT sala_numero, sala_piano
     FROM PRENOTAZIONE
-    WHERE annullata = FALSE AND tipo = TRUE AND giorno = '2023-02-04';
-)
+    WHERE annullata = FALSE AND tipo = TRUE AND giorno = '<giorno>'
+);
 
+/* DATI PROVA
 -- in questo giorno 2023-02-04 sappiamo che esiste una prenotazione che tiene la sala 1 numero 1 occupata dalle ore '09:00:00' fino alle '12:00:00' e
 -- dalle ore '13:00:00' fino alle '17:00:00', noi abbiamo 5 sale in totale
 giorno '2023-02-04'
 orari_inizi['20:00:00', '18:00:00', '10:00:00', '12:00:00', '12:00:00', '11:00:00']
 orarifine['23:00:00', '23:00:00', '12:00:00', '13:00:00', '14:00:00', '13:00:00']
+*/

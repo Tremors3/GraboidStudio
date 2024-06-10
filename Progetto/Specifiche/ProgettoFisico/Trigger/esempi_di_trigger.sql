@@ -22,6 +22,3 @@ WHERE codice = 123;
 Se esiste almeno una riga con codice = 123 nella tabella PRODUZIONE, questa query restituirà una riga con valore 1. Se non esiste alcuna riga che soddisfi la condizione, la query non restituirà alcun risultato.
 
 ---------------------------------------------------------------------------------------------------
-
--- TRIGGER: creare un trigger per fare in modo che le fascie orarie non overleappino, guardare la query gia creata per costruirlo.
-
