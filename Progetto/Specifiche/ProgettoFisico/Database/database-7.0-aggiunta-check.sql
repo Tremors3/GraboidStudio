@@ -258,13 +258,11 @@ CREATE TABLE FASCIA_ORARIA (
         OR (orario_inizio >= '14:00' AND orario_fine <= '23:00'));
 ); 
  
--- Creazione della tabella TIPO_TECNICO
 CREATE TABLE TIPO_TECNICO (
     nome VARCHAR(64) PRIMARY KEY,
     CHECK (nome IN ('Fonico', 'Tecnico del Suono', 'Tecnico del Suono_AND_Fonico'))
 ); 
  
--- Creazione della tabella TECNICO
 CREATE TABLE TECNICO (
     codice_fiscale CHAR(16) PRIMARY KEY,
     sala_piano INT NOT NULL,
@@ -279,21 +277,18 @@ CREATE TABLE TECNICO (
     FOREIGN KEY (tipo_tecnico) REFERENCES TIPO_TECNICO(nome) ON UPDATE CASCADE ON DELETE RESTRICT
 ); 
  
--- Creazione della tabella EMAIL_T
 CREATE TABLE EMAIL_T (
     email VARCHAR(255) PRIMARY KEY,
     tecnico CHAR(16) NOT NULL,
     FOREIGN KEY (tecnico) REFERENCES TECNICO(codice_fiscale) ON UPDATE CASCADE ON DELETE CASCADE
 ); 
  
--- Creazione della tabella TELEFONO_T
 CREATE TABLE TELEFONO_T (
     numero VARCHAR(15) PRIMARY KEY,
     tecnico CHAR(16) NOT NULL,
     FOREIGN KEY (tecnico) REFERENCES TECNICO(codice_fiscale) ON UPDATE CASCADE ON DELETE CASCADE
 ); 
  
--- Creazione della tabella LAVORA_A
 CREATE TABLE LAVORA_A (
     tecnico CHAR(16),
     canzone INTEGER,

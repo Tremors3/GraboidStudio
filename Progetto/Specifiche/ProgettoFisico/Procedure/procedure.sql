@@ -18,7 +18,7 @@ END
 $$;
 CALL AggiornaCostoOrdine(1);
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 /* AGGIUNGE UN ARTISTA
  * La funzione crea il record di un artista con i parametri passati come argomento.
@@ -34,7 +34,7 @@ END
 $$;
 CALL AggiungiArtista('Tremore', '2024-06-08');
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 /* CREA UN NUOVO ORDINE DI TIPO PACCHETTO
  * La procedura crea un ordine di tipo pacchetto.
@@ -104,7 +104,7 @@ CALL CreaPrenotazioneGiornaliera(1, '2023-01-10', 2, 2); -- Funzionante
 CALL CreaPrenotazioneGiornaliera(1, '2022-01-01', 2, 2); -- Eccezione: Indietro nel tempo
 CALL CreaPrenotazioneGiornaliera(1, '2023-05-01', 2, 2); -- Eccezione: Più di 90 giorni
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 /* CREA UN ORDINE DI TIPO ORARIO E RELATIVA PRENOTAZIONE
  * La procedura produce un ordine di tipo orario e la rispettiva prenotazione.
@@ -271,7 +271,7 @@ CALL CreaPrenotazioneOraria(
     2, 2
 );
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 /* CREA UN SOLISTA
  * Crea un nuovo artista e un solista associato nel database.
@@ -332,7 +332,7 @@ CALL CreaArtistaSolista(
     '098762222'
 );
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 /* CREA UN ARTISTA E UN GRUPPO
  * Crea un nuovo artista e un gruppo associato nel database.
@@ -387,7 +387,7 @@ CALL CreaArtistaGruppo(
     '2024-01-01'
 );
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 /* CREA PARTECIPAZIONE SOLISTA GRUPPO
  * Gestisce la partecipazione di un solista a un gruppo nel database.
  *
@@ -444,7 +444,7 @@ CALL CreaPartecipazioneSolistaGruppo('PopStar', 'BandABC',     '2024-06-08');
 CALL CreaPartecipazioneSolistaGruppo('PopStar', 'Group123',    '2024-06-08');
 PERFORM query;
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 /*
  * AGGIUNGI CANZONE

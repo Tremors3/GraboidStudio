@@ -36,7 +36,7 @@ BEFORE INSERT ON prenotazione
 FOR EACH ROW WHEN (NEW.tipo = TRUE)
 EXECUTE FUNCTION check_ordine_orario();
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 /* RV2: Una produzione una volta pubblicata diventa immutabile quindi non è più possibile aggiungere canzoni. 
  * IMPLEMENTAZIONE: Questo vincolo può essere implementato con un trigger che si attiva prima dell'inserimento 
@@ -62,7 +62,7 @@ BEFORE INSERT ON CANZONE
 FOR EACH ROW
 EXECUTE FUNCTION controlla_produzione_immutabile();
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 /* RV3: L'entità Singolo comprende da una a tre canzoni, l'entità Extended Play comprende un massimo di 5 canzoni e 
  * l'entità Album non ha un limite al numero di canzoni fintanto che la durata complessiva stia sotto l'ora.
@@ -115,7 +115,7 @@ BEFORE INSERT ON CANZONE
 FOR EACH ROW
 EXECUTE FUNCTION check_tipo_produzione();
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 /* RV4: Un solista può partecipare ad una canzone soltanto se: non è il compositore della produzione 
  * nella quale compare la canzone interessata; non fa parte del gruppo che ha composto la produzione 
@@ -164,7 +164,7 @@ BEFORE INSERT ON PARTECIPAZIONE
 FOR EACH ROW
 EXECUTE FUNCTION check_participation_rule();
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 /* T1: Dato un certo ordine, controllare che il numero di giorni prenotati non superi il numero di 
  * giorni prenotabili offerti dal pacchetto.
@@ -197,7 +197,7 @@ BEFORE INSERT ON prenotazione
 FOR EACH ROW WHEN (NEW.tipo = TRUE) 
 EXECUTE FUNCTION ControllaGiorniPrenotati();
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 /* T2: Una sala può avere al massimo due tecnici. Uno di tipo Fonico e l'altro di tipo Tecnico del Suono.
  * Può anche darsi che una sala contenga soltanto un tecnico di tipo: "Tecnico del Suono_AND_Fonico".
@@ -240,7 +240,7 @@ BEFORE INSERT OR UPDATE ON TECNICO
 FOR EACH ROW
 EXECUTE FUNCTION check_max_tecnici();
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 /* T3: Se un ordine è già stato pagato allora il campo "annullato" non può essere impostato a FALSE.
  */
@@ -268,7 +268,7 @@ BEFORE UPDATE ON ORDINE
 FOR EACH ROW WHEN (NEW.annullato = TRUE AND OLD.annullato = FALSE)
 EXECUTE FUNCTION check_ordine_pagato();
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 /* T4: Annullando una prenotazione giornaliera dobbiamo andare a decrementare di uno il numero di giorni 
  * prenotati totali di un ordine di tipo pacchetto.
@@ -290,7 +290,7 @@ AFTER UPDATE ON prenotazione
 FOR EACH ROW WHEN (OLD.tipo = TRUE AND NEW.annullata = TRUE AND OLD.annullata = FALSE)
 EXECUTE FUNCTION decrementa_giorni_pacchetto();
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 /* T5: Aggiorna il numero totale di ore prenotate dopo la modifica di una fascia oraria.
  */
 CREATE OR REPLACE FUNCTION aggiorna_ore_prenotate()
@@ -318,7 +318,7 @@ AFTER UPDATE ON FASCIA_ORARIA
 FOR EACH ROW WHEN (NEW.orario_inizio != OLD.orario_inizio OR NEW.orario_fine != OLD.orario_fine)
 EXECUTE FUNCTION aggiorna_ore_prenotate();
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 /* T6: Una prenotazione può essere annullata solo se fa riferimento ad una data futura.
  */
@@ -340,7 +340,7 @@ AFTER UPDATE ON prenotazione
 FOR EACH ROW WHEN (NEW.annullata = TRUE AND OLD.annullata = FALSE)
 EXECUTE FUNCTION check_data_futura_per_prenotazione();
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 /* T7: Un ordine può essere annullato solo se fa riferimento ad una data futura.
  */
@@ -362,4 +362,4 @@ AFTER UPDATE ON ordine
 FOR EACH ROW WHEN (NEW.annullato = TRUE AND OLD.annullato = FALSE)
 EXECUTE FUNCTION check_data_futura_per_ordine();
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------

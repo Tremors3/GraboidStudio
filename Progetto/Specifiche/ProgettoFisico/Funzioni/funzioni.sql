@@ -14,7 +14,7 @@ END
 $$;
 SELECT CalcolaEtaArtista('VCTFNC90A01H501X');
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 /* CONTROLLA IL TIPO DI UN ORDINE
  * La funzione controlla il tipo di un ordine.
@@ -60,7 +60,7 @@ END
 $$;
 SELECT CalcolaCostoTotale(6);
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 /* CONTA NUMERO DI CANZONI
  * La funzione conta il numero di canzoni della produzione di cui è fornito il codice.
