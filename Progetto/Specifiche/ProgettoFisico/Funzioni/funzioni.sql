@@ -1,13 +1,8 @@
-/*IMMUTABLE, STABLE, VOLATILE
- * https://www.postgresql.org/docs/current/xfunc-volatility.html
-*/
----------------------------------------------------------------------------------------------------
-
 /* CALCOLA L'ETA DELL'ARTISTA
  * La funzione calcola l'età dell'artista del quale è stato fornito il codice fiscale.
  *
  * INPUT:   cd      INT
- * OUTPUT:  eta     DECIMAL
+ * OUTPUT:  età     DECIMAL
  */
 CREATE OR REPLACE FUNCTION CalcolaEtaArtista(cd VARCHAR(16)) RETURNS INT LANGUAGE plpgsql AS $$
 DECLARE
