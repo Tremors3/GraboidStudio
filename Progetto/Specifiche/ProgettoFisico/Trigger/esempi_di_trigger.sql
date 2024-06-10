@@ -23,8 +23,6 @@ Se esiste almeno una riga con codice = 123 nella tabella PRODUZIONE, questa quer
 
 ---------------------------------------------------------------------------------------------------
 
--- un ordine e una prenotazione possono essere annullati solo se il giorno a cui fanno riferimento non è antecedente al giorno in cui si fa la richiesta
-
 -- TRIGGER: "Aggiunta una fascia oraria": "FASCIA-->ORARIA-->ORARIO": controllo "numero ore prenotate totali"
 
 -- Creazione della funzione trigger
@@ -52,5 +50,6 @@ FOR EACH ROW
 EXECUTE FUNCTION aggiorna_ore_prenotate();
 
 
+-- TRIGGER: un ordine e una prenotazione possono essere annullati solo se il giorno a cui fanno riferimento non è antecedente al giorno in cui si fa la richiesta
 
 -- creare un trigger per fare in modo che le fascie orarie non overleappino, guardare la query gia creata per costruirlo.
