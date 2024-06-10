@@ -1,8 +1,7 @@
--- Implementazione dei vincoli
-RV1: Non è necessario utilizzare i giorni di un pacchetto tutti in fila ma possono essere sfruttati nell’arco di 90 giorni. 
-
-    Implementazione: Impedire la creazione di una prenotazione dopo 90 giorni dall effettuazione dell ordine. Impedire inoltre di inserire una prenotazione in una data antecedente alla data di effettuazione dell ordine.
-
+/* RV1: Non è necessario utilizzare i giorni di un pacchetto tutti in fila ma possono essere sfruttati nell arco di 90 giorni. 
+ * IMPLEMENTAZIONE: Impedire la creazione di una prenotazione dopo 90 giorni dall effettuazione dell ordine.
+ * Impedire inoltre di inserire una prenotazione in una data antecedente alla data di effettuazione dell ordine.
+ */
 CREATE OR REPLACE FUNCTION check_ordine_orario() 
 RETURNS TRIGGER AS $$
 DECLARE
@@ -12,7 +11,7 @@ BEGIN
     IF NEW.tipo THEN
         -- Otteniamo la data di effettuazione dell'ordine
         SELECT timestamp INTO ordine_timestamp
-        FROM ordine WHERE codice = NEW.PACCHETTO; -- il pacchetto ha la stessa chiave primaria dell'ordine
+        FROM ordine WHERE codice = NEW.PACCHETTO;
         
         -- Calcoliamo la differenza dei giorni
         differenza_giorni := (NEW.giorno::date - ordine_timestamp::date);
@@ -22,9 +21,6 @@ BEGIN
             RAISE EXCEPTION 'Non è possibile creare una prenotazione che vada indietro nel tempo.';
         END IF;
         
-        -- Stampa la differenza dei giorni
-        --RAISE NOTICE 'differenza giorni: %', differenza_giorni;
-
         -- Controlliamo se la differenza è maggiore di 90 giorni
         IF differenza_giorni > 90 THEN
             RAISE EXCEPTION 'Non è possibile creare una prenotazione dopo 90 giorni dall effettuazione dell ordine.';
@@ -42,28 +38,10 @@ EXECUTE FUNCTION check_ordine_orario();
 
 ---------------------------------------------------------------------------------------------------
 
-RV2: Una produzione una volta pubblicata diventa immutabile quindi non è più possibile aggiungere canzoni.
-
-    Implementazione: Questo vincolo può essere implementato con un trigger che si attiva prima dell inserimento di una produzione, per garantire che non possano essere aggiunte nuove canzoni.
-
-Spiegazione:
-
-    Funzione PL/pgSQL (check_production_immutable):
-        Questa funzione controlla se la produzione associata alla nuova canzone (NEW.produzione) è stata pubblicata (stato = 'pubblicato').
-        Se la produzione è stata pubblicata, lancia un eccezione che impedisce l inserimento della nuova canzone.
-        Se la produzione non è stata pubblicata, restituisce semplicemente NEW.
-
-    Trigger check_production_immutable_trigger:
-        Questo trigger viene eseguito prima dell inserimento di una nuova riga nella tabella CANZONE.
-        Per ogni riga inserita (FOR EACH ROW), esegue la funzione check_production_immutable.
-        Il trigger è associato all evento BEFORE INSERT ON CANZONE, quindi viene attivato prima che i dati vengano effettivamente inseriti.
-
-Come funziona:
-
-    Quando si tenta di inserire una nuova canzone (INSERT INTO CANZONE), il trigger check_production_immutable_trigger verifica se la produzione associata (NEW.produzione) è già stata pubblicata.
-    Se la produzione è stata pubblicata (stato = 'pubblicato'), il trigger solleva un eccezione che impedisce l inserimento della canzone.
-    Se la produzione non è stata pubblicata, la nuova riga di CANZONE viene inserita con successo.
-
+/* RV2: Una produzione una volta pubblicata diventa immutabile quindi non è più possibile aggiungere canzoni. 
+ * IMPLEMENTAZIONE: Questo vincolo può essere implementato con un trigger che si attiva prima dell'inserimento 
+ * di una produzione.
+ */
 CREATE OR REPLACE FUNCTION controlla_produzione_immutabile() RETURNS TRIGGER AS $$
 BEGIN
     PERFORM artista
@@ -86,10 +64,9 @@ EXECUTE FUNCTION controlla_produzione_immutabile();
 
 ---------------------------------------------------------------------------------------------------
 
-RV3: L entità Singolo comprende da una a tre canzoni, l entità Extended Play comprende un massimo di 5 canzoni e l entità Album non ha un limite al numero di canzoni fintanto che la durata complessiva stia sotto l ora.
-
-    Implementazione: Questo vincolo può essere implementato con un vincolo CHECK sulla tabella CANZONE.
-
+/* RV3: L'entità Singolo comprende da una a tre canzoni, l'entità Extended Play comprende un massimo di 5 canzoni e 
+ * l'entità Album non ha un limite al numero di canzoni fintanto che la durata complessiva stia sotto l'ora.
+ */
 CREATE OR REPLACE FUNCTION check_tipo_produzione() RETURNS TRIGGER AS $$
 DECLARE
     tipo_produzione VARCHAR(25);
@@ -140,8 +117,10 @@ EXECUTE FUNCTION check_tipo_produzione();
 
 ---------------------------------------------------------------------------------------------------
 
-RV4: Nella relazione partecipazione, si tiene traccia solo degli artisti che non sono membri del gruppo musicale che ha composto la produzione e che non sia il solista che abbia composto da solo una canzone.
-
+/* RV4: Un solista può partecipare ad una canzone soltanto se: non è il compositore della produzione 
+ * nella quale compare la canzone interessata; non fa parte del gruppo che ha composto la produzione 
+ * nella quale si trova la canzone interessata.
+ */
 CREATE OR REPLACE FUNCTION check_participation_rule() 
 RETURNS TRIGGER AS $$
 DECLARE
@@ -186,10 +165,10 @@ FOR EACH ROW
 EXECUTE FUNCTION check_participation_rule();
 
 ---------------------------------------------------------------------------------------------------
--- INIZIO NOMENCLATURA TRIGGERS
 
-T1: fare un trigger che controli che n giorni prenotati totali non superi il numero di giorni nella tipologia di un dato ordine
-
+/* T1: Dato un certo ordine, controllare che il numero di giorni prenotati non superi il numero di 
+ * giorni prenotabili offerti dal pacchetto.
+ */
 CREATE OR REPLACE FUNCTION ControllaGiorniPrenotati()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -220,8 +199,9 @@ EXECUTE FUNCTION ControllaGiorniPrenotati();
 
 ---------------------------------------------------------------------------------------------------
 
--- TRIGGER T2: una sala può avere al massimo due tecnici, uno di tipo Fonico e uno di tipo Tecnico Del Suono o  "Tecnico del Suono_AND_Fonico": t, f -- f, t -- tf opzioni disponibili
-
+/* T2: Una sala può avere al massimo due tecnici. Uno di tipo Fonico e l'altro di tipo Tecnico del Suono.
+ * Può anche darsi che una sala contenga soltanto un tecnico di tipo: "Tecnico del Suono_AND_Fonico".
+ */ 
 CREATE OR REPLACE FUNCTION check_max_tecnici()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -229,7 +209,6 @@ DECLARE
     numero_tecnici INTEGER;
     numero_tecnico_e_fonico INTEGER;
 BEGIN
-
     -- Conta dei Fonici
     SELECT COUNT(codice_fiscale) INTO numero_fonici 
     FROM TECNICO WHERE sala_piano = NEW.sala_piano AND sala_numero = NEW.sala_numero AND tipo_tecnico = 'Fonico';
@@ -256,7 +235,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Creazione del trigger BEFORE INSERT o BEFORE UPDATE sulla tabella TECNICO
 CREATE TRIGGER T2
 BEFORE INSERT OR UPDATE ON TECNICO
 FOR EACH ROW
@@ -264,12 +242,11 @@ EXECUTE FUNCTION check_max_tecnici();
 
 ---------------------------------------------------------------------------------------------------
 
--- T3 Creazione della funzione trigger che controlla che se un ordine è stato già pagato allora il campo annullato non può essere false
-
+/* T3: Se un ordine è già stato pagato allora il campo "annullato" non può essere impostato a FALSE.
+ */
 CREATE OR REPLACE FUNCTION check_ordine_pagato()
 RETURNS TRIGGER AS $$
 BEGIN
-
     -- Se l'ordine è stato pagato otteniamo un record
     PERFORM FROM ORDINE
     JOIN PAGAMENTO ON ordine = NEW.codice
@@ -286,21 +263,19 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Creazione del trigger
 CREATE TRIGGER T3
 BEFORE UPDATE ON ORDINE
-FOR EACH ROW WHEN (NEW.annullato = TRUE AND OLD.annullato = FALSE) -- il trigger viene chiamato quando si imposta a true (da false) il campo annullato
+FOR EACH ROW WHEN (NEW.annullato = TRUE AND OLD.annullato = FALSE)
 EXECUTE FUNCTION check_ordine_pagato();
 
 ---------------------------------------------------------------------------------------------------
 
--- trigger annullando una prenotazione giornaliera dobbiamo andare a decrementare di uno il numero di giorni prenotati totali di un ordine di tipo pacchetto
-
--- Creazione della funzione trigger
+/* T4: Annullando una prenotazione giornaliera dobbiamo andare a decrementare di uno il numero di giorni 
+ * prenotati totali di un ordine di tipo pacchetto.
+ */
 CREATE OR REPLACE FUNCTION decrementa_giorni_pacchetto()
 RETURNS TRIGGER AS $$
 BEGIN
-
     -- Decrementa il numero di giorni prenotati totali del pacchetto associato
     UPDATE PACCHETTO
     SET n_giorni_prenotati_totali = n_giorni_prenotati_totali - 1
@@ -310,16 +285,14 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Creazione del trigger
 CREATE TRIGGER T4
 AFTER UPDATE ON prenotazione
 FOR EACH ROW WHEN (OLD.tipo = TRUE AND NEW.annullata = TRUE AND OLD.annullata = FALSE)
 EXECUTE FUNCTION decrementa_giorni_pacchetto();
 
 ---------------------------------------------------------------------------------------------------
--- TRIGGER: Aggiorna il numero totale di ore prenotate dopo la modifica di una fascia oraria.
-
--- Creazione della funzione trigger
+/* T5: Aggiorna il numero totale di ore prenotate dopo la modifica di una fascia oraria.
+ */
 CREATE OR REPLACE FUNCTION aggiorna_ore_prenotate()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -347,9 +320,8 @@ EXECUTE FUNCTION aggiorna_ore_prenotate();
 
 ---------------------------------------------------------------------------------------------------
 
--- TRIGGER: una prenotazione può essere annullata solo se fa riferimento ad una data futura.
-
--- Creazione della funzione per il trigger
+/* T6: Una prenotazione può essere annullata solo se fa riferimento ad una data futura.
+ */
 CREATE OR REPLACE FUNCTION check_data_futura_per_prenotazione()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -370,8 +342,8 @@ EXECUTE FUNCTION check_data_futura_per_prenotazione();
 
 ---------------------------------------------------------------------------------------------------
 
--- TRIGGER: un ordine può essere annullato solo se fa riferimento ad una data futura.
-
+/* T7: Un ordine può essere annullato solo se fa riferimento ad una data futura.
+ */
 CREATE OR REPLACE FUNCTION check_data_futura_per_ordine()
 RETURNS TRIGGER AS $$
 BEGIN
