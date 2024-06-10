@@ -14,10 +14,11 @@ COSE ANCORA DA FARE
 
 INDICI
 --> https://stackoverflow.com/questions/1108/how-does-database-indexing-work
+--> https://stackoverflow.com/questions/3318727/postgresql-index-usage-analysis
     --> individuare le query che richiedono più letture
     --> individuare gli attributi su cui effettuare un indice
     --> controllare che effettuare un indice convenga veramente e non sia sprecato
     --> calcolare il numero di letture risparmiate utilizzando l'indice
-    --> Calcolare il costo in memoria causato dall'utilizzo dell'indice
+    --> calcolare il costo in memoria causato dall'utilizzo dell'indice
 
 ------------------------------------------------------------
