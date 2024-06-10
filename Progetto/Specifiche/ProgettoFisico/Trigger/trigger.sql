@@ -270,6 +270,7 @@ CREATE OR REPLACE FUNCTION check_ordine_pagato()
 RETURNS TRIGGER AS $$
 BEGIN
 
+    -- Se l'ordine è stato pagato otteniamo un record
     PERFORM FROM ORDINE
     JOIN PAGAMENTO ON ordine = NEW.codice
     WHERE stato = 'Pagato';
@@ -277,10 +278,7 @@ BEGIN
     -- Verifica se l'ordine è stato pagato
     IF FOUND THEN
         -- Se l'ordine è stato pagato, impedisce che il campo annullato sia impostato su TRUE
-        IF NEW.annullato = TRUE THEN
-            RAISE EXCEPTION 'Non è possibile annullare un ordine già pagato.';
-        END IF;
-
+        RAISE EXCEPTION 'Non è possibile annullare un ordine già pagato.';
     END IF;
     
     RETURN NEW;
@@ -290,7 +288,6 @@ $$ LANGUAGE plpgsql;
 -- Creazione del trigger
 CREATE TRIGGER T3
 BEFORE UPDATE ON ORDINE
-FOR EACH ROW
-EXECUTE FUNCTION check_ordine_pagato();
+FOR EACH ROW WHEN (NEW.annullato = TRUE AND OLD.annullato = FALSE) -- se stiamo aggior
 
 ---------------------------------------------------------------------------------------------------

@@ -29,13 +29,12 @@ Se esiste almeno una riga con codice = 123 nella tabella PRODUZIONE, questa quer
 CREATE OR REPLACE FUNCTION decrementa_giorni_pacchetto()
 RETURNS TRIGGER AS $$
 BEGIN
-    -- Verifica se la prenotazione è di tipo giornaliera (tipo = TRUE) e se è stata annullata
-    IF OLD.tipo = TRUE AND NEW.annullata = TRUE AND OLD.annullata = FALSE THEN
-        -- Decrementa il numero di giorni prenotati totali del pacchetto associato
-        UPDATE PACCHETTO
-        SET n_giorni_prenotati_totali = n_giorni_prenotati_totali - 1
-        WHERE ordine = OLD.pacchetto;
-    END IF;
+
+    -- Decrementa il numero di giorni prenotati totali del pacchetto associato
+    UPDATE PACCHETTO
+    SET n_giorni_prenotati_totali = n_giorni_prenotati_totali - 1
+    WHERE ordine = OLD.pacchetto;
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -45,7 +44,7 @@ CREATE TRIGGER T4
 AFTER UPDATE ON PRENOTAZIONE
 FOR EACH ROW
 WHEN (OLD.tipo = TRUE AND NEW.annullata = TRUE AND OLD.annullata = FALSE)
-EXECUTE FUNCTION decrementa_giorni_p
+EXECUTE FUNCTION decrementa_giorni_pacchetto
 
 
 -- un ordine e una prenotazione possono essere annullati solo se il giorno a cui fanno riferimento non è antecedente al giorno in cui si fa la richiesta
