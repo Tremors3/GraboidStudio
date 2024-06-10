@@ -7,8 +7,7 @@
  * La funzione calcola l'età dell'artista del quale è stato fornito il codice fiscale.
  *
  * INPUT:   cd      INT
- * OUTPUT:  
- *          eta     DECIMAL
+ * OUTPUT:  eta     DECIMAL
  */
 CREATE OR REPLACE FUNCTION CalcolaEtaArtista(cd VARCHAR(16)) RETURNS INT LANGUAGE plpgsql AS $$
 DECLARE

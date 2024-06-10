@@ -108,13 +108,15 @@ CALL CreaPrenotazioneGiornaliera(1, '2023-05-01', 2, 2); -- Eccezione: Più di 9
 
 /* CREA UN ORDINE DI TIPO ORARIO E RELATIVA PRENOTAZIONE
  * La procedura produce un ordine di tipo orario e la rispettiva prenotazione.
- *
- * INPUT:   ordine_id       INT
- * INPUT:   giorno          DATE
- * INPUT:   orari_inizio    TIME[]
- * INPUT:   orari_fine      TIME[]
- * INPUT:   sala_piano      INT
- * INPUT:   sala_numero     INT
+ * 
+ * INPUT:   operatore_codice_fiscale    VARCHAR(16)
+ * INPUT:   artista_nome_arte           VARCHAR(255)
+ * INPUT:   costo_ora                   DECIMAL(10, 2)
+ * INPUT:   giorno                      DATE
+ * INPUT:   orari_inizio                TIME[]
+ * INPUT:   orari_fine                  TIME[]
+ * INPUT:   sala_piano                  INT
+ * INPUT:   sala_numero                 INT
  */
 CREATE OR REPLACE PROCEDURE CreaOrdineEPrenotazioneOrarie(
     operatore_codice_fiscale VARCHAR(16), 
@@ -178,7 +180,6 @@ BEGIN
 	RETURNING codice INTO ordine_id;
 
     -- collegamento orario
-    -- oraria ha come dipendenza la prenotazione e l'orario
     INSERT INTO ORARIO (ordine, n_ore_prenotate_totali, valore)
     VALUES (ordine_id, 0, costo_ora);
 
@@ -243,7 +244,7 @@ BEGIN
     FOR i IN 1..array_length(orari_inizio, 1) LOOP
         INSERT INTO FASCIA_ORARIA (oraria, orario_inizio, orario_fine)
         VALUES (prenotazione_id, orari_inizio[i], orari_fine[i]);
-        -- numero di ore
+        -- numero di ore della fascia oraria
         SELECT EXTRACT(HOUR FROM orari_fine[i] - orari_inizio[i]) INTO ore_prenotate_parziali;
         ore_prenotate_totali := ore_prenotate_totali + ore_prenotate_parziali;
     END LOOP;
@@ -387,13 +388,12 @@ CALL CreaArtistaGruppo(
 );
 
 ---------------------------------------------------------------------------------------------------
-
 /* CREA PARTECIPAZIONE SOLISTA GRUPPO
  * Gestisce la partecipazione di un solista a un gruppo nel database.
  *
- * INPUT:   nome_arte_solista  VARCHAR(255)
- * INPUT:   nome_arte_gruppo   VARCHAR(255)
- * INPUT:   data_adesione      DATE
+ * INPUT:   nome_arte_solista       VARCHAR(255)
+ * INPUT:   gruppo_nuovo            VARCHAR(255)
+ * INPUT:   data_adesione_corrente  DATE
  */
 CREATE OR REPLACE PROCEDURE CreaPartecipazioneSolistaGruppo(
     nome_arte_solista VARCHAR(255), 
@@ -447,16 +447,11 @@ PERFORM query;
 ---------------------------------------------------------------------------------------------------
 
 /*
-PERFORM query explanation, FOUND 
-This executes query and discards the result. Write the query the same way you would write an SQL SELECT command, but replace the initial keyword SELECT with PERFORM. For WITH queries, use PERFORM and then place the query in parentheses. (In this case, the query can only return one row.) PL/pgSQL variables will be substituted into the query just as described above, and the plan is cached in the same way. Also, the special variable FOUND is set to true if the query produced at least one row, or false if it produced no row
-*/
-
-/*
  * AGGIUNGI CANZONE
  * Aggiunge una nuova canzone al database e gestisce la relazione "lavora_a" con solisti.
  *
  * INPUT:   titolo                      VARCHAR(255)    - Titolo della canzone
- * INPUT:   produzione_id               INT         - Id della produzione
+ * INPUT:   produzione_id               INT             - Id della produzione
  * INPUT:   testo                       TEXT            - Testo della canzone
  * INPUT:   data_di_registrazione       DATE            - Data di registrazione della canzone
  * INPUT:   lunghezza_in_secondi        INT             - Lunghezza in secondi della canzone
