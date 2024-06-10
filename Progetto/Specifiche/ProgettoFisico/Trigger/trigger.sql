@@ -139,3 +139,48 @@ FOR EACH ROW
 EXECUTE FUNCTION check_tipo_produzione();
 
 ---------------------------------------------------------------------------------------------------
+
+RV4: Nella relazione partecipazione, si tiene traccia solo degli artisti che non sono membri del gruppo musicale che ha composto la produzione e che non sia il solista che abbia composto da solo una canzone.
+
+CREATE OR REPLACE FUNCTION check_participation_rule() 
+RETURNS TRIGGER AS $$
+DECLARE
+    gruppo_del_solista VARCHAR(255);
+BEGIN
+
+    -- Si controlla se il solista è a capo della produzione di cui fa parte la canzone
+    PERFORM FROM produzione as p
+    JOIN artista as a ON p.artista = NEW.solista
+    JOIN canzone as c ON p.codice = c.produzione
+    WHERE c.codice = NEW.canzone;
+    
+    -- Controllo per il solista a capo
+    IF (FOUND) THEN
+        RAISE EXCEPTION 'Un solista non può partecipare a una canzone di cui è già a capo.';
+    END IF;
+    
+    -- Selezioniamo il nome del gruppo corrente del solista
+    SELECT gruppo INTO gruppo_del_solista FROM solista AS s WHERE s.artista = new.solista;
+    IF (gruppo_del_solista IS NOT NULL) THEN
+    
+        -- Controlliamo se il solista fa parte del gruppo creatore della produzione e di conseguenza della canzone
+        PERFORM FROM canzone AS c
+        JOIN produzione AS p ON c.produzione = p.codice
+        JOIN artista AS a ON p.artista = a.nome_arte
+        WHERE c.codice = NEW.canzone AND a.nome_arte = gruppo_del_solista;
+
+        -- Controllo per il solista a capo
+        IF (FOUND) THEN
+            RAISE EXCEPTION 'll solista fa parte del gruppo creatore della produzione e di conseguenza della canzone.';
+        END IF;
+
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER RV4
+BEFORE INSERT ON PARTECIPAZIONE
+FOR EACH ROW
+EXECUTE FUNCTION check_participation_rule();

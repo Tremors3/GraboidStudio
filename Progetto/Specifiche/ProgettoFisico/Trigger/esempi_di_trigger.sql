@@ -23,95 +23,7 @@ Se esiste almeno una riga con codice = 123 nella tabella PRODUZIONE, questa quer
 
 ---------------------------------------------------------------------------------------------------
 
-RV4: Nella relazione partecipazione, si tiene traccia solo degli artisti che non sono membri del gruppo musicale che ha composto la produzione e che non sia il solista che abbia composto da solo una canzone.
-
-    Implementazione: .
-
-CREATE OR REPLACE FUNCTION check_participation_rule() 
-RETURNS TRIGGER AS $$
-BEGIN
-    -- Controllo per il solista
-    IF EXISTS (
-        SELECT 1 
-        FROM SOLISTA 
-        WHERE artista = NEW.solista 
-        AND NOT EXISTS (
-            SELECT 1 FROM GRUPPO WHERE artista = NEW.solista
-        )
-    ) THEN
-        RETURN NEW;
-    ELSE
-        RAISE EXCEPTION 'Un solista può partecipare solo se non è già associato a un gruppo.';
-    END IF;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER check_participation_rule_trigger
-BEFORE INSERT ON PARTECIPAZIONE
-FOR EACH ROW
-EXECUTE FUNCTION check_participation_rule();
-
-
----------------------------------------------------------------------------------------------------
-RV5: Non è possibile che un Gruppo partecipi alla composizione di una canzone appartenente ad un altro artista.
-
-Spiegazione:
-
-    Funzione check_group_composition:
-        La funzione verifica se il Gruppo (identificato da NEW.solista) sta partecipando alla composizione di una canzone (identificata da NEW.canzone) appartenente a un artista diverso.
-        Se trova che il Gruppo sta partecipando alla composizione di una canzone di un altro artista, solleva un eccezione con il messaggio appropriato.
-    Trigger RV5:
-        Questo trigger si attiva prima di ogni inserimento nella tabella PARTECIPAZIONE.
-        Il trigger esegue la funzione check_group_composition per verificare il vincolo desiderato.
-
-CREATE OR REPLACE FUNCTION check_group_composition() 
-RETURNS TRIGGER AS $$
-DECLARE
-    group_artist VARCHAR(255);
-    song_artist VARCHAR(255);
-BEGIN
-    -- Otteniamo l'artista del gruppo
-    SELECT artista INTO group_artist FROM GRUPPO WHERE artista = NEW.solista;
-
-    -- Otteniamo l'artista della canzone
-    SELECT artista INTO song_artist FROM CANZONE WHERE codice = NEW.canzone;
-
-    -- Verifichiamo se il gruppo sta partecipando alla composizione di una canzone di un altro artista
-    IF group_artist IS NOT NULL AND group_artist <> song_artist THEN
-        RAISE EXCEPTION 'Un gruppo non può partecipare alla composizione di una canzone di un altro artista.';
-    END IF;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER RV5
-BEFORE INSERT ON PARTECIPAZIONE
-FOR EACH ROW
-EXECUTE FUNCTION check_group_composition();
-
-
-RV6: L’attributo nome di Tipologia comprende il seguente dominio "giornaliero", "settimanale", "mensile".
-
-    Implementazione: Questo vincolo può essere implementato con un vincolo CHECK sulla tabella TIPOLOGIA.
-
-ALTER TABLE TIPOLOGIA
-ADD CONSTRAINT check_tipo_nome
-CHECK (nome IN ('giornaliero', 'settimanale', 'mensile'));
-
---
--- ATTENZIONE ATTENZIONE ATTENZIONE, ma se il costo totale di ordine è derivato dalle prenotazioni, ma le prenotazioni sono prenotabili solo dopo,
--- ciò significa che il costo totale non sarebbe un dato derivato ma viene passato in input dal sito quando l'utente effettua la scelta,
--- è un bel problema questo, quindi suggerisco di rimuovere questo vincolo o effettuarci delle modifiche sensate..., direi di rimuoverlo tanto
--- è l'operatore che ha la lista di chi non paga ed è compito suo fare in modo che chi non paga non si presenti allo studio cancellandone 
---   la prenotazione e di conseguenza l'ordine
-RV7: Un artista deve aver pagato l’Ordine altrimenti non è possibile effettuare la prenotazione.
-
-    Implementazione: Questo vincolo può essere implementato con un vincolo CHECK sulla tabella PRENOTAZIONE.
--------------------------
-
-
-RV8: Le fasce orarie prenotabili vanno dalle 8:00 alle 12:00, dalle 14:00 alle 23:00.
+RV7: Le fasce orarie prenotabili vanno dalle 8:00 alle 12:00, dalle 14:00 alle 23:00.
 
     Implementazione: Questo vincolo può essere implementato con un vincolo CHECK sulla tabella FASCIA_ORARIA.
 
@@ -122,7 +34,7 @@ CHECK (
     OR (orario_inizio >= '14:00' AND orario_fine <= '23:00')
 );
 
-RV9: Le Fascie Orarie di un Ordine Orario devono essere scelte nel momento in cui si effettua l’ordine.
+RV8: Le Fascie Orarie di un Ordine Orario devono essere scelte nel momento in cui si effettua l’ordine.
     Implementazione: Questo vincolo può essere implementato tramite un trigger che verifichi la corretta selezione delle fasce orarie.
 CREATE OR REPLACE FUNCTION check_ordine_orario() RETURNS TRIGGER AS $$
 BEGIN
@@ -138,7 +50,9 @@ BEFORE INSERT ON ORARIO
 FOR EACH ROW
 EXECUTE FUNCTION check_ordine_orario();
 
-RV10: Nel caso si vogliano prenotare due giorni [settimane o mesi] è necessario effettuare due ordini distinti; quindi un ordine di tipo Giornaliero [Settimanale o Mensile] per giorno [settimana o mese] che si vuole prenotare. Gli ordini di tipo Giornaliero, Settimanale e Mensile possono effettuare prenotazioni Giornaliere, NON Orarie.
+---------------------------------------------------------------------------------------------------
+
+RV9: Nel caso si vogliano prenotare due giorni [settimane o mesi] è necessario effettuare due ordini distinti; quindi un ordine di tipo Giornaliero [Settimanale o Mensile] per giorno [settimana o mese] che si vuole prenotare. Gli ordini di tipo Giornaliero, Settimanale e Mensile possono effettuare prenotazioni Giornaliere, NON Orarie.
 
     Implementazione:
 
@@ -178,7 +92,7 @@ BEFORE INSERT ON PACCHETTO
 FOR EACH ROW
 EXECUTE FUNCTION check_tipo_pacchetto();
 
--- creare un trigger per fare in modo che le fascie orarie non overleappino, guardare la query gia creata per costruirlo.
+
 
 fare un trigger che controli che n giorni prentoati totali non superi il numero di giorni nella tipologia di un dato ordine
 
@@ -220,6 +134,8 @@ BEFORE INSERT OR UPDATE ON ORARIA
 FOR EACH ROW
 EXECUTE FUNCTION ControllaGiorniPrenotati();
 
+-- creare un trigger per fare in modo che le fascie orarie non overleappino, guardare la query gia creata per costruirlo.
+
 -- trigger che controlla che se un ordine è stato già pagato allora il campo annullato non può essere false
 
 -- trigger annullando una prenotazione giornaliera dobbiamo andare a decrementare di uno il numero di giorni prenotati totali di un ordine di tipo pacchetto
@@ -229,3 +145,45 @@ EXECUTE FUNCTION ControllaGiorniPrenotati();
 -- TRIGGER: "Aggiunta una fascia oraria": "FASCIA-->ORARIA-->ORARIO": controllo "numero ore prenotate totali"
 
 -- TRIGGER : una sala può avere al massimo due tecnici, uno di tipo Fonico e uno di tipo Tecnico Del Suono o  "Tecnico del suono_AND_Fonico"
+-- Creazione della funzione plpgsql per il controllo del vincolo
+CREATE OR REPLACE FUNCTION check_max_tecnici()
+RETURNS TRIGGER AS $$
+DECLARE
+    count_tecnico_fonico INTEGER;
+    count_tecnico_suono INTEGER;
+BEGIN
+    -- Contiamo il numero di tecnici di tipo 'Fonico' e 'Tecnico del Suono_AND_Fonico'
+    SELECT 
+        COUNT(*) INTO count_tecnico_fonico 
+    FROM 
+        TECNICO 
+    WHERE 
+        sala = NEW.sala 
+        AND tipo = 'Fonico';
+    
+    SELECT 
+        COUNT(*) INTO count_tecnico_suono 
+    FROM 
+        TECNICO 
+    WHERE 
+        sala = NEW.sala 
+        AND (tipo = 'Tecnico del Suono' OR tipo = 'Tecnico del Suono_AND_Fonico');
+    
+    -- Controlliamo se il numero di tecnici supera quello consentito
+    IF count_tecnico_fonico >= 1 THEN
+        RAISE EXCEPTION 'Impossibile aggiungere un tecnico di tipo Fonico. La sala ha già un tecnico di tipo Fonico.';
+    END IF;
+
+    IF count_tecnico_suono >= 1 THEN
+        RAISE EXCEPTION 'Impossibile aggiungere un tecnico di tipo Tecnico del Suono o Tecnico del Suono_AND_Fonico. La sala ha già un tecnico di uno di questi tipi.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Creazione del trigger BEFORE INSERT o BEFORE UPDATE sulla tabella TECNICO
+CREATE TRIGGER check_max_tecnici_trigger
+BEFORE INSERT OR UPDATE ON TECNICO
+FOR EACH ROW
+EXECUTE FUNCTION check_max_tecnici();

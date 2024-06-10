@@ -194,8 +194,9 @@ CREATE TABLE TIPOLOGIA (
     nome VARCHAR(255) PRIMARY KEY, 
     valore DECIMAL(10, 2) NOT NULL, 
     n_giorni INTEGER NOT NULL, -- 1 giorno, 7 giorni, 30 giorni 
-
-    CHECK(valore > 0 AND (n_giorni = 1 OR n_giorni = 7 OR n_giorni = 30)) -- questo era già qui, a cosa si riferisce?
+    CONSTRAINT check_nome_tipologia CHECK (nome IN ('Giornaliero', 'Settimanale', 'Mensile')),
+    CONSTRAINT check_valore_positivo CHECK (valore > 0),
+    CONSTRAINT check_n_giorni CHECK (n_giorni = 1 OR n_giorni = 7 OR n_giorni = 30)
 ); 
  
 CREATE TABLE PACCHETTO ( 
@@ -251,7 +252,10 @@ CREATE TABLE FASCIA_ORARIA (
     orario_fine TIME, 
     PRIMARY KEY (oraria, orario_inizio), 
     FOREIGN KEY (oraria) REFERENCES ORARIA(prenotazione) ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT orario_fine_maggiore CHECK(orario_fine>orario_inizio)
+    CONSTRAINT orario_fine_maggiore CHECK(orario_fine>orario_inizio),
+    CONSTRAINT check_orario CHECK (
+        (orario_inizio >= '08:00' AND orario_fine <= '12:00')
+        OR (orario_inizio >= '14:00' AND orario_fine <= '23:00'));
 ); 
  
 -- Creazione della tabella TIPO_TECNICO
