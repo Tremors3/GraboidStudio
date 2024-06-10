@@ -23,30 +23,6 @@ Se esiste almeno una riga con codice = 123 nella tabella PRODUZIONE, questa quer
 
 ---------------------------------------------------------------------------------------------------
 
--- trigger annullando una prenotazione giornaliera dobbiamo andare a decrementare di uno il numero di giorni prenotati totali di un ordine di tipo pacchetto
-
--- Creazione della funzione trigger
-CREATE OR REPLACE FUNCTION decrementa_giorni_pacchetto()
-RETURNS TRIGGER AS $$
-BEGIN
-
-    -- Decrementa il numero di giorni prenotati totali del pacchetto associato
-    UPDATE PACCHETTO
-    SET n_giorni_prenotati_totali = n_giorni_prenotati_totali - 1
-    WHERE ordine = OLD.pacchetto;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Creazione del trigger
-CREATE TRIGGER T4
-AFTER UPDATE ON PRENOTAZIONE
-FOR EACH ROW WHEN (OLD.tipo = TRUE AND NEW.annullata = TRUE AND OLD.annullata = FALSE)
-EXECUTE FUNCTION decrementa_giorni_pacchetto
-
----------------------------------------------------------------------------------------------------
-
 -- un ordine e una prenotazione possono essere annullati solo se il giorno a cui fanno riferimento non è antecedente al giorno in cui si fa la richiesta
 
 -- TRIGGER: "Aggiunta una fascia oraria": "FASCIA-->ORARIA-->ORARIO": controllo "numero ore prenotate totali"

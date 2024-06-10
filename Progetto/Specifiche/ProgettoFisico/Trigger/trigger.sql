@@ -293,3 +293,27 @@ FOR EACH ROW WHEN (NEW.annullato = TRUE AND OLD.annullato = FALSE) -- il trigger
 EXECUTE FUNCTION check_ordine_pagato();
 
 ---------------------------------------------------------------------------------------------------
+
+-- trigger annullando una prenotazione giornaliera dobbiamo andare a decrementare di uno il numero di giorni prenotati totali di un ordine di tipo pacchetto
+
+-- Creazione della funzione trigger
+CREATE OR REPLACE FUNCTION decrementa_giorni_pacchetto()
+RETURNS TRIGGER AS $$
+BEGIN
+
+    -- Decrementa il numero di giorni prenotati totali del pacchetto associato
+    UPDATE PACCHETTO
+    SET n_giorni_prenotati_totali = n_giorni_prenotati_totali - 1
+    WHERE ordine = OLD.pacchetto;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Creazione del trigger
+CREATE TRIGGER T4
+AFTER UPDATE ON prenotazione
+FOR EACH ROW WHEN (OLD.tipo = TRUE AND NEW.annullata = TRUE AND OLD.annullata = FALSE)
+EXECUTE FUNCTION decrementa_giorni_pacchetto();
+
+---------------------------------------------------------------------------------------------------
