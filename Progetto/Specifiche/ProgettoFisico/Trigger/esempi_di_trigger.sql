@@ -24,20 +24,25 @@ Questo vincolo non può essere implementato direttamente tramite un vincolo di t
 RV2: Una produzione una volta pubblicata diventa immutabile quindi non è più possibile aggiungere canzoni.
 
     Implementazione: Questo vincolo può essere implementato con un trigger che si attiva dopo l'inserimento di una produzione, per garantire che non possano essere aggiunte nuove canzoni.
-
-CREATE OR REPLACE FUNCTION check_production_immutable() RETURNS TRIGGER AS $$
+-- da testare.
+CREATE OR REPLACE FUNCTION controlla_produzione_immutabile() RETURNS TRIGGER AS $$
 BEGIN
-    IF EXISTS (SELECT 1 FROM PRODUZIONE WHERE codice = NEW.produzione) THEN
-        RAISE EXCEPTION 'Impossibile aggiungere canzoni a una produzione immutabile.';
+    IF EXISTS (
+        SELECT 1 
+        FROM PRODUZIONE 
+        WHERE codice = NEW.produzione AND stato = 'pubblicato'
+    ) THEN
+        RAISE EXCEPTION 'Impossibile aggiungere canzoni a una produzione pubblicata (codice produzione: %).', NEW.produzione;
     END IF;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER check_production_immutable_trigger
+CREATE TRIGGER trigger_controlla_produzione_immutabile
 BEFORE INSERT ON CANZONE
 FOR EACH ROW
-EXECUTE FUNCTION check_production_immutable();
+EXECUTE FUNCTION controlla_produzione_immutabile();
+
 
 RV3: L’entità Singolo comprende da una a tre canzoni, l’entità Extended Play comprende dalle 4 alle 5 canzoni e l’entità Album non ha un limite al numero di canzoni fintanto che la durata complessiva stia tra la mezz’ora e l’ora.
 
