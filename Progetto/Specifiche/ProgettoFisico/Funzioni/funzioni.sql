@@ -85,6 +85,7 @@ BEGIN
     RETURN numero_canzoni;
 END;
 $$ LANGUAGE plpgsql;
+SELECT conta_canzoni_di_una_produzione(1);
 
 /* CONTA NUMERO DI CANZONI
  * Dato il codice di una produzione, la funzione calcola la 
@@ -117,3 +118,4 @@ BEGIN
     RETURN lunghezza_in_secondi_media;
 END;
 $$ LANGUAGE plpgsql;
+SELECT calcola_lunghezza_media_canzoni_di_una_produzione(1);
