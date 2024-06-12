@@ -8,6 +8,67 @@ import random
 fake = Faker()
 
 # Connessione al database PostgreSQL
+c = psycopg2.connect(
+    dbname="test",
+    user="postgres",
+    password="",
+    host="localhost",
+    port="5432"
+)
+cu = c.cursor()
+
+
+def truncate_table(table_name):
+    try:
+        cu.execute(f"TRUNCATE TABLE {table_name} CASCADE;")
+        print(f"Tabelle {table_name} svuotate.")
+    except Exception as e:
+        c.rollback()
+        print(f"Errore durante lo svuotamento di {table_name}: {e}")
+
+def clean_database():
+    tables_to_clean = [
+        'LAVORA_A',
+        'TELEFONO_T',
+        'EMAIL_T',
+        'TECNICO',
+        'TIPO_TECNICO',
+        'FASCIA_ORARIA',
+        'ORARIA',
+        'PAGAMENTO',
+        'METODO',
+        'ORDINE',
+        'SALA',
+        'PRENOTAZIONE',
+        'ORARIO',
+        'PACCHETTO',
+        'TIPOLOGIA',
+        'TELEFONO_O',
+        'EMAIL_O',
+        'OPERATORE',
+        'CANZONE',
+        'PRODUTTORE',
+        'CONDURRE',
+        'PRODUZIONE',
+        'GENERI',
+        'TIPO_PRODUZIONE',
+        'PARTECIPAZIONE',
+        'GRUPPO',
+        'ARTISTA',
+        'SOLISTA',
+        'PARTECIPAZIONE_PASSATA'
+    ]
+    
+    for table_name in tables_to_clean:
+        truncate_table(table_name)
+    
+    # Committa le modifiche e chiude la connessione
+    c.commit()
+    c.close()
+    print("Database pulito")
+
+'''
+# Connessione al database PostgreSQL
 conn = psycopg2.connect(
     dbname="test",
     user="postgres",
@@ -259,7 +320,7 @@ def insert_pagamento(ordine):
         (ordine, stato, costo_totale, metodo)
     )
 # Funzione per inserire le tipologie nel database e restituire il nome della tipologia inserita
-def insert_tipologia():
+def insert_tipologia(i):
     # Lista delle tipologie da inserire
     tipologie = [
         ('Giornaliero', 160.00, 1),
@@ -267,31 +328,15 @@ def insert_tipologia():
         ('Mensile', 2200.00, 30)
     ]
     
-    # Scelgo casualmente una tipologia
-    nome, valore, n_giorni = random.choice(tipologie)
-    
-    # Controlla se le tipologie esistono già nel database
     cursor.execute(
         """
-        SELECT nome FROM TIPOLOGIA WHERE nome = %s
+        INSERT INTO TIPOLOGIA (nome, valore, n_giorni)
+        VALUES (%s, %s, %s)
+        RETURNING nome
         """,
-        (nome,)
+        (tipologie[i][0], tipologie[i][1], tipologie[i][2])
     )
-    if not cursor.fetchone():
-        cursor.execute(
-            """
-            INSERT INTO TIPOLOGIA (nome, valore, n_giorni)
-            VALUES (%s, %s, %s)
-            RETURNING nome
-            """,
-            (nome, valore, n_giorni)
-        )
-        conn.commit()
-        print(f"Tipologia '{nome}' inserita nel database")
-        return cursor.fetchone()[0]  # Ritorna il nome della tipologia inserita
-    else:
-        print(f"Tipologia '{nome}' già presente nel database")
-        return nome  # Ritorna il nome della tipologia che era già presente
+    conn.commit()
 
 def insert_pacchetto(ordine):
     tipologia = insert_tipologia()
@@ -316,7 +361,7 @@ def insert_orario(ordine):
     )
 
 def insert_sala(piano):
-    piano = random.randint(1, 10)
+    piano = piano
     numero = random.randint(1, 10)
     cursor.execute(
         """
@@ -363,26 +408,26 @@ def insert_fascia_oraria(oraria):
         (oraria, orario_inizio, orario_fine)
     )
 
-def insert_tipo_tecnico():
-     # Scelte possibili per il campo 'nome' nella tabella TIPO_TECNICO
-    choices = ['Fonico', 'Tecnico del Suono', 'Tecnico del Suono_AND_Fonico']
-    
-    # Esegui la scelta casuale
-    nome = random.choice(choices)
 
-    cursor.execute(
-        """
-        INSERT INTO TIPO_TECNICO (nome)
-        VALUES (%s)
-        RETURNING nome
-        """,
-        (nome,)
-    )
-    return cursor.fetchone()[0]
+def insert_tipo_tecnico():
+    # Scelte possibili per il campo 'nome' nella tabella TIPO_TECNICO
+    tipi = ['Fonico', 'Tecnico del Suono', 'Tecnico del Suono_AND_Fonico']
+
+    for tipo in tipi:
+        cursor.execute(
+            """
+            INSERT INTO TIPO_TECNICO (nome)
+            VALUES (%s)
+            RETURNING nome
+            """,
+            (tipo,)
+        )
+        tipo_inserito = cursor.fetchone()[0]
+
 
 def insert_tecnico(sala):
     codice_fiscale = fake.unique.ssn()
-    tipo_tecnico = insert_tipo_tecnico()
+    tipo_tecnico = 'Fonico' #random.choice(choices)  choices = ['Fonico', 'Tecnico del Suono', 'Tecnico del Suono_AND_Fonico']
     nome = fake.first_name()
     cognome = fake.last_name()
     data_di_nascita = fake.date_of_birth(minimum_age=18, maximum_age=90)
@@ -452,6 +497,13 @@ orari = []
 orarie = []
 fasce_orarie = []
 
+
+# Esegui la pulizia del database
+clean_database()
+
+
+
+
 # Funzioni per il popolamento delle tabelle (già definite sopra)
 # ...
 
@@ -460,6 +512,8 @@ for i in range(4):
     sala_id = insert_sala(i)
     sale.append(sala_id)
 
+insert_tipo_tecnico()
+
 # TECNICO: 6 (associazione tra tecnico e sala)
 for sala_id in sale:
     for _ in range(1):  # ogni sala ha 1 tecnico
@@ -467,7 +521,7 @@ for sala_id in sale:
         tecnici.append(tecnico_id)
 
 # TIPOLOGIA: 4
-for _ in range(4):
+for _ in range(3):
     tipologia_id = insert_tipologia()
     tipologie.append(tipologia_id)
 
@@ -476,8 +530,8 @@ for _ in range(224):
     artista_id = insert_artista()
     artisti.append(artista_id)
 
-# SOLISTA: 250
-for artista_id in artisti[:250]:
+# SOLISTA: 194
+for artista_id in artisti[:194]:
     solista_id = insert_solista(artista_id)
     solisti.append(solista_id)
 
@@ -642,3 +696,5 @@ conn.commit()
 # Chiusura della connessione
 cursor.close()
 conn.close()
+
+'''

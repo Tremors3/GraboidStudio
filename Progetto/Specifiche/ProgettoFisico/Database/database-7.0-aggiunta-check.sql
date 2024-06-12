@@ -255,7 +255,7 @@ CREATE TABLE FASCIA_ORARIA (
     CONSTRAINT orario_fine_maggiore CHECK(orario_fine>orario_inizio),
     CONSTRAINT check_orario CHECK (
         (orario_inizio >= '08:00' AND orario_fine <= '12:00')
-        OR (orario_inizio >= '14:00' AND orario_fine <= '23:00'));
+        OR (orario_inizio >= '14:00' AND orario_fine <= '23:00'))
 ); 
  
 CREATE TABLE TIPO_TECNICO (
