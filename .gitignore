@@ -8,3 +8,7 @@
 *.bib
 *.fdb_latexmk
 *.synctex(busy)
+# Virtual Environment
+venv/
+env/
+ENV/
