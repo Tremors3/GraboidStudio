@@ -99,7 +99,6 @@ BEGIN
     FROM canzone
     WHERE produzione = codice_produzione;
 
-    
     SELECT conta_canzoni_di_una_produzione(codice_produzione) INTO numero_canzoni;
     -- Calcola la lunghezza media delle canzoni
     IF numero_canzoni > 0 THEN

@@ -26,7 +26,7 @@ CALL AggiungiArtista('Tremore', '2024-06-08');
  * INPUT:   artista_nome_arte           VARCHAR(255)
  * INPUT:   pacchetto_nome              VARCHAR(255)
  */
-CALL CreaOrdinePacchetto('OPRABC90A01H501X', 'BandABC', 'Mensile');
+CALL CreaOrdinePacchetto('OPRABC90A01H501X', 'TrioUVW', 'Mensile');
 
 /* CREA UNA PRENOTAZIONE DI TIPO GIORNALIERA
  * Procedura che inserisce una nuova prenotazione associandola al 
@@ -38,8 +38,8 @@ CALL CreaOrdinePacchetto('OPRABC90A01H501X', 'BandABC', 'Mensile');
  * INPUT:   sala_numero                INT
  */
 CALL CreaPrenotazioneGiornaliera(1, '2023-01-10', 2, 2); -- Funzionante
-CALL CreaPrenotazioneGiornaliera(1, '2022-01-01', 2, 2); -- Eccezione: Indietro nel tempo
-CALL CreaPrenotazioneGiornaliera(1, '2023-05-01', 2, 2); -- Eccezione: Più di 90 giorni
+--CALL CreaPrenotazioneGiornaliera(1, '2022-01-01', 2, 2); -- Eccezione: Indietro nel tempo
+--CALL CreaPrenotazioneGiornaliera(1, '2023-05-01', 2, 2); -- Eccezione: Più di 90 giorni
 
 -----------------------------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ CALL CreaOrdineEPrenotazioneOrarie(
     'OPRABC90A01H501X', 'BandABC', 30,
     '2023-02-03', 
     '{08:00, 14:00}'::time[],
-    '{10:00, 18:00}'::time[],
+    '{12:00, 18:00}'::time[],
     2, 2
 );
 
@@ -73,7 +73,7 @@ CALL CreaOrdineEPrenotazioneOrarie(
  * OUTPUT:  ordine_id                  INT
  */
 SELECT CreaOrdineOrario(
-    'OPRABC90A01H501X', 'BandABC', 30
+    'OPRABC90A01H501X', 'BandDEF', 30
 );
 
 /* CREA PRENOTAZIONE PER ORDINE ORARIO
@@ -87,7 +87,7 @@ SELECT CreaOrdineOrario(
  * INPUT:   sala_numero     INT
  */
 CALL CreaPrenotazioneOraria(
-    ordine_id, '2023-02-03', 
+    10, '2023-02-03', -- ordine_id = 10
     '{08:00, 14:00}'::time[],
     '{10:00, 18:00}'::time[],
     2, 2
@@ -169,13 +169,13 @@ CALL CreaPartecipazioneSolistaGruppo('PopStar', 'Group123',    '2024-06-08');
  */
 CALL AggiungiCanzoneEPartecipazioni(
     'Titolo della Canzone',
-    1,
+    2,
     'Testo della canzone',
     '2024-06-09',
     300, -- Lunghezza in secondi
     'nome_file.mp3',
     '/percorso/di/sistema',
     'mp3', -- Estensione del file
-    ARRAY['SoloXYZ', 'SoloABC'], -- Array di nomi d'arte dei solisti
+    ARRAY['SoloPQR', 'PopStar'], -- Array di nomi d'arte dei solisti
     'TCNAUD85M01H501Z' -- Codice fiscale del tecnico
 );
