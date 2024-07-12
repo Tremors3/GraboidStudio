@@ -3,7 +3,8 @@
 /* A1) ELENCARE LE PRODUZIONI COMPOSTE DA UN DETERMINATO ARTISTA
  * Vengono elencate tutte le informazioni sulle produzioni composte da un determinato artista.
  */
-SELECT * FROM produzione WHERE artista = 'SoloXYZ';
+SELECT * FROM produzione AS p WHERE artista = 'SoloXYZ'
+ORDER BY p.titolo;
 
 /* A2) ELENCARE GLI ARTISTI CHE HANNO PARTECIPATO ALLA CREAZIONE DI UNA CANZONE
  * Data una certa canzone vengono mostrate le informazioni degli artisti che hanno partecipato ad essa.
