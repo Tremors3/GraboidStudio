@@ -289,3 +289,27 @@ INSERT INTO LAVORA_A (tecnico, canzone) VALUES
 ('TCNAUD92D01H501Y', 8),
 ('TCNPRO88M01H501Z', 9),
 ('TCNAUD90A01H501X', 10);
+
+INSERT INTO ATTREZZATURA (modello, costruttore) VALUES
+('Computer', 'China'),
+('Mixer', 'China'),
+('Multitraccia', 'China'),
+('Polivoks', 'Soviet Union'),
+('Mircofhggono', 'China'),
+('Digital Audio Workstation', 'China'),
+('Altopralatni', 'Buuse'),
+('Tasso imbalsamato che fa i rumori', 'China');
+
+INSERT INTO AVERE (piano, numero, attrezzo) VALUES
+(1, 1,  1),
+(1, 1,  2),
+(1, 2,  2),
+(1, 2,  5),
+(2, 1,  3),
+(2, 1,  5),
+(2, 2,  4),
+(2, 2,  2),
+(3, 1,  1),
+(3, 1,  3),
+(3, 2,  7),
+(3, 2,  8);
