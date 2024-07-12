@@ -138,6 +138,7 @@ CALL CreaArtistaGruppo(
 );
 
 -----------------------------------------------------------------------------------------
+
 /* CREA PARTECIPAZIONE SOLISTA GRUPPO
  * Gestisce la partecipazione di un solista a un gruppo nel database.
  *
