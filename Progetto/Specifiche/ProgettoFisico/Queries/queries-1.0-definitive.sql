@@ -10,7 +10,7 @@ SELECT * FROM produzione WHERE artista = 'SoloXYZ';
  */
 SELECT * FROM solista WHERE artista IN (
     SELECT p.solista FROM partecipazione as p WHERE p.canzone = 1
-)
+);
 
 /* A3) VISUALIZZARE UN ELENCO DELLE PRENOTAZIONI EFFETTUATE TRA TUTTI GLI ORDINI DATO UN ARTISTA
  * Vengono visualizzati i dettagli delle prenotazioni effettuate da un artista.
@@ -34,7 +34,7 @@ union
         JOIN pacchetto AS pa ON o.codice = pa.ordine
         WHERE o.artista = 'SoloXYZ'
     )
-)
+);
 ------------------------------------- TECNICO -------------------------------------
 
 /* T1) ELENCARE LE CANZONI A CUI LAVORA UN TECNICO
@@ -90,7 +90,7 @@ JOIN (
     SELECT o.codice, o.timestamp, o.artista, o.annullato, o.operatore
     FROM ordine AS o
     WHERE o.codice = 1
-) AS s ON s.codice = p.ordine
+) AS s ON s.codice = p.ordine;
 
 /* O3) ANNULLARE UN ORDINE
  * L’operatore può annullare un ordine se il cliente lo richiede o non paga dopo aver chiamato l’operatore.
@@ -122,7 +122,7 @@ FROM ordine AS o
 JOIN artista    AS a ON a.nome_arte = o.artista
 JOIN solista    AS s ON a.nome_arte = s.artista
 JOIN telefono_a AS t ON a.nome_arte = t.artista
-JOIN PAGAMENTO  AS p ON p.ordine = o.codice
+JOIN PAGAMENTO  AS p ON p.ordine = o.codice;
 
 -- Caso del Gruppo
 SELECT o.codice, a.nome_arte, t.numero, o.timestamp
@@ -130,7 +130,7 @@ FROM ORDINE AS o
 JOIN ARTISTA    AS a ON a.nome_arte = o.artista
 JOIN GRUPPO     AS g ON a.nome_arte = g.artista
 JOIN TELEFONO_A AS t ON a.nome_arte = t.artista
-JOIN PAGAMENTO  AS p ON p.ordine = o.codice
+JOIN PAGAMENTO  AS p ON p.ordine = o.codice;
 
 /* O7) ELENCARE GLI ORDINI CHE NON SONO ANCORA STATI PAGATI
  * Viene visualizzato un elenco di ordini non pagati e informazioni di chi ha fatto l’ordine: nome, cognome, 
@@ -146,7 +146,7 @@ JOIN (
     WHERE o.artista = a.nome_arte 
     AND s.artista = a.nome_arte
 	AND te.artista = a.nome_arte
-) as sub ON p.ordine = sub.codice WHERE p.stato = 'Da pagare'
+) as sub ON p.ordine = sub.codice WHERE p.stato = 'Da pagare';
 
 -- Caso del Gruppo
 SELECT p.ordine, sub.nome_arte, sub.numero, sub.timestamp
@@ -157,7 +157,7 @@ JOIN (
     WHERE o.artista = a.nome_arte 
     AND g.artista = a.nome_arte
 	AND te.artista = a.nome_arte
-) as sub ON p.ordine = sub.codice WHERE p.stato = 'Da pagare'
+) as sub ON p.ordine = sub.codice WHERE p.stato = 'Da pagare';
 
 /* O8) ELENCARE LE SALE DISPONIBILI
  * Viene visualizzato un elenco di tutte le sale libere per una certa data, ora di inizio e ora di fine
