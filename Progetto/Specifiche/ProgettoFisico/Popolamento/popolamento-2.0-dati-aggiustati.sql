@@ -27,13 +27,13 @@ INSERT INTO GRUPPO (artista, data_formazione) VALUES
 
 -- Popolamento della tabella SOLISTA
 INSERT INTO SOLISTA (artista, codice_fiscale, nome, cognome, data_di_nascita, gruppo, data_adesione) VALUES
-('SoloXYZ', 'RSSMRA85M01H501Z', 'Mario', 'Rossi', '1985-03-01', NULL, NULL),
-('SoloABC', 'VCTFNC90A01H501X', 'Francesco', 'Verdi', '1990-01-01', 'BandABC', '2020-01-20'),
-('SoloDEF', 'BNCLRA92D01H501Y', 'Laura', 'Bianchi', '1992-04-01', 'Group123', '2018-12-05'),
-('SoloPQR', 'RSSMNB85M01H501Z', 'Giovanni', 'Russo', '1987-07-10', NULL, NULL),
-('SoloGHI', 'MRTPLN90A01H501X', 'Anna', 'Mariani', '1990-05-01', 'BandDEF', '2020-03-15'),
-('SoloJKL', 'CNCMRS92D01H501Y', 'Marco', 'Cannavaro', '1992-08-01', 'GroupJKL', '2019-04-15'),
-('SoloSTU', 'FRTRLA89L01H501Z', 'Lucia', 'Ferrari', '1989-11-12', 'TrioUVW', '2019-10-01');
+('SoloXYZ', 'RSSMRA85M01H501Z', 'Mario'     , 'Rossi'     , '1985-03-01',  NULL,        NULL),
+('SoloABC', 'VCTFNC90A01H501X', 'Francesco' , 'Verdi'     , '1990-01-01',  'BandABC',   '2020-01-20'),
+('SoloDEF', 'BNCLRA92D01H501Y', 'Laura'     , 'Bianchi'   , '1992-04-01',  'Group123',  '2018-12-05'),
+('SoloPQR', 'RSSMNB85M01H501Z', 'Giovanni'  , 'Russo'     , '1987-07-10',  NULL,        NULL),
+('SoloGHI', 'MRTPLN90A01H501X', 'Anna'      , 'Mariani'   , '1990-05-01',  'BandDEF',   '2020-03-15'),
+('SoloJKL', 'CNCMRS92D01H501Y', 'Marco'     , 'Cannavaro' , '1992-08-01',  'GroupJKL',  '2019-04-15'),
+('SoloSTU', 'FRTRLA89L01H501Z', 'Lucia'     , 'Ferrari'   , '1989-11-12',  'TrioUVW',   '2019-10-01');
 
 -- Popolamento della tabella PARTECIPAZIONE_PASSATA
 INSERT INTO PARTECIPAZIONE_PASSATA (gruppo, solista, data_adesione, data_fine_adesione) VALUES
@@ -79,45 +79,44 @@ INSERT INTO GENERE (nome) VALUES
 -- Pubblicazione:   immutabile
 -- Produzione:      ancora modificabile
 INSERT INTO PRODUZIONE (titolo, artista, data_inizio, data_fine, stato, tipo_produzione, genere) VALUES
-('Album 1', 'BandABC', '2020-02-01', '2020-06-01', 'Pubblicazione', 'Album', 'Rock'),
-('Singolo 1', 'SoloXYZ', '2019-08-01', '2019-08-15', 'Produzione', 'Singolo', 'Pop'),
-('EP 1', 'Group123', '2018-12-01', '2019-01-01', 'Produzione', 'EP', 'Jazz'),
-('Compilation 1', 'DuoLMN', '2021-03-01', '2021-04-01', 'Produzione', 'EP', 'Classical'),
-('Album 2', 'SoloPQR', '2017-06-01', '2017-10-01', 'Pubblicazione', 'Album', 'Hip Hop'),
-('Singolo 2', 'TrioUVW', '2019-10-10', '2019-10-20', 'Pubblicazione', 'Singolo', 'Electronic'),
-('EP 2', 'BandDEF', '2020-04-01', '2020-05-01', 'Produzione', 'EP', 'Rock'),
-('Album 3', 'SoloGHI', '2018-07-01', '2018-11-01', 'Pubblicazione', 'Album', 'Pop'),
-('Singolo 3', 'GroupJKL', '2019-05-01', '2019-05-15', 'Produzione', 'Singolo', 'Jazz'),
-('EP 3', 'DuoMNO', '2021-08-01', '2021-09-01', 'Produzione', 'EP', 'Classical');
+('Album 1'      , 'BandABC' , '2020-02-01', '2020-06-01', 'Pubblicazione'   , 'Album'   , 'Rock'),
+('Singolo 1'    , 'SoloXYZ' , '2019-08-01', '2019-08-15', 'Produzione'      , 'Singolo' , 'Pop'),
+('EP 1'         , 'Group123', '2018-12-01', '2019-01-01', 'Produzione'      , 'EP'      , 'Jazz'),
+('Compilation 1', 'DuoLMN'  , '2021-03-01', '2021-04-01', 'Produzione'      , 'EP'      , 'Classical'),
+('Album 2'      , 'SoloPQR' , '2017-06-01', '2017-10-01', 'Pubblicazione'   , 'Album'   , 'Hip Hop'),
+('Singolo 2'    , 'TrioUVW' , '2019-10-10', '2019-10-20', 'Pubblicazione'   , 'Singolo' , 'Electronic'),
+('EP 2'         , 'BandDEF' , '2020-04-01', '2020-05-01', 'Produzione'      , 'EP'      , 'Rock'),
+('Album 3'      , 'SoloGHI' , '2018-07-01', '2018-11-01', 'Pubblicazione'   , 'Album'   , 'Pop'),
+('Singolo 3'    , 'GroupJKL', '2019-05-01', '2019-05-15', 'Produzione'      , 'Singolo' , 'Jazz'),
+('EP 3'         , 'DuoMNO'  , '2021-08-01', '2021-09-01', 'Produzione'      , 'EP'      , 'Classical');
 
 -- Popolamento della tabella CANZONE
 INSERT INTO CANZONE (titolo, produzione, testo, data_di_registrazione, lunghezza_in_secondi, nome_del_file, percorso_di_sistema, estensione) VALUES
-('Canzone 1', 1, 'Testo della canzone 1', '2020-02-10', 180, 'canzone1.mp3', '/musica/bandabc', 'mp3'),
-('Canzone 2', 2, 'Testo della canzone 2', '2019-08-05', 210, 'canzone2.mp3', '/musica/soloxyz', 'mp3'),
-('Canzone 3', 3, 'Testo della canzone 3', '2018-12-10', 240, 'canzone3.mp3', '/musica/group123', 'mp3'),
-('Canzone 4', 4, 'Testo della canzone 4', '2021-03-10', 200, 'canzone4.mp3', '/musica/duolmn', 'mp3'),
-('Canzone 5', 5, 'Testo della canzone 5', '2017-07-01', 190, 'canzone5.mp3', '/musica/solopqr', 'mp3'),
-('Canzone 6', 3, 'Testo della canzone 6', '2019-10-15', 220, 'canzone6.mp3', '/musica/triouvw', 'mp3'),
-('Canzone 7', 4, 'Testo della canzone 7', '2020-04-05', 230, 'canzone7.mp3', '/musica/banddef', 'mp3'),
-('Canzone 8', 5, 'Testo della canzone 8', '2018-07-15', 250, 'canzone8.mp3', '/musica/sologhi', 'mp3'),
-('Canzone 9', 9, 'Testo della canzone 9', '2019-05-10', 260, 'canzone9.mp3', '/musica/groupjkl', 'mp3'),
-('Canzone 10', 10, 'Testo della canzone 10', '2021-08-10', 270, 'canzone10.mp3', '/musica/duomno', 'mp3');
+('Canzone 1' , 9 , 'Testo della canzone 1' , '2020-02-10', 180, 'canzone1.mp3' , '/musica/bandabc'  , 'mp3'),
+('Canzone 2' , 2 , 'Testo della canzone 2' , '2019-08-05', 210, 'canzone2.mp3' , '/musica/soloxyz'  , 'mp3'),
+('Canzone 3' , 7 , 'Testo della canzone 3' , '2018-12-10', 240, 'canzone3.mp3' , '/musica/group123' , 'mp3'),
+('Canzone 4' , 3 , 'Testo della canzone 4' , '2021-03-10', 200, 'canzone4.mp3' , '/musica/duolmn'   , 'mp3'),
+('Canzone 5' , 4 , 'Testo della canzone 5' , '2017-07-01', 190, 'canzone5.mp3' , '/musica/solopqr'  , 'mp3'),
+('Canzone 6' , 7 , 'Testo della canzone 6' , '2019-10-15', 220, 'canzone6.mp3' , '/musica/triouvw'  , 'mp3'),
+('Canzone 7' , 4 , 'Testo della canzone 7' , '2020-04-05', 230, 'canzone7.mp3' , '/musica/banddef'  , 'mp3'),
+('Canzone 8' , 7 , 'Testo della canzone 8' , '2018-07-15', 250, 'canzone8.mp3' , '/musica/sologhi'  , 'mp3'),
+('Canzone 9' , 9 , 'Testo della canzone 9' , '2019-05-10', 260, 'canzone9.mp3' , '/musica/groupjkl' , 'mp3'),
+('Canzone 10', 10, 'Testo della canzone 10', '2021-08-10', 270, 'canzone10.mp3', '/musica/duomno'   , 'mp3');
 
 -- Popolamento della tabella PARTECIPAZIONE
 INSERT INTO PARTECIPAZIONE (solista, canzone) VALUES
 ('SoloABC', 1),
-('SoloXYZ', 2),
+('SoloXYZ', 8),
 ('SoloDEF', 3),
 ('SoloPQR', 4),
 ('SoloGHI', 5),
 ('SoloSTU', 6),
 ('SoloJKL', 7),
-('SoloGHI', 8),
+('SoloPQR', 8),
 ('SoloXYZ', 9),
 ('SoloABC', 10),
-('SoloDEF', 4),
 ('SoloPQR', 5),
-('SoloGHI', 6),
+('SoloPQR', 6),
 ('SoloSTU', 7),
 ('SoloJKL', 8),
 ('SoloGHI', 2);
@@ -190,15 +189,17 @@ INSERT INTO PAGAMENTO (ordine, stato, costo_totale, metodo) VALUES
 
 -- Popolamento della tabella TIPOLOGIA
 INSERT INTO TIPOLOGIA (nome, valore, n_giorni) VALUES
-('Giornaliera', 50.00, 1), ('Settimanale', 100.00, 7), ('Mensile', 150.00, 30);
+('Giornaliera', 200.00, 1),
+('Settimanale', 1200.00, 7), 
+('Mensile', 4000.00, 30);
 
 -- Popolamento della tabella PACCHETTO
 INSERT INTO PACCHETTO (ordine, tipologia, n_giorni_prenotati_totali) VALUES
-(1, 'Giornaliera', 1),
-(2, 'Settimanale', 3),
-(3, 'Settimanale', 7),
+(1, 'Giornaliera', 0),
+(2, 'Settimanale', 0),
+(3, 'Settimanale', 0),
 (4, 'Giornaliera', 0),
-(5, 'Mensile', 17);
+(5, 'Mensile', 0);
 
 -- Popolamento della tabella ORARIO
 INSERT INTO ORARIO (ordine, n_ore_prenotate_totali, valore) VALUES
@@ -240,7 +241,7 @@ INSERT INTO ORARIA (prenotazione, orario) VALUES
 
 INSERT INTO FASCIA_ORARIA (oraria, orario_inizio, orario_fine) VALUES 
 (6, '09:00:00', '12:00:00'), 
-(6, '13:00:00', '17:00:00'),
+(6, '14:00:00', '17:00:00'),
 (7, '08:00:00', '11:00:00'),
 (8, '18:00:00', '22:00:00'),
 (9, '17:00:00', '23:00:00'),

@@ -78,7 +78,7 @@ CREATE TABLE PRODUZIONE (
     FOREIGN KEY (tipo_produzione) REFERENCES TIPO_PRODUZIONE(nome) ON UPDATE CASCADE ON DELETE SET NULL,
     FOREIGN KEY (genere) REFERENCES GENERE(nome) ON UPDATE CASCADE ON DELETE SET NULL,
     CHECK (data_inizio <= data_fine),
-    CHECK (stato IN ('Pubblicato', 'Pubblicazione'))
+    CHECK (stato IN ('Produzione', 'Pubblicazione'))
 ); 
  
 CREATE TABLE CANZONE (
@@ -169,7 +169,7 @@ CREATE TABLE ORDINE (
     -- Other
     annullato BOOLEAN NOT NULL,
     operatore CHAR(16) NOT NULL,
-    FOREIGN KEY (operatore) REFERENCES OPERATORE(codice_fiscale)  ON UPDATE CASCADE ON DELETE RESTRICT
+    FOREIGN KEY (operatore) REFERENCES OPERATORE(codice_fiscale) ON UPDATE CASCADE ON DELETE RESTRICT
 ); 
  
 CREATE TABLE METODO ( 
@@ -194,7 +194,7 @@ CREATE TABLE TIPOLOGIA (
     nome VARCHAR(255) PRIMARY KEY, 
     valore DECIMAL(10, 2) NOT NULL, 
     n_giorni INTEGER NOT NULL, -- 1 giorno, 7 giorni, 30 giorni 
-    CONSTRAINT check_nome_tipologia CHECK (nome IN ('Giornaliero', 'Settimanale', 'Mensile')),
+    CONSTRAINT check_nome_tipologia CHECK (nome IN ('Giornaliera', 'Settimanale', 'Mensile')),
     CONSTRAINT check_valore_positivo CHECK (valore > 0),
     CONSTRAINT check_n_giorni CHECK (n_giorni = 1 OR n_giorni = 7 OR n_giorni = 30)
 ); 

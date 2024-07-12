@@ -150,7 +150,7 @@ BEGIN
 
         -- Controllo per il solista a capo
         IF (FOUND) THEN
-            RAISE EXCEPTION 'll solista fa parte del gruppo creatore della produzione e di conseguenza della canzone.';
+            RAISE EXCEPTION 'Il solista fa parte del gruppo creatore della produzione e di conseguenza della canzone.';
         END IF;
 
     END IF;

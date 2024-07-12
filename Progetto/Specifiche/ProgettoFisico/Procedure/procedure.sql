@@ -16,7 +16,6 @@ EXCEPTION
         ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
-CALL AggiornaCostoOrdine(1);
 
 -----------------------------------------------------------------------------------------
 
@@ -32,7 +31,6 @@ BEGIN
     VALUES (nome_arte, data_registrazione);
 END
 $$;
-CALL AggiungiArtista('Tremore', '2024-06-08');
 
 -----------------------------------------------------------------------------------------
 
@@ -68,7 +66,6 @@ EXCEPTION
         ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
-CALL CreaOrdinePacchetto('OPRABC90A01H501X', 'BandABC', 'Mensile');
 
 /* CREA UNA PRENOTAZIONE DI TIPO GIORNALIERA
  * Procedura che inserisce una nuova prenotazione associandola al 
@@ -100,9 +97,6 @@ EXCEPTION
         ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
-CALL CreaPrenotazioneGiornaliera(1, '2023-01-10', 2, 2); -- Funzionante
-CALL CreaPrenotazioneGiornaliera(1, '2022-01-01', 2, 2); -- Eccezione: Indietro nel tempo
-CALL CreaPrenotazioneGiornaliera(1, '2023-05-01', 2, 2); -- Eccezione: Più di 90 giorni
 
 -----------------------------------------------------------------------------------------
 
@@ -150,13 +144,6 @@ EXCEPTION
         ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
-CALL CreaOrdineEPrenotazioneOrarie(
-    'OPRABC90A01H501X', 'BandABC', 30,
-    '2023-02-03', 
-    '{08:00, 14:00}'::time[],
-    '{10:00, 18:00}'::time[],
-    2, 2
-);
 
 /* CREA UN NUOVO ORDINE DI TIPO ORARIO
  * La funzione produce un ordine di tipo orario. E restituisce il suo id.
@@ -194,9 +181,6 @@ EXCEPTION
         ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
-SELECT CreaOrdineOrario(
-    'OPRABC90A01H501X', 'BandABC', 30
-);
 
 /* CREA PRENOTAZIONE PER ORDINE ORARIO
  * La procedura produce la prenotazione per un ordine orario.
@@ -264,12 +248,6 @@ EXCEPTION
         ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
-CALL CreaPrenotazioneOraria(
-    ordine_id, '2023-02-03', 
-    '{08:00, 14:00}'::time[],
-    '{10:00, 18:00}'::time[],
-    2, 2
-);
 
 -----------------------------------------------------------------------------------------
 
@@ -321,16 +299,6 @@ EXCEPTION
         ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
-CALL CreaArtistaSolista(
-    'PopStar', 
-    '2024-06-08', 
-    'PSMRTN90B05C351K', 
-    'Giulia', 
-    'Bianchi', 
-    '1990-02-05', 
-    'giulia.bianchi@example.com', 
-    '098762222'
-);
 
 -----------------------------------------------------------------------------------------
 
@@ -378,14 +346,6 @@ EXCEPTION
 
 END
 $$;
-
-CALL CreaArtistaGruppo(
-    'Artista1234',
-    '2024-06-09',
-    'artista1234@email.com',
-    '1234567333',
-    '2024-01-01'
-);
 
 -----------------------------------------------------------------------------------------
 /* CREA PARTECIPAZIONE SOLISTA GRUPPO
@@ -437,12 +397,6 @@ BEGIN
             ROLLBACK;    -- Annulla la transazione in caso di errore
 END
 $$;
-
-CALL CreaPartecipazioneSolistaGruppo('PopStar', 'Artista1234', '2024-06-08');
-CALL CreaPartecipazioneSolistaGruppo('PopStar', 'Artista1234', '2024-06-08'); -- controllo Il solista è già nel gruppo specificato
-CALL CreaPartecipazioneSolistaGruppo('PopStar', 'BandABC',     '2024-06-08');
-CALL CreaPartecipazioneSolistaGruppo('PopStar', 'Group123',    '2024-06-08');
-PERFORM query;
 
 -----------------------------------------------------------------------------------------
 
@@ -517,16 +471,3 @@ EXCEPTION
         ROLLBACK;    -- Annulla la transazione in caso di errore
 END;
 $$;
-
-CALL AggiungiCanzoneEPartecipazioni(
-    'Titolo della Canzone',
-    1,
-    'Testo della canzone',
-    '2024-06-09',
-    300, -- Lunghezza in secondi
-    'nome_file.mp3',
-    '/percorso/di/sistema',
-    'mp3', -- Estensione del file
-    ARRAY['SoloXYZ', 'SoloABC'], -- Array di nomi d'arte dei solisti
-    'TCNAUD85M01H501Z' -- Codice fiscale del tecnico
-);
