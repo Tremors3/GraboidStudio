@@ -1,3 +1,9 @@
+SELECT * FROM pg_stat_user_indexes;
+SELECT * FROM pg_stat_user_tables;
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+--- ------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------
 
 VINCOLI TROVATI
 
@@ -27,7 +33,7 @@ CREATE INDEX ordine_artista_indx ON ordine (artista);
 --------------------------------------------------------------------------
 
 -- Query
-EXPLAIN ANALYSE SELECT p.ordine, sub.nome_arte, sub.numero, sub.timestamp
+EXPLAIN ANALYSE VERBOSE SELECT p.ordine, sub.nome_arte, sub.numero, sub.timestamp
 FROM PAGAMENTO AS p
 JOIN ( 
     SELECT a.nome_arte, o.codice, te.numero, o.timestamp
@@ -39,9 +45,10 @@ JOIN (
 
 --------------------------------------------------------------------------
 
-1) La query diventa molto 'lenta' man mano aumenta il numero di 'ordini'. L indice 'ordine_artista_indx' velocizza drasticamente la query.
-2) Un altro problema sorge nell aumentare il numero di 'gruppi'. In questo caso non è stato individuato nessun indice che possa velocizzare la query.
-In questo caso non avvantaggia usare query composite, anzi, non si possono nemmeno fare...
+100 k || 20 ms -> .120 ms
+
+1 [x]) La query diventa molto 'lenta' man mano aumenta il numero di 'ordini'. L indice 'ordine_artista_indx' velocizza drasticamente la query.
+2 [ ]) Un altro problema sorge nell aumentare il numero di 'gruppi'. In questo caso non è stato individuato nessun indice che possa velocizzare la query.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------

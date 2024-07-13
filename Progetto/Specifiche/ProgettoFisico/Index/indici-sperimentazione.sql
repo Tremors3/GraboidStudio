@@ -4,6 +4,7 @@ TROVARE I VINCOLI
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 --- O7) ELENCARE GLI ORDINI CHE NON SONO ANCORA STATI PAGATI ---------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT * FROM pg_stat_user_indexes;
 
 -- Genera Ordini
 CREATE OR REPLACE FUNCTION insert_data_multiple_times(n INT, w INT ) RETURNS VOID AS $$
@@ -135,7 +136,7 @@ SELECT DISTINCT t.codice_fiscale, t.nome, t.cognome
 FROM TECNICO t
 JOIN LAVORA_A l ON t.codice_fiscale = l.tecnico
 JOIN CANZONE c ON l.canzone = c.codice
-JOIN GENERE g ON c.genere = g.codice
+JOIN PRODUZIONE g ON c.genere = g.codice
 WHERE g.nome = 'Pop';
 
 
@@ -147,6 +148,7 @@ WHERE g.nome = 'Pop';
 c. genere non esiste --> aggiungere a CANZONE:
     genere VARCHAR(255),
     FOREIGN KEY (genere) REFERENCES genere(nome) ON UPDATE CASCADE ON DELETE RESTRICT,
+bisogna aggiornare anche le procedure
 
 g.codice è sbagliato --> g.nome
 
