@@ -291,12 +291,12 @@ INSERT INTO LAVORA_A (tecnico, canzone) VALUES
 ('TCNAUD90A01H501X', 10);
 
 INSERT INTO ATTREZZATURA (modello, costruttore) VALUES
-('Computer', 'China'),
-('Mixer', 'China'),
-('Multitraccia', 'China'),
+('Computre', 'China'),
+('Micser', 'China'),
+('Multritraccia', 'China'),
 ('Polivoks', 'Soviet Union'),
 ('Mircofhggono', 'China'),
-('Digital Audio Workstation', 'China'),
+('Digital Audio Workstescion', 'China'),
 ('Altopralatni', 'Buuse'),
 ('Tasso imbalsamato che fa i rumori', 'China');
 
