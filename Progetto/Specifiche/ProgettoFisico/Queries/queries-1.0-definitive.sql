@@ -117,12 +117,13 @@ WHERE codice = 1;
  */
 
 -- Caso del Solista
+TODO QUESTA QUERY NON FA ESATTAMENTE CIO CHE DICE
 SELECT o.codice, s.nome, s.cognome, t.numero, o.timestamp
 FROM ordine AS o
 JOIN artista    AS a ON a.nome_arte = o.artista
 JOIN solista    AS s ON a.nome_arte = s.artista
 JOIN telefono_a AS t ON a.nome_arte = t.artista
-JOIN PAGAMENTO  AS p ON p.ordine = o.codice;
+JOIN PAGAMENTO  AS p ON p.ordine = o.codice; -- al posto di o.codice = <codice>
 
 -- Caso del Gruppo
 SELECT o.codice, a.nome_arte, t.numero, o.timestamp
@@ -138,6 +139,8 @@ JOIN PAGAMENTO  AS p ON p.ordine = o.codice;
  */
 
 -- Caso del Solista
+
+CREATE OR REPLACE VIEW ordini_non_pagati_solisti AS
 SELECT p.ordine, sub.nome, sub.cognome, sub.numero, sub.timestamp
 FROM PAGAMENTO AS p
 JOIN ( 
@@ -148,7 +151,10 @@ JOIN (
 	AND te.artista = a.nome_arte
 ) as sub ON p.ordine = sub.codice WHERE p.stato = 'Da pagare';
 
+select * from ordini_non_pagati_solisti;
+
 -- Caso del Gruppo
+CREATE OR REPLACE VIEW ordini_non_pagati_gruppo AS
 SELECT p.ordine, sub.nome_arte, sub.numero, sub.timestamp
 FROM PAGAMENTO AS p
 JOIN ( 
@@ -158,6 +164,8 @@ JOIN (
     AND g.artista = a.nome_arte
 	AND te.artista = a.nome_arte
 ) as sub ON p.ordine = sub.codice WHERE p.stato = 'Da pagare';
+
+select * from ordini_non_pagati_gruppo;
 
 /* O8) ELENCARE LE SALE DISPONIBILI
  * Viene visualizzato un elenco di tutte le sale libere per una certa data, ora di inizio e ora di fine
