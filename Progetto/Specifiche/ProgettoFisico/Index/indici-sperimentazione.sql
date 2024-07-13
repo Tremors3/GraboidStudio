@@ -5,7 +5,7 @@ TROVARE I VINCOLI
 --- O7) ELENCARE GLI ORDINI CHE NON SONO ANCORA STATI PAGATI ---------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 SELECT * FROM pg_stat_user_indexes;
-
+SELECT * FROM pg_stat_user_tables;
 -- Genera Ordini
 CREATE OR REPLACE FUNCTION insert_data_multiple_times(n INT, w INT ) RETURNS VOID AS $$
 DECLARE
@@ -53,7 +53,7 @@ CLUSTER pagamento USING indice;
 
 --------------------------------------------------------------------------
 
-EXPLAIN ANALYSE SELECT p.ordine, sub.nome_arte, sub.numero, sub.timestamp
+EXPLAIN ANALYSE VERBOSE SELECT p.ordine, sub.nome_arte, sub.numero, sub.timestamp
 FROM PAGAMENTO AS p
 JOIN ( 
     SELECT a.nome_arte, o.codice, te.numero, o.timestamp
@@ -131,6 +131,50 @@ WHERE o.artista = 'SoloXYZ';
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 --- T11) Elencare i tecnici che hanno lavorato su canzoni in un determinato genere------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION insert_data_multiple_times(n INT, w INT ) RETURNS VOID AS $$
+DECLARE
+    i INT := n;
+BEGIN
+    WHILE i <= N+w LOOP
+		call aggiungicanzoneepartecipazioni(
+			'Titolo' || i, 	--titolo
+			'' || i, 		--produzione_id
+			'abgdjhhjghjgy',--testo
+			TIMESTAMP, 		--data_di_registrazione
+			'' ||i, 		--lunghezza_in_secondi
+			'Titolo' || i, 	--nome_del_file
+			'percorso', 	--percorso_di_sistema
+			'mp3', 			--estensione
+                            --solisti_nome_arte
+                            --codice_fiscale_tecnico	
+		);
+		
+		INSERT INTO produzione (titolo, artista, stato, tipo_produzione, genere)
+		VALUES (
+            'Titolo' || i,
+            'Artista' || i%5,
+            'Produzione',
+            'Album',
+            '' || i%6
+		);
+		
+      i := i + 1;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT insert_data_multiple_times(0, 100000);
+
+
+
+
+
+
+
+
+
+
 
 SELECT DISTINCT t.codice_fiscale, t.nome, t.cognome
 FROM TECNICO t
