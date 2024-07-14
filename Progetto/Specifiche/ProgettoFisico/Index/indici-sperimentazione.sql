@@ -1,74 +1,4 @@
-----------------------------------------------------------------------------------------------------------------------------------------------------
---- O7) ELENCARE GLI ORDINI CHE NON SONO ANCORA STATI PAGATI ---------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------------------------
-
--- Genera Ordini
-CREATE OR REPLACE FUNCTION insert_data_multiple_times(n INT, w INT ) RETURNS VOID AS $$
-DECLARE
-    i INT := n;
-BEGIN
-    WHILE i <= N+w LOOP
-		call AggiungiArtista('SoloXYZ ' || i, '2024-12-07');
-        call CreaOrdinePacchetto('OPRABC90A01H501X', 'SoloXYZ ' || i, 'Mensile');
-        i := i + 1;
-    END LOOP;
-END;
-$$ LANGUAGE plpgsql;
-
-SELECT insert_data_multiple_times(0, 100000);
-
--- CREATE INDEX indice ON ordine (artista);
-
---------------------------------------------------------------------------
-
--- Genera Gruppi
-CREATE OR REPLACE FUNCTION insert_data_multiple_times(n INT, w INT ) RETURNS VOID AS $$
-DECLARE
-    i INT := n;
-BEGIN
-    WHILE i <= N+w LOOP
-		CALL CreaArtistaGruppo('Gruppo ' || i, '2024-06-09', i || 'artista@email.com', '' || i, '2024-01-01');
-        i := i + 1;
-    END LOOP;
-END;
-$$ LANGUAGE plpgsql;
-
-SELECT insert_data_multiple_times(0, 100000);
-
--- Accrescendo il numero di gruppi la query diventa e resta lenta qualsiasi indice utilizzato
-
---------------------------------------------------------------------------
-
-DROP INDEX IF EXISTS indice;
-DROP INDEX IF EXISTS indice2;
-
-CREATE INDEX indice ON ordine (artista);  -- Questo dovrebbe essere l'unico sensato       <---
-CREATE INDEX indice2 ON gruppo (artista); -- Questo non serve a niente
-
-CLUSTER pagamento USING indice;
-
---------------------------------------------------------------------------
-
-EXPLAIN ANALYSE VERBOSE SELECT p.ordine, sub.nome_arte, sub.numero, sub.timestamp
-FROM PAGAMENTO AS p
-JOIN ( 
-    SELECT a.nome_arte, o.codice, te.numero, o.timestamp
-    FROM ORDINE AS o, ARTISTA AS a, GRUPPO AS g, TELEFONO_A AS te
-    WHERE o.artista = a.nome_arte 
-    AND g.artista = a.nome_arte
-	AND te.artista = a.nome_arte
-) as sub ON p.ordine = sub.codice WHERE p.stato = 'Da pagare';
-
--- creazione di query che non fanno uso dei due campi che vanno a creare delle unique key; in modo da creare l'indice solo su un attributo, invece dei due creati in automatico
--- creazione di query lente per le altre tabelle, la tabella prenotazione ha il problema dei timestamp
-
-
-
-
-
-----------------------------------------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION insert_data_multiple_times(n INT, w INT ) RETURNS VOID AS $$
 DECLARE
@@ -94,22 +24,9 @@ EXPLAIN ANALYSE SELECT * FROM produzione AS p WHERE p.titolo LIKE 'Album 100%'AN
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------------------------
+------- ---------------------------------------------------------------------------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION insert_data_multiple_times_p(n INT, w INT ) RETURNS VOID AS $$
-DECLARE
-    i INT := n;
-BEGIN
-    WHILE i <= N+w LOOP
-     	call CreaOrdinePacchetto('OPRABC90A01H501X', 'SoloXYZ', 'Mensile');
-    	raise notice '%',i;
-     PERFORM pg_sleep(1);
-    END LOOP;
-END;
-$$ LANGUAGE plpgsql;
 
--- Esegui la funzione per inserire i dati
-select insert_data_multiple_times_p(60, 10); --indice di partenza, quante volte
 
 -- Creazione dell'indice sulla colonna titolo
 -- Creazione dell'indice composito
@@ -174,30 +91,27 @@ JOIN CANZONE c ON l.canzone = c.codice
 JOIN PRODUZIONE p ON c.produzione = p.codice
 WHERE p.genere = 'Rock';
 
-
-
-
-
-
-/*
-c. genere non esiste --> aggiungere a CANZONE:
-    genere VARCHAR(255),
-    FOREIGN KEY (genere) REFERENCES genere(nome) ON UPDATE CASCADE ON DELETE RESTRICT,
-bisogna aggiornare anche le procedure
-
-g.codice è sbagliato --> g.nome
-
-*/
-
-
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+CREATE OR REPLACE FUNCTION insert_multiple_ordini_giornalieri(n INT, w INT ) RETURNS VOID AS $$
+DECLARE
+    i INT := n;
+BEGIN
+    WHILE i <= N+w LOOP
+        -- Genera Artista
+		call AggiungiArtista('SoloXYZ ' || i, '2024-12-07');
+     	call CreaOrdinePacchetto('OPRABC90A01H501X', 'SoloXYZ ' || i, 'Giornaliera');
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
 
+-- Esegui la funzione per inserire i dati
+select insert_multiple_ordini_giornalieri(60, 10); --indice di partenza, quante volte
 
-
+ 
 
 
 
@@ -333,3 +247,120 @@ JOIN LAVORA_A l ON t.codice_fiscale = l.tecnico
 JOIN CANZONE c ON l.canzone = c.codice
 JOIN GENERE g ON c.genere = g.codice
 WHERE g.nome = 'Pop';
+
+
+
+
+--=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=
+
+
+
+
+--- FUNZIONA INDICE ma è gia usato
+CREATE OR REPLACE FUNCTION insert_multiple_ordini_giornalieri(n INT, w INT ) RETURNS VOID AS $$
+DECLARE
+    i INT := n;
+BEGIN
+    WHILE i <= N+w LOOP
+        -- Genera Artista
+		call AggiungiArtista('SoloXZ ' || i, '2024-12-07');
+     	call CreaOrdinePacchetto('OPRABC90A01H501X', 'SoloXZ ' || i, 'Giornaliera');  
+     
+
+     	i = i + 1;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+select insert_multiple_ordini_giornalieri(50000, 30000);
+
+drop index p_ord_idx;
+create index p_ord_idx on ordine(artista);
+
+explain analyse verbose SELECT sum(p.costo_totale) as costo_totale, count(*) AS counter
+FROM PAGAMENTO p
+JOIN ORDINE o ON p.ordine = o.codice
+WHERE o.artista = 'SoloXZ 70000';
+-- DA 5 MS PASSA A .05 SU 30mila RECORDS
+
+--------------
+
+
+
+--- Genera gli Ordini
+CREATE OR REPLACE FUNCTION insert_multiple_ordini_giornalieri(n INT, w INT ) RETURNS VOID AS $$
+DECLARE
+    i INT := n;
+BEGIN
+    WHILE i <= N+w LOOP
+
+        -- Genera Artista
+		call AggiungiArtista('SoloXZ ' || i, '2024-12-07');
+     	
+        -- Genera Ordine di tipo Pacchetto
+        call CreaOrdinePacchetto('OPRABC90A01H501X', 'SoloXZ ' || i, 'Giornaliera');  
+
+     	i = i + 1;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+select insert_multiple_ordini_giornalieri(1, 30000);
+
+--------------------------------------------------------------------------
+
+CREATE INDEX ordine_artista_indx ON prenotazioni(artista);
+
+--------------------------------------------------------------------------
+
+EXPLAIN (ANALYSE, BUFFERS, VERBOSE) 
+    SELECT count(*) AS numero_prenotazioni
+    FROM PRENOTAZIONE AS p
+    WHERE p.annullata = FALSE and .artista = 'SoloXZ 25000' ;
+
+
+-- prese tutte le produzioni fare un filtro che parta da una data di inizio e data una data da cui iniziare la ricerca, creando un indice su di esso, volendo si può calcolare il numero di produzioni, canzoni opppure lasciarla cosi come è 
+
+
+
+
+
+
+
+-- Genera Produzione ed Artista
+CREATE OR REPLACE FUNCTION insert_data_multiple_times(n INT, w INT ) RETURNS VOID AS $$
+DECLARE
+    i INT := n;
+BEGIN
+    WHILE i <= N+w LOOP
+
+        -- Genera Artista
+		call AggiungiArtista('SoloCiccio ' || i, '2024-12-07');
+		
+        -- Genera Produzione
+        INSERT INTO PRODUZIONE (titolo, artista, data_inizio, data_fine, stato, tipo_produzione, genere) VALUES
+		('Album ' || i, 'SoloCiccio ' || i, '2020-02-01', '2020-06-01', 'Pubblicazione'   , 'Album' , 'Rock');
+
+        i := i + 1;
+    END LOOP;
+
+    WHILE i <= N+w + 1500  LOOP
+
+        -- Genera Produzione
+	  
+        INSERT INTO PRODUZIONE (titolo, artista, data_inizio, data_fine, stato, tipo_produzione, genere) VALUES
+		('Album ' || i, 'SoloCiccio 1000', '2023-02-01', '2023-06-01', 'Pubblicazione'   , 'Album'   , 'Rock');
+        i := i + 1;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+select insert_data_multiple_times(300, 10300);
+
+create index data_inizio_produzione on PRODUZIONE(data_inizio);
+
+
+EXPLAIN (ANALYSE, BUFFERS, VERBOSE)  SELECT *
+FROM PRODUZIONE
+WHERE data_inizio >= '2023-01-01';
+
+-- da 16 ms a 0.2 ms
