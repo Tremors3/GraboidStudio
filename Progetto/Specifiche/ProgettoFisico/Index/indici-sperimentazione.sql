@@ -1,49 +1,3 @@
-
-TROVARE I VINCOLI
-
-----------------------------------------------------------------------------------------------------------------------------------------------------
---- A1) ELENCARE LE PRODUZIONI COMPOSTE DA UN DETERMINATO ARTISTA ----------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------------------------
-
--- Genera Produzione ed Artista
-CREATE OR REPLACE FUNCTION insert_data_multiple_times(n INT, w INT ) RETURNS VOID AS $$
-DECLARE
-    i INT := n;
-BEGIN
-    WHILE i <= N+w LOOP
-
-        -- Genera Artista
-		call AggiungiArtista('SoloCiccio ' || i, '2024-12-07');
-		
-        -- Genera Produzione
-        INSERT INTO PRODUZIONE (titolo, artista, data_inizio, data_fine, stato, tipo_produzione, genere) VALUES
-		('Album ' || i, 'SoloCiccio ' || i, '2020-02-01', '2020-06-01', 'Pubblicazione'   , 'Album'   , 'Rock');
-        i := i + 1;
-
-    END LOOP;
-END;
-$$ LANGUAGE plpgsql;
-
--- Index
-DROP INDEX artista_produzione_indx;
-CREATE INDEX artista_produzione_indx ON produzione (artista);
-
--- Query
-EXPLAIN (ANALYSE, BUFFERS, VERBOSE) 
-    SELECT * FROM produzione AS p WHERE artista = 'SoloCiccio 1000';
-
-10k 
-
--- Decidiamo di non mettere l'indice perchè:
-
-
-
-
-
-
-
-
-
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 --- O7) ELENCARE GLI ORDINI CHE NON SONO ANCORA STATI PAGATI ---------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -107,8 +61,6 @@ JOIN (
 
 -- creazione di query che non fanno uso dei due campi che vanno a creare delle unique key; in modo da creare l'indice solo su un attributo, invece dei due creati in automatico
 -- creazione di query lente per le altre tabelle, la tabella prenotazione ha il problema dei timestamp
-
-
 
 
 

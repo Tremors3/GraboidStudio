@@ -2,7 +2,7 @@ SELECT * FROM pg_stat_user_indexes;
 SELECT * FROM pg_stat_user_tables;
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
---- ------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 VINCOLI TROVATI
@@ -59,11 +59,7 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 Decidiamo di non utilizzare l indice perchè:
 [ ] E difficile che otterremo un numero di produzioni molto alto;
 [ ] ...e comunque su 10mila record 1ms è accettabile.
-
-
-
-
-
+[ ] ... provare con i clusters
 
 
 
@@ -83,7 +79,7 @@ Decidiamo di non utilizzare l indice perchè:
 --- O7) ELENCARE GLI ORDINI CHE NON SONO ANCORA STATI PAGATI ---------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
--- Genera gli ordini
+-- Genera gli Ordini
 CREATE OR REPLACE FUNCTION insert_data_multiple_times(n INT, w INT ) RETURNS VOID AS $$
 DECLARE
     i INT := n;
@@ -95,6 +91,20 @@ BEGIN
     END LOOP;
 END;
 $$ LANGUAGE plpgsql;
+SELECT insert_data_multiple_times(0, 100000);
+
+-- Genera gli Gruppi
+CREATE OR REPLACE FUNCTION insert_data_multiple_times(n INT, w INT ) RETURNS VOID AS $$
+DECLARE
+    i INT := n;
+BEGIN
+    WHILE i <= N+w LOOP
+		CALL CreaArtistaGruppo('Gruppo ' || i, '2024-06-09', i || 'artista@email.com', '' || i, '2024-01-01');
+        i := i + 1;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
 SELECT insert_data_multiple_times(0, 100000);
 
 --------------------------------------------------------------------------
