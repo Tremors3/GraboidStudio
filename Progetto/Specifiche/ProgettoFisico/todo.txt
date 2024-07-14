@@ -5,16 +5,19 @@
 COSE ANCORA DA FARE
 
 1. [X] AGGIUSTARE IL POPOLAMENTO IN MODO CHE RISPETTI I VINCOLI
-2. [ ] IMPLEMENTARE LE VISTE RELATIVE ALLE QUERY E QUELLE A SE STANTI
+2. [x] IMPLEMENTARE LE VISTE RELATIVE ALLE QUERY E QUELLE A SE STANTI
 3. [x] AGGIUNGERE LE KEYWORD SPECIALI A FUNZIONI, PROCEDURE e TRIGGERS
-4. [ ] FINIRE DI SCRIVERE LE INTRODUZIONI DEL SECONDO LETECS.
-5. [ ] DIVIDERCI LE PARTI E REGISTRARE I VIDEO.
+4. [x] FINIRE DI SCRIVERE LE INTRODUZIONI DEL SECONDO LETECS.
+5. [x] TROVARE E STUDIARE GLI INDICI PER CIASCUNO DI NOI TRE.
+6. [ ] FORMATTARE IL TESTO E LE IMMAGINI DEGLI INDICI NEL FILE SECONDARIO
+7. [ ] AGGIUNGERE AL FILE PRIMARIO LA TEBELLA "ATTREZZATURA" E LA RELAZIONE "AVERE"
+8. [ ] DIVIDERCI LE PARTI E REGISTRARE I VIDEO.
 
 ------------------------------------------------------------
 
-INDICI
---> https://stackoverflow.com/questions/1108/how-does-database-indexing-work
---> https://stackoverflow.com/questions/3318727/postgresql-index-usage-analysis
+[x] INDICI
+    --> https://stackoverflow.com/questions/1108/how-does-database-indexing-work
+    --> https://stackoverflow.com/questions/3318727/postgresql-index-usage-analysis
     --> individuare le query che richiedono più letture
     --> individuare gli attributi su cui effettuare un indice
     --> controllare che effettuare un indice convenga veramente e non sia sprecato
