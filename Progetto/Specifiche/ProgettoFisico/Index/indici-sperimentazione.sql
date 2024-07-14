@@ -65,7 +65,7 @@ BEGIN
         -- Genera Produzione
 	  
         INSERT INTO PRODUZIONE (titolo, artista, data_inizio, data_fine, stato, tipo_produzione, genere) VALUES
-		('Album ' || i, 'SoloCiccio 1000', '2023-02-01', '2023-06-01', 'Pubblicazione'   , 'Album'   , 'Rock');
+		('Album ' || i, 'SoloCiccio 1000', '2023-02-01', '2023-06-01', 'Produzione'   , 'Album'   , 'Rock');
         i := i + 1;
     END LOOP;
 END;
@@ -146,6 +146,7 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 
 
 ----- indice per artista
+
 create index data_registrazione_artista_idx on ARTISTA(data_di_registrazione);
 
 EXPLAIN (ANALYSE, BUFFERS, VERBOSE) 
@@ -153,7 +154,6 @@ SELECT *
 FROM ARTISTA AS a
 WHERE a.data_di_registrazione <=  '2020-01-01' ;
 -- 10k || 1,3 ms a 0,2 ms
-
 
 
 
@@ -314,16 +314,16 @@ Decidiamo di non utilizzare l indice perchè:
 
 
 
--- CREATE OR REPLACE FUNCTION grattacielo(n INT, w INT ) RETURNS VOID AS $$
--- DECLARE
---     i INT := n;
--- BEGIN
---     WHILE i <= N+w LOOP
--- 		INSERT INTO SALA (piano, numero) VALUES
--- 		(i, i%3);
---         i := i + 1;
---     END LOOP;
--- END;
--- $$ LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION grattacielo(n INT, w INT ) RETURNS VOID AS $$
+DECLARE
+    i INT := n;
+BEGIN
+    WHILE i <= N+w LOOP
+		INSERT INTO SALA (piano, numero) VALUES
+		(i, i%3);
+        i := i + 1;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
 
--- SELECT grattacielo(4, 100000);
+SELECT grattacielo(4, 100000);
