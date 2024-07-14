@@ -1,0 +1,5 @@
+INTRODUZIONE
+
+Il presente documento descrive una serie di procedure PL/pgSQL sviluppate per il database, 
+progettate per automatizzare e ottimizzare la gestione dei dati. Ogni procedura viene dettagliata 
+con il suo scopo e utilizzo specifico.

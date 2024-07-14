@@ -38,8 +38,8 @@ CALL CreaOrdinePacchetto('OPRABC90A01H501X', 'TrioUVW', 'Mensile');
  * INPUT:   sala_numero                INT
  */
 CALL CreaPrenotazioneGiornaliera(1, '2023-01-10', 2, 2); -- Funzionante
---CALL CreaPrenotazioneGiornaliera(1, '2022-01-01', 2, 2); -- Eccezione: Indietro nel tempo
---CALL CreaPrenotazioneGiornaliera(1, '2023-05-01', 2, 2); -- Eccezione: Più di 90 giorni
+CALL CreaPrenotazioneGiornaliera(1, '2022-01-01', 2, 2); -- Eccezione: Indietro nel tempo
+CALL CreaPrenotazioneGiornaliera(1, '2023-05-01', 2, 2); -- Eccezione: Più di 90 giorni
 
 -----------------------------------------------------------------------------------------
 
@@ -147,7 +147,7 @@ CALL CreaArtistaGruppo(
  * INPUT:   data_adesione_corrente  DATE
  */
 CALL CreaPartecipazioneSolistaGruppo('PopStar', 'Artista1234', '2024-06-08');
-CALL CreaPartecipazioneSolistaGruppo('PopStar', 'Artista1234', '2024-06-08'); -- controllo Il solista è già nel gruppo specificato
+CALL CreaPartecipazioneSolistaGruppo('PopStar', 'Artista1234', '2024-06-08'); -- Notifica: controllo Il solista è già nel gruppo specificato
 CALL CreaPartecipazioneSolistaGruppo('PopStar', 'BandABC',     '2024-06-08');
 CALL CreaPartecipazioneSolistaGruppo('PopStar', 'Group123',    '2024-06-08');
 

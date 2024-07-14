@@ -1,0 +1,4 @@
+INTRODUZIONE
+
+Sono descritte in seguito una serie di funzioni in linguaggio PL/pgSQL, le quali sono utilizzate 
+da diverse procedure al fine di automatizzare e ottimizzare la gestione dei dati. 
