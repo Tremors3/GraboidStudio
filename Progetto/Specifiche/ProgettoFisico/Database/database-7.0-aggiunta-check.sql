@@ -217,8 +217,6 @@ CREATE TABLE ORARIO (
     n_ore_prenotate_totali INTEGER, 
     valore DECIMAL(10, 2),
     CONSTRAINT valore_maggiore CHECK (valore > 0)
-    -- one to one
-    --oraria INTEGER REFERENCES ORARIA(prenotazione) UNIQUE DEFERRABLE INITIALLY DEFERRED
 ); 
  
 CREATE TABLE SALA ( 
