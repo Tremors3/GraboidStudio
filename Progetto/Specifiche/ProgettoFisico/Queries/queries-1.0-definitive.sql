@@ -15,26 +15,34 @@ SELECT * FROM solista WHERE artista IN (
 /* A3) VISUALIZZARE UN ELENCO DELLE PRENOTAZIONI EFFETTUATE TRA TUTTI GLI ORDINI DATO UN ARTISTA
  * Vengono visualizzati i dettagli delle prenotazioni effettuate da un artista.
  */
+CREATE OR REPLACE VIEW informazioni_oraria_or AS
+SELECT * FROM ordine
+JOIN orario ON ordine.codice = orario.ordine
+JOIN oraria ON oraria.orario = orario.ordine;
+
+CREATE OR REPLACE VIEW informazioni_o_or AS
+SELECT * FROM ordine AS o
+JOIN pacchetto AS pa ON o.codice = pa.ordine;
+
 (
     SELECT codice, giorno, annullata FROM prenotazione
     WHERE codice IN (
-        SELECT oraria.prenotazione
-        FROM ordine
-        JOIN orario ON ordine.codice = orario.ordine
-        JOIN oraria ON oraria.orario = orario.ordine
-        WHERE ordine.artista = 'SoloXYZ'
+        
+        SELECT i.prenotazione
+        FROM informazioni_oraria_or as i
+        WHERE i.artista = 'SoloXYZ'
     )
 )
 union
 (
     SELECT codice, giorno, annullata FROM prenotazione
     WHERE pacchetto IN (
-        SELECT pa.ordine  
-        FROM ordine AS o
-        JOIN pacchetto AS pa ON o.codice = pa.ordine
-        WHERE o.artista = 'SoloXYZ'
+        SELECT i.ordine  
+        FROM informazioni_o_or as i
+        WHERE i.artista = 'SoloXYZ'
     )
 );
+
 ------------------------------------- TECNICO -------------------------------------
 
 /* T1) ELENCARE LE CANZONI A CUI LAVORA UN TECNICO
@@ -117,21 +125,26 @@ WHERE codice = 1;
  */
 
 -- Caso del Solista
-TODO QUESTA QUERY NON FA ESATTAMENTE CIO CHE DICE
+CREATE OR REPLACE VIEW informazioni_ordine_solista AS
 SELECT o.codice, s.nome, s.cognome, t.numero, o.timestamp
 FROM ordine AS o
 JOIN artista    AS a ON a.nome_arte = o.artista
 JOIN solista    AS s ON a.nome_arte = s.artista
-JOIN telefono_a AS t ON a.nome_arte = t.artista
-JOIN PAGAMENTO  AS p ON p.ordine = o.codice; -- al posto di o.codice = <codice>
+JOIN telefono_a AS t ON a.nome_arte = t.artista;
+
+select * from informazioni_ordine_solista
+JOIN PAGAMENTO AS p ON p.ordine = <codice_ordine>;
 
 -- Caso del Gruppo
+CREATE OR REPLACE VIEW informazioni_ordine_gruppo AS
 SELECT o.codice, a.nome_arte, t.numero, o.timestamp
 FROM ORDINE AS o
 JOIN ARTISTA    AS a ON a.nome_arte = o.artista
 JOIN GRUPPO     AS g ON a.nome_arte = g.artista
-JOIN TELEFONO_A AS t ON a.nome_arte = t.artista
-JOIN PAGAMENTO  AS p ON p.ordine = o.codice;
+JOIN TELEFONO_A AS t ON a.nome_arte = t.artista;
+
+select * from informazioni_ordine_gruppo
+JOIN PAGAMENTO  AS p ON p.ordine = <codice_ordine>;
 
 /* O7) ELENCARE GLI ORDINI CHE NON SONO ANCORA STATI PAGATI
  * Viene visualizzato un elenco di ordini non pagati e informazioni di chi ha fatto l’ordine: nome, cognome, 
@@ -139,7 +152,6 @@ JOIN PAGAMENTO  AS p ON p.ordine = o.codice;
  */
 
 -- Caso del Solista
-
 CREATE OR REPLACE VIEW ordini_non_pagati_solisti AS
 SELECT p.ordine, sub.nome, sub.cognome, sub.numero, sub.timestamp
 FROM PAGAMENTO AS p

@@ -2,20 +2,20 @@
 
 /* A1) ELENCARE LE PRODUZIONI COMPOSTE DA UN DETERMINATO ARTISTA
  * Vengono elencate tutte le informazioni sulle produzioni composte da un determinato artista.
- */
+ */ [CONTROLLATA - INDICE ] : "L'indice viene anche ignorato dall'ottimizzatore"
 SELECT * FROM produzione AS p WHERE artista = 'SoloXYZ'
 ORDER BY p.titolo;
 
 /* A2) ELENCARE GLI ARTISTI CHE HANNO PARTECIPATO ALLA CREAZIONE DI UNA CANZONE
  * Data una certa canzone vengono mostrate le informazioni degli artisti che hanno partecipato ad essa.
- */
+ */ [CONTROLLATA  - (TANTE CANZONI)]
 SELECT * FROM solista WHERE artista IN (
     SELECT p.solista FROM partecipazione as p WHERE p.canzone = 1
-);
+); 
 
 /* A3) VISUALIZZARE UN ELENCO DELLE PRENOTAZIONI EFFETTUATE TRA TUTTI GLI ORDINI DATO UN ARTISTA
  * Vengono visualizzati i dettagli delle prenotazioni effettuate da un artista.
- */
+ */ [CONTROLLATA  - NON SERVE INDICE]
 (
     SELECT codice, giorno, annullata FROM prenotazione
     WHERE codice IN (

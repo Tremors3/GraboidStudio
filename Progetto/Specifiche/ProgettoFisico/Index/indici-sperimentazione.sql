@@ -2,10 +2,52 @@
 TROVARE I VINCOLI
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
+--- A1) ELENCARE LE PRODUZIONI COMPOSTE DA UN DETERMINATO ARTISTA ----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- Genera Produzione ed Artista
+CREATE OR REPLACE FUNCTION insert_data_multiple_times(n INT, w INT ) RETURNS VOID AS $$
+DECLARE
+    i INT := n;
+BEGIN
+    WHILE i <= N+w LOOP
+
+        -- Genera Artista
+		call AggiungiArtista('SoloCiccio ' || i, '2024-12-07');
+		
+        -- Genera Produzione
+        INSERT INTO PRODUZIONE (titolo, artista, data_inizio, data_fine, stato, tipo_produzione, genere) VALUES
+		('Album ' || i, 'SoloCiccio ' || i, '2020-02-01', '2020-06-01', 'Pubblicazione'   , 'Album'   , 'Rock');
+        i := i + 1;
+
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Index
+DROP INDEX artista_produzione_indx;
+CREATE INDEX artista_produzione_indx ON produzione (artista);
+
+-- Query
+EXPLAIN (ANALYSE, BUFFERS, VERBOSE) 
+    SELECT * FROM produzione AS p WHERE artista = 'SoloCiccio 1000';
+
+10k 
+
+-- Decidiamo di non mettere l'indice perchè:
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
 --- O7) ELENCARE GLI ORDINI CHE NON SONO ANCORA STATI PAGATI ---------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
-SELECT * FROM pg_stat_user_indexes;
-SELECT * FROM pg_stat_user_tables;
+
 -- Genera Ordini
 CREATE OR REPLACE FUNCTION insert_data_multiple_times(n INT, w INT ) RETURNS VOID AS $$
 DECLARE
@@ -96,6 +138,8 @@ CREATE INDEX artista_titolo_idx ON produzione (artista, titolo);
 CLUSTER produzione USING artista_produzione_idx;
 EXPLAIN ANALYSE SELECT * FROM produzione AS p WHERE p.titolo LIKE 'Album 100%'AND p.artista = 'SoloXYZ' ORDER BY p.titolo;
 
+-- INDICE GIÀ ESISTE DOVUTO AL CONSTRAINT UNIQUE(artista, titolo) presente su produzione
+
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -132,31 +176,34 @@ WHERE o.artista = 'SoloXYZ';
 --- T11) Elencare i tecnici che hanno lavorato su canzoni in un determinato genere------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION insert_data_multiple_times(n INT, w INT ) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION insert_produzione_multiple_times(n INT, w INT ) RETURNS VOID AS $$
+DECLARE
+    i INT := n;
+BEGIN
+    WHILE i <= N+w LOOP
+		INSERT INTO PRODUZIONE (titolo, artista, data_inizio, data_fine, stato, tipo_produzione, genere) VALUES
+		('Album ' || i, 'SoloXYZ' , '2020-02-01', '2020-06-01', 'Produzione'   , 'Album'   , 'Rock');
+        i := i + 1;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insert_canzone_multiple_times(n INT, w INT ) RETURNS VOID AS $$
 DECLARE
     i INT := n;
 BEGIN
     WHILE i <= N+w LOOP
 		call aggiungicanzoneepartecipazioni(
 			'Titolo' || i, 	--titolo
-			'' || i, 		--produzione_id
-			'abgdjhhjghjgy',--testo
-			TIMESTAMP, 		--data_di_registrazione
-			'' ||i, 		--lunghezza_in_secondi
+			i+100, 					--produzione_id
+			'abgdjhhjghjgy', 	--testo
+			'2024-06-21',		--data_di_registrazione
+			i+1, 					--lunghezza_in_secondi
 			'Titolo' || i, 	--nome_del_file
-			'percorso', 	--percorso_di_sistema
-			'mp3', 			--estensione
-                            --solisti_nome_arte
-                            --codice_fiscale_tecnico	
-		);
-		
-		INSERT INTO produzione (titolo, artista, stato, tipo_produzione, genere)
-		VALUES (
-            'Titolo' || i,
-            'Artista' || i%5,
-            'Produzione',
-            'Album',
-            '' || i%6
+			'percorso', 		--percorso_di_sistema
+			'mp3', 				--estensione
+			ARRAY['SoloPQR', 'SoloGHI'],			--solisti_nome_arte
+			'TCNPRO90A01H501X'--codice_fiscale_tecnico	
 		);
 		
       i := i + 1;
@@ -164,24 +211,16 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT insert_data_multiple_times(0, 100000);
+SELECT insert_produzione_multiple_times(0, 100000);
+SELECT insert_canzone_multiple_times(0, 10000);
 
 
-
-
-
-
-
-
-
-
-
-SELECT DISTINCT t.codice_fiscale, t.nome, t.cognome
+explain analyze SELECT DISTINCT t.codice_fiscale, t.nome, t.cognome
 FROM TECNICO t
 JOIN LAVORA_A l ON t.codice_fiscale = l.tecnico
 JOIN CANZONE c ON l.canzone = c.codice
-JOIN PRODUZIONE g ON c.genere = g.codice
-WHERE g.nome = 'Pop';
+JOIN PRODUZIONE p ON c.produzione = p.codice
+WHERE p.genere = 'Rock';
 
 
 
