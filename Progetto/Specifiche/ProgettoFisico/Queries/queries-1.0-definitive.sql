@@ -208,7 +208,7 @@ EXCEPT
     WHERE annullata = FALSE AND tipo = TRUE AND giorno = '<giorno>'
 );
 
-/* DATI PROVA
+/* DATI di PROVA
  *  giorno '2023-02-04'
  *  orari_inizi['20:00:00', '18:00:00', '10:00:00', '12:00:00', '12:00:00', '11:00:00']
  *  orarifine['23:00:00', '23:00:00', '12:00:00', '13:00:00', '14:00:00', '13:00:00']
