@@ -5,7 +5,7 @@ SELECT * FROM pg_stat_user_tables;
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
-VINCOLI INUTILI
+INDICI INUTILI
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 --- A1) ELENCARE LE PRODUZIONI COMPOSTE DA UN DETERMINATO ARTISTA ------ NON ACCETTABILE [INUTILE] -------------------------------------------------
@@ -66,7 +66,7 @@ Decidiamo di non utilizzare l indice perchè:
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
---- O8) CONTARE L'AMMONTARE SPESO DA UN ARTISTA E IL NUMERO DI ORDINI EFFETTUATI ------ NON ACCETTABILE [INDICE DUPLICATO]--------------------------
+--- O8) CONTARE L'AMMONTARE SPESO DA UN ARTISTA E IL NUMERO DI ORDINI EFFETTUATI ------ SECONDA MATTE [INDICE DUPLICATO]----------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 --- Genera gli Ordini
@@ -113,6 +113,140 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
+----------------------------------------------------------------------------------------------------------------------------------------------------
+--- XX) CONTARE IL NUMERO DI PRENOTAZIONI AVVENUTE DOPO UNA DATA ------ SECONDA PATRI --------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- Genera le Date
+CREATE OR REPLACE FUNCTION insert_multiple_ordini_giornalieri(n INT, w INT ) RETURNS VOID AS $$
+DECLARE
+    i INT := n;
+    before_date DATE := '2023-02-03';
+    after_date DATE := '2023-02-03';
+BEGIN
+
+    WHILE i <= N+w LOOP
+
+        before_date := DATE_ADD(before_date, INTERVAL '-1 day');
+
+        -- Genera Artista
+		CALL AggiungiArtista('SoloYZ ' || i, '2019-12-07');
+     	
+        -- Genera Ordine e Prenotazione Orarie effettuate prima del 2023-01-01
+        CALL CreaOrdineEPrenotazioneOrarie(
+            'OPRABC90A01H501X', 'SoloYZ ' || i, 30,
+            before_date, 
+            '{08:00, 14:00}'::time[],
+            '{12:00, 18:00}'::time[],
+            2, 2
+        );
+
+     	i = i + 1;
+    END LOOP;
+   
+    WHILE i <= N+w + 1500  LOOP
+
+        after_date := DATE_ADD(after_date, INTERVAL '1 day');
+       
+        -- Genera Artista
+		CALL AggiungiArtista('SoloYZ ' || i, '2021-12-07');
+
+        -- Genera Ordine e Prenotazione Orarie effettuate dopo il 2023-01-01
+        CALL CreaOrdineEPrenotazioneOrarie(
+            'OPRABC90A01H501X', 'SoloYZ ' || i, 30,
+            after_date, 
+            '{08:00, 14:00}'::time[],
+            '{12:00, 18:00}'::time[],
+            2, 2
+        );
+
+        i := i + 1;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+SELECT insert_multiple_ordini_giornalieri(0, 10000);
+
+--------------------------------------------------------------------------
+
+-- Index
+DROP INDEX IF EXISTS data_inizio_prenotazione_idx;
+CREATE INDEX data_inizio_prenotazione_idx on PRENOTAZIONE(giorno);
+
+--------------------------------------------------------------------------
+
+-- Query
+EXPLAIN (ANALYSE, BUFFERS, VERBOSE) 
+    SELECT count(*) AS numero_prenotazioni
+    FROM PRENOTAZIONE AS p
+    WHERE p.giorno >=  '2023-01-01' ;
+
+--------------------------------------------------------------------------
+
+10k || 2,3 ms -> .3 ms
+
+[x] La query diventa 'lenta' man mano aumenta il numero di 'prenotazioni'. L indice 'data_inizio_prenotazione_idx' velocizza drasticamente la query.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+--- XX) SELEZIONE TUTTI I DATI DI UN ARTISTA CHE SI E' REGISTRATO NEL SISTEMA PRIMA DI UNA CERTA DATA ------ SECONDA ENRICO ------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- Indice
+DROP INDEX IF EXISTS data_registrazione_artista_idx;
+CREATE INDEX data_registrazione_artista_idx ON artista(data_di_registrazione);
+
+-- Query
+EXPLAIN (ANALYSE, BUFFERS, VERBOSE) 
+    SELECT * FROM ARTISTA AS a
+    WHERE a.data_di_registrazione <= '2020-01-01';
+
+10k || 1.3 ms -> .2 ms
+
+[x] La query diventa 'lenta' man mano aumenta il numero di 'artisti'. L indice 'data_registrazione_artista_idx' velocizza drasticamente la query.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -144,7 +278,7 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
-VINCOLI TROVATI
+INDICI TROVATI
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 --- O7) ELENCARE GLI ORDINI CHE NON SONO ANCORA STATI PAGATI ------ ACCETTABILE - MATTEO -----------------------------------------------------------
@@ -225,7 +359,7 @@ BEGIN
 		
         -- Genera Produzione
         INSERT INTO PRODUZIONE (titolo, artista, data_inizio, data_fine, stato, tipo_produzione, genere) VALUES
-		('Album ' || i, 'SoloCiccio ' || i, '2020-02-01', '2020-06-01', 'Pubblicazione'   , 'Album' , 'Rock');
+		('Album ' || i, 'SoloCiccio ' || i, '2020-02-01', '2020-06-01', 'Produzione', 'Album', 'Rock');
 
         i := i + 1;
     END LOOP;
@@ -234,7 +368,7 @@ BEGIN
 
         -- Genera Produzione
         INSERT INTO PRODUZIONE (titolo, artista, data_inizio, data_fine, stato, tipo_produzione, genere) VALUES
-		('Album ' || i, 'SoloCiccio 1000', '2023-02-01', '2023-06-01', 'Pubblicazione'   , 'Album'   , 'Rock');
+		('Album ' || i, 'SoloCiccio 1000', '2023-02-01', '2023-06-01', 'Produzione', 'Album', 'Rock');
 
         i := i + 1;
     END LOOP;
@@ -340,7 +474,6 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
-
 
 
 
