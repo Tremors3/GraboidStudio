@@ -23,7 +23,16 @@ EXPLAIN ANALYSE SELECT * FROM produzione AS p WHERE p.titolo LIKE 'Album 100%'AN
 -- INDICE GIÀ ESISTE DOVUTO AL CONSTRAINT UNIQUE(artista, titolo) presente su produzione
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------ALL AggiungiArtista('SoloYZ ' || i, '2018-12-07');
+drop index data_registrazione_artista_idx;
+create index data_registrazione_artista_idx on ARTISTA(data_di_registrazione);
+
+EXPLAIN (ANALYSE, BUFFERS, VERBOSE) 
+SELECT *
+FROM ARTISTA AS a
+WHERE a.data_di_registrazione =  '2018-12-07' ;
+da 1ms a 0.02 ms
+-------------------------------------------------------------------
 ------- ---------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -95,7 +104,6 @@ WHERE p.genere = 'Rock';
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
-
 CREATE OR REPLACE FUNCTION insert_multiple_ordini_giornalieri(n INT, w INT ) RETURNS VOID AS $$
 DECLARE
     i INT := n;
@@ -112,15 +120,6 @@ $$ LANGUAGE plpgsql;
 select insert_multiple_ordini_giornalieri(60, 10); --indice di partenza, quante volte
 
  
-
-
-
-
-
-
-
-
-
 
 
 
@@ -312,17 +311,9 @@ CREATE INDEX ordine_artista_indx ON prenotazioni(artista);
 
 --------------------------------------------------------------------------
 
-EXPLAIN (ANALYSE, BUFFERS, VERBOSE) 
-    SELECT count(*) AS numero_prenotazioni
-    FROM PRENOTAZIONE AS p
-    WHERE p.annullata = FALSE and .artista = 'SoloXZ 25000' ;
 
 
 -- prese tutte le produzioni fare un filtro che parta da una data di inizio e data una data da cui iniziare la ricerca, creando un indice su di esso, volendo si può calcolare il numero di produzioni, canzoni opppure lasciarla cosi come è 
-
-
-
-
 
 
 
@@ -356,7 +347,7 @@ $$ LANGUAGE plpgsql;
 
 select insert_data_multiple_times(300, 10300);
 
-create index data_inizio_produzione on PRODUZIONE(data_inizio);
+create index data_inizio_produzione_idx on PRODUZIONE(data_inizio);
 
 
 EXPLAIN (ANALYSE, BUFFERS, VERBOSE)  SELECT *
@@ -364,3 +355,141 @@ FROM PRODUZIONE
 WHERE data_inizio >= '2023-01-01';
 
 -- da 16 ms a 0.2 ms
+
+-----------------------------------------------------------------
+
+
+
+CREATE OR REPLACE FUNCTION insert_multiple_ordini_giornalieri(n INT, w INT ) RETURNS VOID AS $$
+DECLARE
+    i INT := n;
+    before_date DATE := '2023-02-03';
+    after_date DATE := '2023-02-03';
+BEGIN
+
+    WHILE i <= N+w LOOP
+        before_date := DATE_ADD(before_date, INTERVAL '-1 day');
+        -- Genera Artista
+		CALL AggiungiArtista('SoloYZ ' || i, '2019-12-07');
+     	
+        -- Genera Ordine e Prenotazione Orarie effettuate prima del 2023-01-01
+        CALL CreaOrdineEPrenotazioneOrarie(
+            'OPRABC90A01H501X', 'SoloYZ ' || i, 30,
+            before_date, 
+            '{08:00, 14:00}'::time[],
+            '{12:00, 18:00}'::time[],
+            2, 2
+        );
+
+
+     	i = i + 1;
+
+    END LOOP;
+   
+     WHILE i <= N+w + 1500  LOOP
+        after_date := DATE_ADD(after_date, INTERVAL '1 day');
+       
+        -- Genera Artista
+		CALL AggiungiArtista('SoloYZ ' || i, '2021-12-07');
+        -- Genera Ordine e Prenotazione Orarie effettuate dopo il 2023-01-01
+        CALL CreaOrdineEPrenotazioneOrarie(
+            'OPRABC90A01H501X', 'SoloYZ ' || i, 30,
+            after_date, 
+            '{08:00, 14:00}'::time[],
+            '{12:00, 18:00}'::time[],
+            2, 2
+        );
+        i := i + 1;
+    END LOOP;
+
+END;
+$$ LANGUAGE plpgsql;
+
+select insert_multiple_ordini_giornalieri(0, 10000);
+
+drop index data_inizio_prenotazione_idx;
+create index data_inizio_prenotazione_idx on PRENOTAZIONE(giorno);
+
+EXPLAIN (ANALYSE, BUFFERS, VERBOSE) 
+    SELECT count(*) AS numero_prenotazioni
+    FROM PRENOTAZIONE AS p
+    WHERE p.giorno >=  '2023-01-01' ;
+
+-- 10k || 2,3 ms a 0,3 ms
+
+
+----- indice per artista
+create index data_registrazione_artista_idx on ARTISTA(data_di_registrazione);
+
+EXPLAIN (ANALYSE, BUFFERS, VERBOSE) 
+SELECT *
+FROM ARTISTA AS a
+WHERE a.data_di_registrazione <=  '2020-01-01' ;
+-- 10k || 1,3 ms a 0,2 ms
+
+
+
+
+
+
+------------------
+
+
+CREATE OR REPLACE FUNCTION insert_data_multiple_times(n INT, w INT ) RETURNS VOID AS $$
+DECLARE
+    i INT := n;
+BEGIN
+    WHILE i <= N+w LOOP
+
+        -- Genera Artista
+		CALL AggiungiArtista('SoloCiccio ' || i, '2024-12-07');
+		
+        -- Genera Produzione
+        INSERT INTO PRODUZIONE (titolo, artista, data_inizio, data_fine, stato, tipo_produzione, genere) VALUES
+		('Album ' || i, 'SoloCiccio ' || i, '2020-02-01', '2020-06-01', 'Produzione'   , 'Album' , 'Rock');
+
+        i := i + 1;
+    END LOOP;
+
+
+END;
+$$ LANGUAGE plpgsql;
+SELECT insert_data_multiple_times(0, 30000);
+
+
+CREATE OR REPLACE FUNCTION insert_canzone_multiple_times(n INT, w INT ) RETURNS VOID AS $$
+DECLARE
+    i INT := n;
+    d DATE := '2020-02-10';
+BEGIN
+    WHILE i <= N+w loop
+	    d  := DATE_ADD(d , INTERVAL '1 day');
+		call AggiungiCanzoneEPartecipazioni(
+			'Titolo' || i, 	    --titolo
+			10000 | i , 		--produzione_id
+			'abgdjhhjghjgy', 	--testo
+			d,		            --data_di_registrazione
+			60, 				--lunghezza_in_secondi
+			'Titolo' || i, 	    --nome_del_file
+			'percorso', 		--percorso_di_sistema
+			'mp3', 				--estensione
+			ARRAY['SoloXYZ'],	--solisti_nome_arte
+			'TCNPRO90A01H501X'  --codice_fiscale_tecnico	
+		);
+		
+      i := i + 1;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+select insert_canzone_multiple_times(0, 10000);
+
+drop index data_registrazione_canzone_idx;
+create index data_registrazione_canzone_idx on CANZONE(data_di_registrazione);
+
+EXPLAIN (ANALYSE, BUFFERS, VERBOSE) 
+SELECT *
+FROM CANZONE 
+where data_di_registrazione < '2020-04-10' ;
+
+-- 10K | 1 ms -> 0.02 ms

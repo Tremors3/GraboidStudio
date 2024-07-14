@@ -66,7 +66,7 @@ Decidiamo di non utilizzare l indice perchè:
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
---- O8) CONTARE L'AMMONTARE SPESO DA UN ARTISTA E IL NUMERO DI ORDINI EFFETTUATI ------ NON ACCETTABILE [VINCOLO DUPLICATO]-------------------------
+--- O8) CONTARE L'AMMONTARE SPESO DA UN ARTISTA E IL NUMERO DI ORDINI EFFETTUATI ------ NON ACCETTABILE [INDICE DUPLICATO]--------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 --- Genera gli Ordini
@@ -210,7 +210,7 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
---- O9) VISUALIZZA INFORMAZIONI PRODUZIONI AVVENUTE DOPO DATA FORNITA ------ ACCETTABILE - PATRINI -----------------------------------------------------------
+--- O9) VISUALIZZA INFORMAZIONI PRODUZIONI AVVENUTE DOPO DATA FORNITA ------ ACCETTABILE - PATRINI -------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Genera le Produzioni e gli Artisti
@@ -260,3 +260,90 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 30 k || 16 ms -> .2 ms
 
 [x] La query diventa 'lenta' man mano aumenta il numero di 'produzioni'. L indice 'data_inizio_produzione_indx' velocizza drasticamente la query.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+--- A9) SELEZIONA LE CANZONI PIU' VECCHIE DI UNA CERTA DATA  ------ ACCETTABILE - ENRICO -----------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- Genera Produzioni
+CREATE OR REPLACE FUNCTION insert_data_multiple_times(n INT, w INT ) RETURNS VOID AS $$
+DECLARE
+    i INT := n;
+BEGIN
+    WHILE i <= N+w LOOP
+
+        -- Genera Artista
+		CALL AggiungiArtista('SoloCiccio ' || i, '2024-12-07');
+		
+        -- Genera Produzione
+        INSERT INTO PRODUZIONE (titolo, artista, data_inizio, data_fine, stato, tipo_produzione, genere) VALUES
+		('Album ' || i, 'SoloCiccio ' || i, '2020-02-01', '2020-06-01', 'Produzione'   , 'Album' , 'Rock');
+
+        i := i + 1;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+SELECT insert_data_multiple_times(10000, 20000);
+
+--------------------------------------------------------------------------
+
+-- Genera Canzoni
+CREATE OR REPLACE FUNCTION insert_canzone_multiple_times(n INT, w INT ) RETURNS VOID AS $$
+DECLARE
+    i INT := n;
+    d DATE := '2020-02-10';
+BEGIN
+    WHILE i <= N+w loop
+	    d  := DATE_ADD(d , INTERVAL '1 day');
+		CALL AggiungiCanzoneEPartecipazioni(
+			'Titolo' || i, 	    --titolo
+			10000 + i,   		--produzione_id
+			'abgdjhhjghjgy', 	--testo
+			d,		            --data_di_registrazione
+			60, 				--lunghezza_in_secondi
+			'Titolo' || i, 	    --nome_del_file
+			'percorso', 		--percorso_di_sistema
+			'mp3', 				--estensione
+			ARRAY['SoloXYZ'],	--solisti_nome_arte
+			'TCNPRO90A01H501X'  --codice_fiscale_tecnico	
+		);
+		
+      i := i + 1;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+SELECT insert_canzone_multiple_times(0, 10000);
+
+--------------------------------------------------------------------------
+
+-- Index
+DROP INDEX IF EXISTS data_registrazione_canzone_idx;
+CREATE INDEX data_registrazione_canzone_idx on CANZONE(data_di_registrazione);
+
+--------------------------------------------------------------------------
+
+-- Query
+EXPLAIN (ANALYSE, BUFFERS, VERBOSE) 
+    SELECT * FROM CANZONE 
+    WHERE data_di_registrazione < '2020-04-10' ;
+
+--------------------------------------------------------------------------
+
+10K || 1 ms -> .02 ms
+
+[x] La query diventa 'lenta' man mano aumenta il numero di 'canzoni'. L indice 'data_registrazione_canzone_idx' velocizza drasticamente la query.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
