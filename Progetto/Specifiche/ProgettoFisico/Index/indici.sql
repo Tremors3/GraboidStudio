@@ -66,9 +66,9 @@ Decidiamo di non utilizzare l indice perchè:
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
---- O8) CONTARE L'AMMONTARE SPESO DA UN ARTISTA E IL NUMERO DI ORDINI EFFETTUATI ------ SECONDA MATTE [INDICE DUPLICATO]----------------------------
+--- N1) CONTARE L'AMMONTARE SPESO DA UN ARTISTA E IL NUMERO DI ORDINI EFFETTUATI ------ SECONDA MATTE [INDICE DUPLICATO]----------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
-
+FATTO
 --- Genera gli Ordini
 CREATE OR REPLACE FUNCTION insert_multiple_ordini_giornalieri(n INT, w INT ) RETURNS VOID AS $$
 DECLARE
@@ -105,7 +105,7 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 
 --------------------------------------------------------------------------
 
-30 k || 5 ms -> .05 ms
+30 k || 3 ms -> .05 ms
 
 [x] La query diventa 'lenta' man mano aumenta il numero di 'ordini'. L indice 'ordine_artista_indx' velocizza drasticamente la query.
 
@@ -114,7 +114,7 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
---- XX) CONTARE IL NUMERO DI PRENOTAZIONI AVVENUTE DOPO UNA DATA ------ SECONDA PATRI --------------------------------------------------------------
+--- N3) CONTARE IL NUMERO DI PRENOTAZIONI AVVENUTE DOPO UNA DATA ------ SECONDA PATRI --------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Genera le Date
@@ -164,13 +164,13 @@ BEGIN
     END LOOP;
 END;
 $$ LANGUAGE plpgsql;
-SELECT insert_multiple_ordini_giornalieri(0, 10000);
+SELECT insert_multiple_ordini_giornalieri(0, 30000);
 
 --------------------------------------------------------------------------
 
 -- Index
-DROP INDEX IF EXISTS data_inizio_prenotazione_idx;
-CREATE INDEX data_inizio_prenotazione_idx on PRENOTAZIONE(giorno);
+DROP INDEX IF EXISTS giorno_prenotazione_idx;
+CREATE INDEX giorno_prenotazione_idx ON prenotazione (giorno);
 
 --------------------------------------------------------------------------
 
@@ -178,11 +178,11 @@ CREATE INDEX data_inizio_prenotazione_idx on PRENOTAZIONE(giorno);
 EXPLAIN (ANALYSE, BUFFERS, VERBOSE) 
     SELECT count(*) AS numero_prenotazioni
     FROM PRENOTAZIONE AS p
-    WHERE p.giorno >=  '2023-01-01' ;
+    WHERE p.giorno >= '2023-01-01' ;
 
 --------------------------------------------------------------------------
 
-10k || 2,3 ms -> .3 ms
+10k || 2 ms -> .2 ms
 
 [x] La query diventa 'lenta' man mano aumenta il numero di 'prenotazioni'. L indice 'data_inizio_prenotazione_idx' velocizza drasticamente la query.
 
@@ -191,19 +191,35 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
---- XX) SELEZIONE TUTTI I DATI DI UN ARTISTA CHE SI E' REGISTRATO NEL SISTEMA PRIMA DI UNA CERTA DATA ------ SECONDA ENRICO ------------------------
+--- N5) SELEZIONE TUTTI I DATI DI UN ARTISTA CHE SI E' REGISTRATO NEL SISTEMA PRIMA DI UNA CERTA DATA ------ SECONDA ENRICO ------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+--- Genera gli Ordini
+CREATE OR REPLACE FUNCTION insert_multiple_ordini_giornalieri(n INT, w INT ) RETURNS VOID AS $$
+DECLARE
+    i INT := n;
+BEGIN
+    WHILE i <= N+w LOOP
+
+        -- Genera Artista
+		CALL AggiungiArtista('SoloXZ ' || i, '2024-12-07');
+     	
+     	i = i + 1;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+SELECT insert_multiple_ordini_giornalieri(1, 30000);
 
 -- Indice
 DROP INDEX IF EXISTS data_registrazione_artista_idx;
-CREATE INDEX data_registrazione_artista_idx ON artista(data_di_registrazione);
+CREATE INDEX data_registrazione_artista_idx ON artista (data_di_registrazione);
 
 -- Query
 EXPLAIN (ANALYSE, BUFFERS, VERBOSE) 
     SELECT * FROM ARTISTA AS a
     WHERE a.data_di_registrazione <= '2020-01-01';
 
-10k || 1.3 ms -> .2 ms
+30k || 3 ms -> .03 ms
 
 [x] La query diventa 'lenta' man mano aumenta il numero di 'artisti'. L indice 'data_registrazione_artista_idx' velocizza drasticamente la query.
 
@@ -283,7 +299,7 @@ INDICI TROVATI
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 --- O7) ELENCARE GLI ORDINI CHE NON SONO ANCORA STATI PAGATI ------ ACCETTABILE - MATTEO -----------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
-
+FATTO
 -- Genera gli Ordini
 CREATE OR REPLACE FUNCTION insert_data_multiple_times(n INT, w INT ) RETURNS VOID AS $$
 DECLARE
@@ -321,16 +337,19 @@ CREATE INDEX ordine_artista_indx ON ordine (artista);
 --------------------------------------------------------------------------
 
 -- Query
+CREATE OR REPLACE VIEW ordini_non_pagati_gruppo AS
+SELECT p.ordine, sub.nome_arte, sub.numero, sub.timestamp
+FROM PAGAMENTO AS p
+JOIN ( 
+    SELECT a.nome_arte, o.codice, te.numero, o.timestamp
+    FROM ORDINE AS o, ARTISTA AS a, GRUPPO AS g, TELEFONO_A AS te
+    WHERE o.artista = a.nome_arte 
+    AND g.artista = a.nome_arte
+    AND te.artista = a.nome_arte
+) as sub ON p.ordine = sub.codice WHERE p.stato = 'Da pagare';
+
 EXPLAIN (ANALYSE, BUFFERS, VERBOSE) 
-    SELECT p.ordine, sub.nome_arte, sub.numero, sub.timestamp
-    FROM PAGAMENTO AS p
-    JOIN ( 
-        SELECT a.nome_arte, o.codice, te.numero, o.timestamp
-        FROM ORDINE AS o, ARTISTA AS a, GRUPPO AS g, TELEFONO_A AS te
-        WHERE o.artista = a.nome_arte 
-        AND g.artista = a.nome_arte
-        AND te.artista = a.nome_arte
-    ) as sub ON p.ordine = sub.codice WHERE p.stato = 'Da pagare';
+    select * from ordini_non_pagati_gruppo;
 
 --------------------------------------------------------------------------
 
@@ -344,9 +363,9 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
---- O9) VISUALIZZA INFORMAZIONI PRODUZIONI AVVENUTE DOPO DATA FORNITA ------ ACCETTABILE - PATRINI -------------------------------------------------
+--- N2) VISUALIZZA INFORMAZIONI PRODUZIONI AVVENUTE DOPO DATA FORNITA ------ ACCETTABILE - PATRINI -------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
-
+FATTO
 -- Genera le Produzioni e gli Artisti
 CREATE OR REPLACE FUNCTION insert_data_multiple_times(n INT, w INT ) RETURNS VOID AS $$
 DECLARE
@@ -380,7 +399,7 @@ SELECT insert_data_multiple_times(0, 30000);
 
 -- Indice
 DROP INDEX IF EXISTS data_inizio_produzione_indx;
-CREATE INDEX data_inizio_produzione_indx on PRODUZIONE(data_inizio);
+CREATE INDEX data_inizio_produzione_indx ON produzione (data_inizio);
 
 --------------------------------------------------------------------------
 
@@ -393,6 +412,10 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 
 30 k || 16 ms -> .2 ms
 
+A me (Matteo) viene 
+
+30 k || 2  ms -> .2
+
 [x] La query diventa 'lenta' man mano aumenta il numero di 'produzioni'. L indice 'data_inizio_produzione_indx' velocizza drasticamente la query.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -400,7 +423,7 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
---- A9) SELEZIONA LE CANZONI PIU' VECCHIE DI UNA CERTA DATA  ------ ACCETTABILE - ENRICO -----------------------------------------------------------
+--- N4) SELEZIONA LE CANZONI PIU' VECCHIE DI UNA CERTA DATA  ------ ACCETTABILE - ENRICO -----------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Genera Produzioni
@@ -421,7 +444,7 @@ BEGIN
     END LOOP;
 END;
 $$ LANGUAGE plpgsql;
-SELECT insert_data_multiple_times(10000, 20000);
+SELECT insert_data_multiple_times(10000, 50000);
 
 --------------------------------------------------------------------------
 
@@ -450,13 +473,13 @@ BEGIN
     END LOOP;
 END;
 $$ LANGUAGE plpgsql;
-SELECT insert_canzone_multiple_times(0, 10000);
+SELECT insert_canzone_multiple_times(0, 40000);
 
 --------------------------------------------------------------------------
 
 -- Index
 DROP INDEX IF EXISTS data_registrazione_canzone_idx;
-CREATE INDEX data_registrazione_canzone_idx on CANZONE(data_di_registrazione);
+CREATE INDEX data_registrazione_canzone_idx ON canzone (data_di_registrazione);
 
 --------------------------------------------------------------------------
 
@@ -467,7 +490,7 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 
 --------------------------------------------------------------------------
 
-10K || 1 ms -> .02 ms
+40K || 3 ms -> .02 ms
 
 [x] La query diventa 'lenta' man mano aumenta il numero di 'canzoni'. L indice 'data_registrazione_canzone_idx' velocizza drasticamente la query.
 
