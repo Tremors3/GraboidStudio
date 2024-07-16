@@ -20,6 +20,7 @@ COSE ANCORA DA FARE
 8. FARE IL VIDEO
     [x] Settare OBS Studio
     [ ] Dividerci le parti
+    [ ] Programmare i capitoli del video
     [ ] Registrare le nostre parti
 
 ------------------------------------------------------------
