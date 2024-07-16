@@ -17,7 +17,10 @@ COSE ANCORA DA FARE
     [x] ER Completo
     [x] Volume dei dati
     [x] Schema logico
-8. [ ] DIVIDERCI LE PARTI E REGISTRARE I VIDEO.
+8. FARE IL VIDEO
+    [x] Settare OBS Studio
+    [ ] Dividerci le parti
+    [ ] Registrare le nostre parti
 
 ------------------------------------------------------------
 

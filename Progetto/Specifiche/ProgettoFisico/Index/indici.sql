@@ -91,8 +91,8 @@ SELECT insert_multiple_ordini_giornalieri(1, 30000);
 --------------------------------------------------------------------------
 
 -- Indice
-DROP INDEX IF EXISTS artista_produzione_indx;
-CREATE INDEX ordine_artista_indx ON ordine(artista);
+DROP INDEX IF EXISTS artista_ordine_index;
+CREATE INDEX artista_ordine_index ON ordine(artista);
 
 --------------------------------------------------------------------------
 
@@ -169,8 +169,8 @@ SELECT insert_multiple_ordini_giornalieri(0, 30000);
 --------------------------------------------------------------------------
 
 -- Index
-DROP INDEX IF EXISTS giorno_prenotazione_idx;
-CREATE INDEX giorno_prenotazione_idx ON prenotazione (giorno);
+DROP INDEX IF EXISTS giorno_prenotazione_index;
+CREATE INDEX giorno_prenotazione_index ON prenotazione (giorno);
 
 --------------------------------------------------------------------------
 
@@ -182,9 +182,9 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 
 --------------------------------------------------------------------------
 
-10k || 2 ms -> .2 ms
+30k || 2 ms -> .2 ms
 
-[x] La query diventa 'lenta' man mano aumenta il numero di 'prenotazioni'. L indice 'data_inizio_prenotazione_idx' velocizza drasticamente la query.
+[x] La query diventa 'lenta' man mano aumenta il numero di 'prenotazioni'. L indice 'giorno_prenotazione_index' velocizza drasticamente la query.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -211,8 +211,8 @@ $$ LANGUAGE plpgsql;
 SELECT insert_multiple_ordini_giornalieri(1, 30000);
 
 -- Indice
-DROP INDEX IF EXISTS data_registrazione_artista_idx;
-CREATE INDEX data_registrazione_artista_idx ON artista (data_di_registrazione);
+DROP INDEX IF EXISTS data_di_registrazione_artista_index;
+CREATE INDEX data_di_registrazione_artista_index ON artista (data_di_registrazione);
 
 -- Query
 EXPLAIN (ANALYSE, BUFFERS, VERBOSE) 
@@ -221,7 +221,7 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 
 30k || 3 ms -> .03 ms
 
-[x] La query diventa 'lenta' man mano aumenta il numero di 'artisti'. L indice 'data_registrazione_artista_idx' velocizza drasticamente la query.
+[x] La query diventa 'lenta' man mano aumenta il numero di 'artisti'. L indice 'data_di_registrazione_artista_index' velocizza drasticamente la query.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -331,12 +331,14 @@ SELECT insert_data_multiple_times(0, 100000);
 --------------------------------------------------------------------------
 
 -- Indice
-DROP INDEX IF EXISTS ordine_artista_indx;
-CREATE INDEX ordine_artista_indx ON ordine (artista);
+DROP INDEX IF EXISTS artista_ordine_index;
+CREATE INDEX artista_ordine_index ON ordine (artista);
 
 --------------------------------------------------------------------------
 
--- Query
+/*
+ * O7) ELENCARE GLI ORDINI CHE NON SONO ANCORA STATI PAGATI
+ */
 CREATE OR REPLACE VIEW ordini_non_pagati_gruppo AS
 SELECT p.ordine, sub.nome_arte, sub.numero, sub.timestamp
 FROM PAGAMENTO AS p
@@ -348,6 +350,7 @@ JOIN (
     AND te.artista = a.nome_arte
 ) as sub ON p.ordine = sub.codice WHERE p.stato = 'Da pagare';
 
+-- Analisi della query interessata
 EXPLAIN (ANALYSE, BUFFERS, VERBOSE) 
     select * from ordini_non_pagati_gruppo;
 
@@ -355,7 +358,7 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 
 100 k || 20 ms -> .120 ms
 
-[x] La query diventa molto 'lenta' man mano aumenta il numero di 'ordini'. L indice 'ordine_artista_indx' velocizza drasticamente la query.
+[x] La query diventa molto 'lenta' man mano aumenta il numero di 'ordini'. L indice 'artista_ordine_index' velocizza drasticamente la query.
 [ ] Un altro problema sorge nell aumentare il numero di 'gruppi'. In questo caso non è stato individuato nessun indice che possa velocizzare la query.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -398,8 +401,8 @@ SELECT insert_data_multiple_times(0, 30000);
 --------------------------------------------------------------------------
 
 -- Indice
-DROP INDEX IF EXISTS data_inizio_produzione_indx;
-CREATE INDEX data_inizio_produzione_indx ON produzione (data_inizio);
+DROP INDEX IF EXISTS data_inizio_produzione_index;
+CREATE INDEX data_inizio_produzione_index ON produzione (data_inizio);
 
 --------------------------------------------------------------------------
 
@@ -410,13 +413,9 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 
 --------------------------------------------------------------------------
 
-30 k || 16 ms -> .2 ms
+A me (Matteo) viene: 30 k || 2  ms -> .2
 
-A me (Matteo) viene 
-
-30 k || 2  ms -> .2
-
-[x] La query diventa 'lenta' man mano aumenta il numero di 'produzioni'. L indice 'data_inizio_produzione_indx' velocizza drasticamente la query.
+[x] La query diventa 'lenta' man mano aumenta il numero di 'produzioni'. L indice 'data_inizio_produzione_index' velocizza drasticamente la query.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -459,7 +458,7 @@ BEGIN
 		CALL AggiungiCanzoneEPartecipazioni(
 			'Titolo' || i, 	    --titolo
 			10000 + i,   		--produzione_id
-			'abgdjhhjghjgy', 	--testo
+			'Testo', 	        --testo
 			d,		            --data_di_registrazione
 			60, 				--lunghezza_in_secondi
 			'Titolo' || i, 	    --nome_del_file
@@ -478,8 +477,8 @@ SELECT insert_canzone_multiple_times(0, 40000);
 --------------------------------------------------------------------------
 
 -- Index
-DROP INDEX IF EXISTS data_registrazione_canzone_idx;
-CREATE INDEX data_registrazione_canzone_idx ON canzone (data_di_registrazione);
+DROP INDEX IF EXISTS data_di_registrazione_canzone_index;
+CREATE INDEX data_di_registrazione_canzone_index ON canzone (data_di_registrazione);
 
 --------------------------------------------------------------------------
 
@@ -492,7 +491,7 @@ EXPLAIN (ANALYSE, BUFFERS, VERBOSE)
 
 40K || 3 ms -> .02 ms
 
-[x] La query diventa 'lenta' man mano aumenta il numero di 'canzoni'. L indice 'data_registrazione_canzone_idx' velocizza drasticamente la query.
+[x] La query diventa 'lenta' man mano aumenta il numero di 'canzoni'. L indice 'data_di_registrazione_canzone_index' velocizza drasticamente la query.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------
