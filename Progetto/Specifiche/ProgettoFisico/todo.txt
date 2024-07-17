@@ -19,9 +19,13 @@ COSE ANCORA DA FARE
     [x] Schema logico
 8. FARE IL VIDEO
     [x] Settare OBS Studio
-    [ ] Dividerci le parti
-    [ ] Programmare i capitoli del video
+    [x] Dividerci le parti
+    [x] Programmare i capitoli del video
     [ ] Registrare le nostre parti
+        [x] Matteo
+        [ ] Herrico
+        [ ] Andrea
+    [ ] Montare il video
 
 ------------------------------------------------------------
 
