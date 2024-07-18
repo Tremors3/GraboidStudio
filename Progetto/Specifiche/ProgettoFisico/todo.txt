@@ -25,7 +25,7 @@ COSE ANCORA DA FARE
         [x] Matteo
         [x] Herrico
         [x] Andrea
-    [ ] Montare il video
+    [x] Montare il video
 
 ------------------------------------------------------------
 
