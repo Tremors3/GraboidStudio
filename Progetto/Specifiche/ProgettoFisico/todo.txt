@@ -21,10 +21,10 @@ COSE ANCORA DA FARE
     [x] Settare OBS Studio
     [x] Dividerci le parti
     [x] Programmare i capitoli del video
-    [ ] Registrare le nostre parti
+    [x] Registrare le nostre parti
         [x] Matteo
-        [ ] Herrico
-        [ ] Andrea
+        [x] Herrico
+        [x] Andrea
     [ ] Montare il video
 
 ------------------------------------------------------------
